@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Révision Télécommunications - ISEP A1</title>
+    <title>Révision Télécommunications - ISEP A1 - Seydi</title>
     <style>
         * {
             margin: 0;
@@ -29,9 +29,9 @@
             background: var(--beige);
             color: var(--charcoal);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        /* Header avec fond texturé */
         header {
             background: linear-gradient(135deg, var(--slate) 0%, var(--forest) 100%);
             color: white;
@@ -78,7 +78,6 @@
             z-index: 1;
         }
 
-        /* Navigation sticky */
         nav {
             background: var(--cream);
             padding: 1rem;
@@ -171,7 +170,6 @@
             }
         }
 
-        /* Hero section avec texture */
         .hero {
             text-align: center;
             padding: 3rem 2rem;
@@ -215,7 +213,6 @@
             z-index: 1;
         }
 
-        /* Grille de cartes */
         .subject-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -281,7 +278,6 @@
             box-shadow: 0 10px 30px rgba(88,129,87,0.4);
         }
 
-        /* Cartes de TD */
         .topics-grid {
             display: grid;
             gap: 2rem;
@@ -355,7 +351,6 @@
             font-weight: bold;
         }
 
-        /* Checkbox stylée */
         .checkbox {
             width: 32px;
             height: 32px;
@@ -385,7 +380,6 @@
             font-size: 1.2rem;
         }
 
-        /* Barre de progression */
         .progress-container {
             margin: 2rem 0;
             text-align: center;
@@ -441,7 +435,6 @@
             color: var(--slate);
         }
 
-        /* Page détaillée TD */
         .td-detail {
             background: var(--cream);
             border-radius: 20px;
@@ -501,7 +494,6 @@
             margin-bottom: 1rem;
         }
 
-        /* Exercices */
         .exercice {
             background: var(--cream);
             border-radius: 15px;
@@ -577,7 +569,6 @@
             animation: slideIn 0.3s;
         }
 
-        /* Footer */
         footer {
             background: linear-gradient(135deg, var(--charcoal) 0%, var(--slate) 100%);
             color: white;
@@ -605,7 +596,74 @@
             margin: 0.5rem 0;
         }
 
-        /* Responsive */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .subject-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .subject-card:nth-child(1) { animation-delay: 0.1s; }
+        .subject-card:nth-child(2) { animation-delay: 0.2s; }
+        .subject-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .topic-card {
+            animation: slideInLeft 0.5s ease-out;
+        }
+
+        .topic-card:nth-child(1) { animation-delay: 0.1s; }
+        .topic-card:nth-child(2) { animation-delay: 0.2s; }
+        .topic-card:nth-child(3) { animation-delay: 0.3s; }
+        .topic-card:nth-child(4) { animation-delay: 0.4s; }
+        .topic-card:nth-child(5) { animation-delay: 0.5s; }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .exercice {
+            animation: fadeInUp 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .exercice:nth-child(1) { animation-delay: 0.1s; }
+        .exercice:nth-child(2) { animation-delay: 0.2s; }
+        .exercice:nth-child(3) { animation-delay: 0.3s; }
+        .exercice:nth-child(4) { animation-delay: 0.4s; }
+        .exercice:nth-child(5) { animation-delay: 0.5s; }
+        .exercice:nth-child(6) { animation-delay: 0.6s; }
+        .exercice:nth-child(7) { animation-delay: 0.7s; }
+
+        .formula:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
         @media (max-width: 768px) {
             h1 { font-size: 2rem; }
             .hero h2 { font-size: 1.8rem; }
@@ -618,7 +676,7 @@
 </head>
 <body>
     <header>
-        <h1>📡 Révision Télécommunications</h1>
+        <h1>📡 Révision Télécommunications & Probabilités</h1>
         <p class="subtitle">ISEP A1 - Projet Campus Connecté</p>
     </header>
 
@@ -632,7 +690,6 @@
     </nav>
 
     <div class="container">
-        <!-- PAGE ACCUEIL -->
         <section id="home" class="page active">
             <div class="hero">
                 <h2>Bienvenue sur votre espace de révision</h2>
@@ -660,7 +717,6 @@
             </div>
         </section>
 
-        <!-- PAGE PROBABILITÉS -->
         <section id="proba" class="page">
             <a href="#" class="back-btn" data-page="home">← Retour</a>
             
@@ -716,10 +772,421 @@
                         <li>Fonction de répartition</li>
                     </ul>
                 </div>
+
+                <div class="topic-card" data-td="td4">
+                    <div class="topic-header">
+                        <h3>TD4 - Transformations & Couples</h3>
+                        <div class="checkbox" data-topic="td4"></div>
+                    </div>
+                    <ul>
+                        <li>Transformation de variables</li>
+                        <li>Variables bidimensionnelles</li>
+                        <li>Lois marginales et jointes</li>
+                        <li>Indépendance</li>
+                    </ul>
+                </div>
+
+                <div class="topic-card" data-td="td5">
+                    <div class="topic-header">
+                        <h3>TD5 - Vecteurs Gaussiens</h3>
+                        <div class="checkbox" data-topic="td5"></div>
+                    </div>
+                    <ul>
+                        <li>Covariance et corrélation</li>
+                        <li>Vecteurs gaussiens</li>
+                        <li>Matrice de covariance</li>
+                        <li>Applications</li>
+                    </ul>
+                </div>
             </div>
         </section>
 
-        <!-- PAGE TÉLÉCOMMUNICATIONS -->
+        <section id="td1" class="page">
+            <a href="#" class="back-btn" data-page="proba">← Retour</a>
+            
+            <div class="td-detail">
+                <h2>TD1 - Probabilités Conditionnelles</h2>
+                
+                <div class="fiche-revision">
+                    <h3>📋 Rappels théoriques</h3>
+                    
+                    <div class="formula">
+                        Théorème de Bayes : P(A|B) = P(B|A) · P(A) / P(B)<br><br>
+                        Probabilités totales : P(B) = Σ P(A_i) · P(B|A_i)<br><br>
+                        Indépendance : P(A∩B) = P(A) · P(B)<br><br>
+                        Si A et B indépendants ⟹ A et B̅ indépendants
+                    </div>
+                    
+                    <div class="example">
+                        <h4>💡 Combinaisons</h4>
+                        <p><strong>Permutations :</strong> n! arrangements de n objets</p>
+                        <p><strong>Arrangements :</strong> A(n,k) = n!/(n-k)!</p>
+                        <p><strong>Combinaisons :</strong> C(n,k) = n!/(k!(n-k)!)</p>
+                    </div>
+                </div>
+
+                <h3 style="color: var(--slate); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 1 - Indépendance d'événements</h4>
+                        <span class="difficulty moyen">Moyen</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Montrer que si A et B sont indépendants, alors A et B̅ sont aussi indépendants.</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            On sait que A = (A∩B) ∪ (A∩B̅) avec les deux événements disjoints<br>
+                            Donc P(A) = P(A∩B) + P(A∩B̅)<br><br>
+                            Si A et B indépendants : P(A∩B) = P(A)·P(B)<br>
+                            Alors P(A∩B̅) = P(A) - P(A)·P(B) = P(A)·(1-P(B)) = P(A)·P(B̅)<br><br>
+                            ✓ Donc A et B̅ sont indépendants
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 2 - Probabilités totales</h4>
+                        <span class="difficulty moyen">Moyen</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Dans une bibliothèque : 30% des livres sur étagère haute, 50% sur moyenne, 20% sur basse. Sur l'étagère haute : 25% romans. Sur moyenne : 40% romans. Sur basse : 80% romans. Quelle est la probabilité de choisir un roman au hasard ?</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            Événements : H (haute), M (moyenne), B (basse), R (roman)<br><br>
+                            P(R) = P(H)·P(R|H) + P(M)·P(R|M) + P(B)·P(R|B)<br>
+                            P(R) = 0.30×0.25 + 0.50×0.40 + 0.20×0.80<br>
+                            P(R) = 0.075 + 0.20 + 0.16 = 0.435<br><br>
+                            ✓ La probabilité est 43.5%
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 3 - Combinaisons</h4>
+                        <span class="difficulty facile">Facile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Combien de mains de 5 cartes différentes peut-on faire avec un jeu de 32 cartes ?</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            Il s'agit d'une combinaison (l'ordre n'importe pas)<br>
+                            C(32,5) = 32!/(5!×27!) = (32×31×30×29×28)/(5×4×3×2×1)<br>
+                            C(32,5) = 20,358,520/120 = 201,376<br><br>
+                            ✓ Il y a 201,376 mains possibles
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 4 - Dés et probabilités conditionnelles</h4>
+                        <span class="difficulty moyen">Moyen</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> On jette deux dés. Soit S la somme des deux dés. Calculer P(S≥10 | premier dé = 5).</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            Si le premier dé = 5, alors S≥10 ⟺ deuxième dé ≥ 5<br>
+                            Valeurs possibles pour le 2ème dé : {5, 6}<br>
+                            P(S≥10 | D1=5) = P(D2≥5) = 2/6 = 1/3<br><br>
+                            ✓ La probabilité est 1/3 ≈ 33.3%
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 5 - Bayes appliqué</h4>
+                        <span class="difficulty difficile">Difficile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Un test médical détecte une maladie avec 99% de précision (sensibilité). La maladie touche 0.1% de la population. Si le test est positif, quelle est la probabilité d'être réellement malade ?</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            Soit M : malade, T+ : test positif<br>
+                            P(M) = 0.001, P(M̅) = 0.999<br>
+                            P(T+|M) = 0.99 (sensibilité)<br>
+                            P(T+|M̅) = 0.01 (faux positif)<br><br>
+                            P(T+) = P(M)·P(T+|M) + P(M̅)·P(T+|M̅)<br>
+                            P(T+) = 0.001×0.99 + 0.999×0.01 = 0.00099 + 0.00999 = 0.01098<br><br>
+                            P(M|T+) = P(T+|M)·P(M) / P(T+)<br>
+                            P(M|T+) = (0.99×0.001) / 0.01098 ≈ 0.090 = 9%<br><br>
+                            ✓ Seulement 9% de chances d'être malade !<br>
+                            Paradoxe : test très précis mais maladie très rare
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="td2" class="page">
+            <a href="#" class="back-btn" data-page="proba">← Retour</a>
+            
+            <div class="td-detail">
+                <h2>TD2 - Lois Discrètes Usuelles</h2>
+                
+                <div class="fiche-revision">
+                    <h3>📋 Lois de probabilités discrètes</h3>
+                    
+                    <h4 style="color: var(--forest); margin-top: 1.5rem;">1. Loi Binomiale B(n,p)</h4>
+                    <div class="formula">
+                        P(X=k) = C(n,k) · p^k · (1-p)^(n-k)<br>
+                        E(X) = n·p<br>
+                        Var(X) = n·p·(1-p)<br><br>
+                        Usage : n épreuves indépendantes, succès avec probabilité p
+                    </div>
+                    
+                    <h4 style="color: var(--forest); margin-top: 1.5rem;">2. Loi de Poisson P(λ)</h4>
+                    <div class="formula">
+                        P(X=k) = (λ^k · e^(-λ)) / k!<br>
+                        E(X) = λ<br>
+                        Var(X) = λ<br><br>
+                        Usage : événements rares, approximation binomiale si n grand et p petit
+                    </div>
+                    
+                    <h4 style="color: var(--forest); margin-top: 1.5rem;">3. Loi Géométrique G(p)</h4>
+                    <div class="formula">
+                        P(X=k) = (1-p)^(k-1) · p<br>
+                        E(X) = 1/p<br>
+                        Var(X) = (1-p)/p²<br><br>
+                        Usage : nombre d'essais jusqu'au premier succès
+                    </div>
+                </div>
+
+                <h3 style="color: var(--slate); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 6 - Loi Binomiale</h4>
+                        <span class="difficulty facile">Facile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> On lance 10 fois une pièce équilibrée. Quelle est la probabilité d'obtenir exactement 6 fois pile ?</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            X ~ B(10, 0.5)<br>
+                            P(X=6) = C(10,6) · (0.5)^6 · (0.5)^4<br>
+                            C(10,6) = 10!/(6!×4!) = 210<br>
+                            P(X=6) = 210 · (0.5)^10 = 210/1024 ≈ 0.205<br><br>
+                            ✓ Probabilité ≈ 20.5%
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 7 - Loi de Poisson</h4>
+                        <span class="difficulty moyen">Moyen</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Un magasin reçoit en moyenne 4 clients par heure. Quelle est la probabilité de recevoir exactement 5 clients dans la prochaine heure ? Au moins 6 clients ?</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            X ~ P(4)<br><br>
+                            P(X=5) = (4^5 · e^(-4)) / 5!<br>
+                            P(X=5) = (1024 · e^(-4)) / 120<br>
+                            P(X=5) ≈ (1024 × 0.0183) / 120 ≈ 0.156<br>
+                            ✓ Exactement 5 clients : 15.6%<br><br>
+                            P(X≥6) = 1 - P(X≤5)<br>
+                            = 1 - [P(X=0) + P(X=1) + P(X=2) + P(X=3) + P(X=4) + P(X=5)]<br>
+                            = 1 - 0.785 ≈ 0.215<br>
+                            ✓ Au moins 6 clients : 21.5%
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 8 - Loi Géométrique</h4>
+                        <span class="difficulty moyen">Moyen</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> On lance un dé jusqu'à obtenir un 6. Quelle est la probabilité d'y arriver en moins de 5 lancers ? Quel est le nombre moyen de lancers ?</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            X ~ G(1/6)<br><br>
+                            P(X<5) = P(X=1) + P(X=2) + P(X=3) + P(X=4)<br>
+                            P(X=k) = (5/6)^(k-1) · (1/6)<br><br>
+                            P(X=1) = 1/6<br>
+                            P(X=2) = (5/6)·(1/6) = 5/36<br>
+                            P(X=3) = (5/6)²·(1/6) = 25/216<br>
+                            P(X=4) = (5/6)³·(1/6) = 125/1296<br><br>
+                            P(X<5) = 1/6 + 5/36 + 25/216 + 125/1296 ≈ 0.518<br>
+                            ✓ Probabilité : 51.8%<br><br>
+                            E(X) = 1/p = 6 lancers en moyenne<br>
+                            ✓ Nombre moyen : 6 lancers
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 9 - Approximation Poisson</h4>
+                        <span class="difficulty difficile">Difficile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Un composant électronique a 0.1% de chances d'être défectueux. Sur un lot de 1000, calculer la probabilité d'avoir exactement 2 défectueux (avec binomiale puis Poisson).</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            <strong>Méthode 1 : Binomiale</strong><br>
+                            X ~ B(1000, 0.001)<br>
+                            P(X=2) = C(1000,2) · (0.001)² · (0.999)^998<br>
+                            C(1000,2) = 499,500<br>
+                            P(X=2) ≈ 499,500 × 10^(-6) × 0.368 ≈ 0.184<br><br>
+                            
+                            <strong>Méthode 2 : Approximation Poisson</strong><br>
+                            λ = n·p = 1000 × 0.001 = 1<br>
+                            X ~ P(1)<br>
+                            P(X=2) = (1² · e^(-1)) / 2! = e^(-1)/2 ≈ 0.368/2 ≈ 0.184<br><br>
+                            
+                            ✓ Les deux méthodes donnent ~18.4%<br>
+                            ✓ Approximation Poisson excellente car n grand et p petit
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="td3" class="page">
+            <a href="#" class="back-btn" data-page="proba">← Retour</a>
+            
+            <div class="td-detail">
+                <h2>TD3 - Variables Continues</h2>
+                
+                <div class="fiche-revision">
+                    <h3>📋 Lois continues usuelles</h3>
+                    
+                    <h4 style="color: var(--forest); margin-top: 1.5rem;">1. Loi Uniforme U(a,b)</h4>
+                    <div class="formula">
+                        f(x) = 1/(b-a) si x∈[a,b], 0 sinon<br>
+                        E(X) = (a+b)/2<br>
+                        Var(X) = (b-a)²/12<br>
+                        F(x) = (x-a)/(b-a) pour x∈[a,b]
+                    </div>
+                    
+                    <h4 style="color: var(--forest); margin-top: 1.5rem;">2. Loi Exponentielle E(λ)</h4>
+                    <div class="formula">
+                        f(x) = λe^(-λx) si x≥0<br>
+                        E(X) = 1/λ<br>
+                        Var(X) = 1/λ²<br>
+                        F(x) = 1 - e^(-λx)<br>
+                        Propriété : sans mémoire P(X>s+t|X>s) = P(X>t)
+                    </div>
+                    
+                    <h4 style="color: var(--forest); margin-top: 1.5rem;">3. Loi Normale N(μ,σ²)</h4>
+                    <div class="formula">
+                        f(x) = (1/(σ√(2π)))·exp(-(x-μ)²/(2σ²))<br>
+                        E(X) = μ<br>
+                        Var(X) = σ²<br>
+                        Règle 68-95-99.7 : ±1σ ≈ 68%, ±2σ ≈ 95%, ±3σ ≈ 99.7%<br>
+                        Standardisation : Z = (X-μ)/σ ~ N(0,1)
+                    </div>
+                </div>
+
+                <h3 style="color: var(--slate); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 10 - Loi Uniforme</h4>
+                        <span class="difficulty facile">Facile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Un bus arrive aléatoirement entre 8h00 et 8h20. Vous arrivez à 8h05. Quelle est la probabilité d'attendre moins de 5 minutes ?</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            X ~ U(0,20) où X est le temps d'arrivée en minutes après 8h00<br>
+                            Vous arrivez à t=5, vous attendez <5min si bus arrive entre 5 et 10<br>
+                            P(5≤X≤10) = (10-5)/(20-0) = 5/20 = 1/4<br><br>
+                            ✓ Probabilité = 25%
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 11 - Loi Exponentielle</h4>
+                        <span class="difficulty moyen">Moyen</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> La durée de vie d'un disque dur suit E(λ) avec durée moyenne 5 ans. Quelle probabilité de panne avant 1 an ? Quelle garantie donner pour que P(panne) < 0.01 ?</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            E(X) = 1/λ = 5 donc λ = 0.2<br>
+                            F(x) = 1 - e^(-λx)<br><br>
+                            P(X<1) = F(1) = 1 - e^(-0.2) ≈ 1 - 0.8187 = 0.1813<br>
+                            ✓ Probabilité panne < 1an : 18.13%<br><br>
+                            Pour garantie t : 1 - e^(-0.2t) < 0.01<br>
+                            e^(-0.2t) > 0.99 ⟹ -0.2t > ln(0.99)<br>
+                            t < -ln(0.99)/0.2 ≈ 0.05 ans ≈ 18 jours<br>
+                            ✓ Garantir maximum 18 jours
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 12 - Loi Normale</h4>
+                        <span class="difficulty moyen">Moyen</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Les notes suivent N(13, 3²). Calculer P(note > 20), P(note < 5), P(12 < note < 14). Quelle note pour le top 10% ?</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            X ~ N(13,9), Z = (X-13)/3 ~ N(0,1)<br><br>
+                            P(X>20) = P(Z>(20-13)/3) = P(Z>2.33) ≈ 0.01<br>
+                            ✓ 1% ont plus de 20<br><br>
+                            P(X<5) = P(Z<(5-13)/3) = P(Z<-2.67) ≈ 0.004<br>
+                            ✓ 0.4% ont moins de 5<br><br>
+                            P(12<X<14) = P(-0.33<Z<0.33) ≈ 2×0.1293 = 0.2586<br>
+                            ✓ 25.86% entre 12 et 14<br><br>
+                            Top 10% : P(X>x) = 0.10 ⟹ P(Z>(x-13)/3) = 0.10<br>
+                            (x-13)/3 = 1.28 ⟹ x ≈ 16.84<br>
+                            ✓ Note ≥ 16.84 pour top 10%
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 13 - Théorème de Tchebychev</h4>
+                        <span class="difficulty difficile">Difficile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Pour X~N(13,3²), comparer P(|X-13|>6) calculée exactement et avec l'inégalité de Tchebychev.</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            <strong>Calcul exact :</strong><br>
+                            P(|X-13|>6) = P(X<7 ou X>19)<br>
+                            = P(Z<-2) + P(Z>2) = 2×0.0228 = 0.0456<br>
+                            ✓ Exacte : 4.56%<br><br>
+                            <strong>Théorème de Tchebychev :</strong> P(|X-μ|≥kσ) ≤ 1/k²<br>
+                            Ici k = 6/3 = 2<br>
+                            P(|X-13|≥6) ≤ 1/4 = 0.25<br>
+                            ✓ Borne de Tchebychev : ≤25%<br><br>
+                            L'inégalité est large mais toujours valide !<br>
+                            Avantage : valable pour TOUTE distribution
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="telecom" class="page">
             <a href="#" class="back-btn" data-page="home">← Retour</a>
             
@@ -804,116 +1271,6 @@
             </div>
         </section>
 
-        <!-- PAGE BUREAU D'ÉTUDES -->
-        <section id="bureau" class="page">
-            <a href="#" class="back-btn" data-page="home">← Retour</a>
-            
-            <div class="hero">
-                <h2>Bureau d'Études - Notions Fondamentales</h2>
-                <p>Unités de télécom, propagation radio, capacité de Shannon, antennes</p>
-            </div>
-
-            <div class="td-detail">
-                <h2>Unités de Télécommunications</h2>
-                
-                <div class="fiche-revision">
-                    <h3>📋 Conversions d'unités</h3>
-                    
-                    <div class="formula">
-                        P(dBW) = 10 log₁₀ P(W)<br>
-                        P(dBm) = 10 log₁₀ P(mW) = P(dBW) + 30<br>
-                        P_r(dBm) = P_e(dBm) - A(dB)
-                    </div>
-                    
-                    <div class="example">
-                        <h4>💡 Exemples de conversion</h4>
-                        <p><strong>P = 1 mW</strong> → 0.001 W, 0 dBm, -30 dBW</p>
-                        <p><strong>P = 1 W</strong> → 1000 mW, 0 dBW, 30 dBm</p>
-                        <p><strong>P = 21 dBm</strong> → 125.89 mW, 0.12589 W</p>
-                        <p><strong>P = -80 dBm</strong> → 0.0000001 mW, 10⁻¹⁰ W</p>
-                    </div>
-                </div>
-
-                <h3 style="color: var(--slate); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 1 - Conversion d'unités</h4>
-                        <span class="difficulty facile">Facile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Convertir 27 dBm en Watts et en milliwatts.</p>
-                    <button class="toggle-solution">Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            P(mW) = 10^(P(dBm)/10) = 10^(27/10) = 10^2.7 ≈ 501.19 mW<br>
-                            P(W) = 501.19 × 10⁻³ = 0.50119 W
-                        </div>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 2 - Bruit thermique</h4>
-                        <span class="difficulty moyen">Moyen</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Calculer la puissance du bruit thermique pour une bande passante de 10 MHz à température ambiante (T=290K).</p>
-                    <button class="toggle-solution">Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            P_bruit(W) = kTB = 1.38×10⁻²³ × 290 × 10×10⁶<br>
-                            P_bruit(W) ≈ 4.002×10⁻¹⁴ W<br>
-                            P_bruit(dBm) = 10 log₁₀(4.002×10⁻¹⁴ × 10³) ≈ -103.98 dBm
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="td-detail">
-                <h2>Propagation Radio</h2>
-                
-                <div class="fiche-revision">
-                    <h3>📋 Modèles de propagation</h3>
-                    
-                    <h4 style="color: var(--forest); margin-top: 1.5rem;">1. Espace libre</h4>
-                    <div class="formula">
-                        A_EL(d,f) = 32.4 + 20 log₁₀(d_km) + 20 log₁₀(f_MHz)
-                    </div>
-                    
-                    <h4 style="color: var(--forest); margin-top: 1.5rem;">2. Indoor IEEE 802.11</h4>
-                    <div class="formula">
-                        A_i(f,d) = 15.5 + 55 log₁₀(d_m) à 2.4 GHz
-                    </div>
-                    
-                    <h4 style="color: var(--forest); margin-top: 1.5rem;">3. Outdoor Okumura-Hata</h4>
-                    <div class="formula">
-                        A_Hata(d) = 139 + 35 log₁₀(d_km) à 1.8 GHz
-                    </div>
-                </div>
-
-                <h3 style="color: var(--slate); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 3 - Bilan de liaison WiFi</h4>
-                        <span class="difficulty moyen">Moyen</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Un point d'accès WiFi émet à 20 dBm avec une antenne de gain 3 dBi. Calculer la puissance reçue à 30 m en indoor à 2.4 GHz.</p>
-                    <button class="toggle-solution">Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            Atténuation = 15.5 + 55 log₁₀(30) ≈ 15.5 + 55×1.477 = 96.74 dB<br>
-                            P_r = P_e + G_antenne - Atténuation<br>
-                            P_r = 20 + 3 - 96.74 = -73.74 dBm
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE ARCHITECTURE RÉSEAU -->
         <section id="archi" class="page">
             <a href="#" class="back-btn" data-page="telecom">← Retour aux Télécoms</a>
             
@@ -951,36 +1308,438 @@
                     </ul>
                 </div>
 
-                <div class="example">
-                    <h4>💡 Cas pratique - Supermarché connecté</h4>
-                    <p><strong>Surface :</strong> 800 m² divisée en 4 zones</p>
-                    <p><strong>Architecture :</strong></p>
-                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
-                        <li>4 passerelles intermédiaires (une par zone)</li>
-                        <li>1 passerelle centrale</li>
-                        <li>Capteurs sur étagères et rayons</li>
-                        <li>Connexion internet filaire</li>
-                    </ul>
-                    <p style="margin-top: 1rem;"><strong>Technologies :</strong> Zigbee/LoRa pour capteurs, WiFi pour clients, fibre pour backbone</p>
+                <h3 style="color: var(--slate); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 14 - Dimensionnement réseau</h4>
+                        <span class="difficulty difficile">Difficile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Pour un campus de 400 m² avec 35 capteurs Bluetooth, calculer le nombre de passerelles nécessaires si chaque passerelle peut supporter 10 capteurs simultanés avec un débit de 100 Kbps chacun.</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            <strong>Nombre de passerelles :</strong><br>
+                            Nombre de capteurs par passerelle = 10<br>
+                            Nombre total de capteurs = 35<br>
+                            Nombre de passerelles = ⌈35/10⌉ = 4 passerelles<br><br>
+                            <strong>Débit requis :</strong><br>
+                            Débit total par passerelle = 10 × 100 Kbps = 1 Mbps<br>
+                            Débit WiFi requis > 1 Mbps (OK avec WiFi standard)<br><br>
+                            ✓ Il faut 4 passerelles BLE minimum<br>
+                            ✓ Débit WiFi largement suffisant
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="bruit" class="page">
+            <a href="#" class="back-btn" data-page="telecom">← Retour aux Télécoms</a>
+            
+            <div class="td-detail">
+                <h2>Bruit Thermique</h2>
+                
+                <div class="fiche-revision">
+                    <h3>📋 Formule fondamentale</h3>
+                    
+                    <div class="formula">
+                        P_bruit = k·T·B<br><br>
+                        k = 1.38×10⁻²³ J/K (constante de Boltzmann)<br>
+                        T = température en Kelvin (typiquement 290K = 17°C)<br>
+                        B = bande passante en Hz<br><br>
+                        Conversion en dBm :<br>
+                        P_bruit(dBm) = 10·log₁₀(P_bruit(W) × 10³)
+                    </div>
                 </div>
 
                 <h3 style="color: var(--slate); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
 
                 <div class="exercice">
                     <div class="exercice-header">
-                        <h4>Exercice 4 - Dimensionnement réseau</h4>
-                        <span class="difficulty difficile">Difficile</span>
+                        <h4>Exercice 15 - Calcul du bruit</h4>
+                        <span class="difficulty moyen">Moyen</span>
                     </div>
-                    <p><strong>Énoncé :</strong> Pour un campus de 400 m² avec 35 capteurs Bluetooth, calculer le nombre de passerelles nécessaires si chaque passerelle peut supporter 10 capteurs simultanés avec un débit de 100 Kbps chacun.</p>
-                    <button class="toggle-solution">Voir la solution</button>
+                    <p><strong>Énoncé :</strong> Calculer la puissance du bruit thermique pour une bande passante de 10 MHz à température ambiante (T=290K).</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
                     <div class="solution">
                         <p><strong>Solution :</strong></p>
                         <div class="formula">
-                            Nombre de capteurs par passerelle = 10<br>
-                            Nombre total de capteurs = 35<br>
-                            Nombre de passerelles = ceil(35/10) = 4 passerelles<br><br>
-                            Débit total par passerelle = 10 × 100 Kbps = 1 Mbps<br>
-                            Débit WiFi requis > 1 Mbps (OK avec WiFi standard)
+                            P_bruit(W) = k·T·B<br>
+                            P_bruit = 1.38×10⁻²³ × 290 × 10×10⁶<br>
+                            P_bruit ≈ 4.002×10⁻¹⁴ W<br><br>
+                            Conversion en dBm :<br>
+                            P_bruit(dBm) = 10·log₁₀(4.002×10⁻¹⁴ × 10³)<br>
+                            P_bruit(dBm) = 10·log₁₀(4.002×10⁻¹¹)<br>
+                            P_bruit(dBm) ≈ -103.98 dBm<br><br>
+                            ✓ Puissance du bruit : -104 dBm
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="bilan" class="page">
+            <a href="#" class="back-btn" data-page="telecom">← Retour aux Télécoms</a>
+            
+            <div class="td-detail">
+                <h2>Bilan de Liaison</h2>
+                
+                <div class="fiche-revision">
+                    <h3>📋 Modèles de propagation</h3>
+                    
+                    <h4 style="color: var(--forest); margin-top: 1.5rem;">1. Espace libre</h4>
+                    <div class="formula">
+                        A_EL(d,f) = 32.4 + 20·log₁₀(d_km) + 20·log₁₀(f_MHz)<br><br>
+                        Usage : ligne de vue directe, sans obstacles
+                    </div>
+                    
+                    <h4 style="color: var(--forest); margin-top: 1.5rem;">2. Indoor IEEE 802.11</h4>
+                    <div class="formula">
+                        A_i(f,d) = 15.5 + 55·log₁₀(d_m) à 2.4 GHz<br><br>
+                        Usage : environnements intérieurs avec murs et obstacles
+                    </div>
+                    
+                    <h4 style="color: var(--forest); margin-top: 1.5rem;">3. Outdoor Okumura-Hata</h4>
+                    <div class="formula">
+                        A_Hata(d) = 139 + 35·log₁₀(d_km) à 1.8 GHz<br><br>
+                        Usage : environnements urbains extérieurs
+                    </div>
+                    
+                    <div class="example">
+                        <h4>💡 Bilan complet</h4>
+                        <p><strong>P_reçue = P_émise + G_émetteur - Atténuation + G_récepteur</strong></p>
+                    </div>
+                </div>
+
+                <h3 style="color: var(--slate); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 16 - Bilan WiFi indoor</h4>
+                        <span class="difficulty moyen">Moyen</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Un point d'accès WiFi émet à 20 dBm avec une antenne de gain 3 dBi. Calculer la puissance reçue à 30 m en indoor à 2.4 GHz.</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            Atténuation indoor :<br>
+                            A = 15.5 + 55·log₁₀(30)<br>
+                            A = 15.5 + 55×1.477 = 96.74 dB<br><br>
+                            Bilan de liaison (avec G_r = 0 dBi) :<br>
+                            P_r = P_e + G_e - A + G_r<br>
+                            P_r = 20 + 3 - 96.74 + 0<br>
+                            P_r = -73.74 dBm<br><br>
+                            ✓ Puissance reçue : -73.74 dBm
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 17 - Comparaison modèles</h4>
+                        <span class="difficulty difficile">Difficile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Comparer l'atténuation à 100m pour les modèles espace libre (2.4 GHz) et indoor (2.4 GHz). Expliquer la différence.</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            <strong>Espace libre :</strong><br>
+                            A_EL = 32.4 + 20·log₁₀(0.1) + 20·log₁₀(2400)<br>
+                            A_EL = 32.4 - 20 + 67.6 = 80 dB<br><br>
+                            
+                            <strong>Indoor :</strong><br>
+                            A_indoor = 15.5 + 55·log₁₀(100)<br>
+                            A_indoor = 15.5 + 55×2 = 125.5 dB<br><br>
+                            
+                            <strong>Différence :</strong> 125.5 - 80 = 45.5 dB<br><br>
+                            ✓ L'atténuation indoor est 45.5 dB supérieure !<br>
+                            ✓ Raison : murs, obstacles, réflexions multiples<br>
+                            ✓ Le modèle indoor est beaucoup plus pessimiste (réaliste)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="portee" class="page">
+            <a href="#" class="back-btn" data-page="telecom">← Retour aux Télécoms</a>
+            
+            <div class="td-detail">
+                <h2>Portée Maximale</h2>
+                
+                <div class="fiche-revision">
+                    <h3>📋 Calcul de la portée</h3>
+                    
+                    <div class="formula">
+                        Budget de liaison :<br>
+                        P_reçue_min = P_émise + G_émetteur - Atténuation + G_récepteur<br><br>
+                        À la portée maximale :<br>
+                        P_reçue = Seuil de sensibilité du récepteur<br><br>
+                        On résout pour trouver d_max
+                    </div>
+                </div>
+
+                <h3 style="color: var(--slate); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 18 - Portée WiFi</h4>
+                        <span class="difficulty moyen">Moyen</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Un émetteur WiFi (2.4 GHz) a une puissance de 23 dBm, gain antenne 5 dBi. Seuil de sensibilité du récepteur : -85 dBm. Calculer la portée max en indoor.</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            Budget de liaison :<br>
+                            -85 = 23 + 5 - A + 0<br>
+                            A = 113 dB<br><br>
+                            Modèle indoor : A = 15.5 + 55·log₁₀(d)<br>
+                            113 = 15.5 + 55·log₁₀(d)<br>
+                            55·log₁₀(d) = 97.5<br>
+                            log₁₀(d) = 1.773<br>
+                            d = 10^1.773 ≈ 59.3 m<br><br>
+                            ✓ Portée maximale : environ 59 mètres
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 19 - Impact de la fréquence</h4>
+                        <span class="difficulty difficile">Difficile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Comparer la portée en espace libre à 2.4 GHz et 5 GHz avec même puissance 20 dBm, gains 0 dBi, sensibilité -90 dBm.</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            Budget : -90 = 20 + 0 - A + 0 ⟹ A = 110 dB<br><br>
+                            
+                            <strong>À 2.4 GHz (2400 MHz) :</strong><br>
+                            110 = 32.4 + 20·log₁₀(d_km) + 20·log₁₀(2400)<br>
+                            110 = 32.4 + 20·log₁₀(d_km) + 67.6<br>
+                            20·log₁₀(d_km) = 10<br>
+                            d_km = 10^0.5 ≈ 3.16 km<br>
+                            ✓ Portée à 2.4 GHz : 3.16 km<br><br>
+                            
+                            <strong>À 5 GHz (5000 MHz) :</strong><br>
+                            110 = 32.4 + 20·log₁₀(d_km) + 20·log₁₀(5000)<br>
+                            110 = 32.4 + 20·log₁₀(d_km) + 74<br>
+                            20·log₁₀(d_km) = 3.6<br>
+                            d_km = 10^0.18 ≈ 1.51 km<br>
+                            ✓ Portée à 5 GHz : 1.51 km<br><br>
+                            
+                            <strong>Conclusion :</strong> 2.4 GHz a 2× plus de portée !<br>
+                            Les fréquences basses portent plus loin
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="shannon" class="page">
+            <a href="#" class="back-btn" data-page="telecom">← Retour aux Télécoms</a>
+            
+            <div class="td-detail">
+                <h2>Capacité de Shannon</h2>
+                
+                <div class="fiche-revision">
+                    <h3>📋 Théorème de Shannon-Hartley</h3>
+                    
+                    <div class="formula">
+                        C = B·log₂(1 + SINR)<br><br>
+                        C : capacité du canal (bit/s)<br>
+                        B : bande passante (Hz)<br>
+                        SINR : rapport signal sur interférence + bruit (linéaire)<br><br>
+                        Efficacité spectrale : η = C/B (bit/s/Hz)<br>
+                        η = log₂(1 + SINR)<br><br>
+                        Conversion dB : SINR(linéaire) = 10^(SINR(dB)/10)
+                    </div>
+                </div>
+
+                <h3 style="color: var(--slate); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 20 - Capacité théorique</h4>
+                        <span class="difficulty difficile">Difficile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Canal WiFi : bande 20 MHz, SINR = 20 dB. Calculer la capacité théorique. Combien de temps pour transférer un fichier de 100 Mo ?</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            SINR(dB) = 20 dB ⟹ SINR = 10^(20/10) = 100<br><br>
+                            Capacité de Shannon :<br>
+                            C = B·log₂(1 + SINR)<br>
+                            C = 20×10⁶ × log₂(101)<br>
+                            C = 20×10⁶ × 6.658 ≈ 133.16 Mbps<br><br>
+                            Fichier 100 Mo = 800 Mbits<br>
+                            Temps = 800 / 133.16 ≈ 6.0 secondes<br><br>
+                            ✓ Capacité : 133 Mbps<br>
+                            ✓ Temps : 6 secondes<br>
+                            (En pratique, overhead protocolaire réduit le débit)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 21 - Efficacité spectrale</h4>
+                        <span class="difficulty difficile">Difficile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Un réseau 4G utilise 10 MHz de bande et atteint 30 Mbps. Calculer l'efficacité spectrale η. Quel SINR minimum est requis ?</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            Efficacité spectrale :<br>
+                            η = C/B = 30×10⁶ / 10×10⁶ = 3 bit/s/Hz<br><br>
+                            De C = B·log₂(1 + SINR) :<br>
+                            η = log₂(1 + SINR)<br>
+                            3 = log₂(1 + SINR)<br>
+                            1 + SINR = 2³ = 8<br>
+                            SINR = 7 (linéaire)<br>
+                            SINR(dB) = 10·log₁₀(7) ≈ 8.45 dB<br><br>
+                            ✓ Efficacité : 3 bit/s/Hz<br>
+                            ✓ SINR minimum : 8.45 dB
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 22 - Cas pratique Campus IoT</h4>
+                        <span class="difficulty difficile">Difficile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Campus 5000 m² sur 3 étages, 80 salles avec 3 capteurs chacun (T°, humidité, présence). Données : 100 bytes toutes les 5 min. Dimensionner l'architecture complète (BLE → passerelles → WiFi → serveur).</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            <strong>Niveau 1 : Capteurs → Passerelles BLE</strong><br>
+                            Total capteurs = 80 × 3 = 240 capteurs<br>
+                            Chaque passerelle : 20 capteurs max<br>
+                            Passerelles BLE = ⌈240/20⌉ = 12 passerelles<br>
+                            Répartition : 4 passerelles par étage<br><br>
+                            
+                            <strong>Débit par capteur :</strong><br>
+                            100 bytes / 5 min = 20 bytes/min = 0.33 bytes/s<br>
+                            = 2.67 bps par capteur<br>
+                            Par passerelle : 20 × 2.67 = 53.4 bps<br><br>
+                            
+                            <strong>Niveau 2 : Passerelles → AP WiFi</strong><br>
+                            Débit total : 12 × 53.4 bps = 641 bps ≈ 0.6 kbps<br>
+                            Avec overhead × 100 : 60 kbps requis<br>
+                            WiFi (54 Mbps) : largement suffisant !<br><br>
+                            
+                            <strong>Architecture recommandée :</strong><br>
+                            ✓ 12 passerelles BLE (4 par étage)<br>
+                            ✓ 3 AP WiFi (1 par étage) + 1 backup<br>
+                            ✓ 1 serveur local ou cloud<br>
+                            ✓ Backup 4G pour redondance<br><br>
+                            
+                            <strong>Bilan de liaison à vérifier :</strong><br>
+                            BLE : portée 10m OK pour salles<br>
+                            WiFi : portée 40m OK pour étages<br>
+                            Marge ≥ 10 dB recommandée
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="bureau" class="page">
+            <a href="#" class="back-btn" data-page="home">← Retour</a>
+            
+            <div class="hero">
+                <h2>Bureau d'Études - Notions Fondamentales</h2>
+                <p>Unités de télécom, propagation radio, capacité de Shannon, antennes</p>
+            </div>
+
+            <div class="td-detail">
+                <h2>Unités de Télécommunications</h2>
+                
+                <div class="fiche-revision">
+                    <h3>📋 Conversions d'unités</h3>
+                    
+                    <div class="formula">
+                        P(dBW) = 10·log₁₀(P(W))<br>
+                        P(dBm) = 10·log₁₀(P(mW)) = P(dBW) + 30<br>
+                        P_r(dBm) = P_e(dBm) - A(dB)<br><br>
+                        Formule inverse :<br>
+                        P(W) = 10^(P(dBW)/10)<br>
+                        P(mW) = 10^(P(dBm)/10)
+                    </div>
+                    
+                    <div class="example">
+                        <h4>💡 Exemples de conversion</h4>
+                        <p><strong>P = 1 mW</strong> → 0.001 W, 0 dBm, -30 dBW</p>
+                        <p><strong>P = 1 W</strong> → 1000 mW, 0 dBW, 30 dBm</p>
+                        <p><strong>P = 21 dBm</strong> → 125.89 mW, 0.12589 W</p>
+                        <p><strong>P = -80 dBm</strong> → 0.0000001 mW, 10⁻¹⁰ W</p>
+                    </div>
+                </div>
+
+                <h3 style="color: var(--slate); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 23 - Conversion d'unités</h4>
+                        <span class="difficulty facile">Facile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Convertir 27 dBm en Watts et en milliwatts.</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            P(mW) = 10^(27/10) = 10^2.7 ≈ 501.19 mW<br>
+                            P(W) = 501.19 / 1000 = 0.50119 W<br><br>
+                            ✓ 27 dBm = 501.19 mW = 0.501 W
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 24 - Calcul de puissance</h4>
+                        <span class="difficulty moyen">Moyen</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Un émetteur a une puissance de 2 W. Après une atténuation de 15 dB, quelle est la puissance reçue en dBm et en mW ?</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            P_émetteur = 2 W = 10·log₁₀(2000) ≈ 33.01 dBm<br>
+                            P_reçue = 33.01 - 15 = 18.01 dBm<br>
+                            P_reçue(mW) = 10^(18.01/10) ≈ 63.25 mW<br><br>
+                            ✓ Puissance reçue : 18.01 dBm = 63.25 mW
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 25 - Bilan complet</h4>
+                        <span class="difficulty difficile">Difficile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Système avec P_émetteur = 30 dBm, G_émetteur = 5 dBi, atténuation = 110 dB, G_récepteur = 2 dBi. Calculer P_reçue en dBm et en μW.</p>
+                    <button class="toggle-solution">🔓 Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            P_reçue = P_émetteur + G_émetteur - Atténuation + G_récepteur<br>
+                            P_reçue = 30 + 5 - 110 + 2 = -73 dBm<br><br>
+                            Conversion en μW :<br>
+                            P(μW) = 10^(P(dBm)/10) × 1000<br>
+                            P(μW) = 10^(-73/10) × 1000 = 10^(-7.3) × 1000<br>
+                            P(μW) = 5.01 × 10⁻⁸ × 1000 = 0.0501 μW<br><br>
+                            ✓ P_reçue = -73 dBm = 0.0501 μW
                         </div>
                     </div>
                 </div>
@@ -989,79 +1748,124 @@
     </div>
 
     <footer>
-        <p>🚀 Application de révision - ISEP A1</p>
-        <p>Probabilités & Télécommunications - Projet Campus Connecté</p>
+        <p>📚 ISEP A1 - Projet Campus Connecté</p>
+        <p>🎯 Seydi - Révision Télécommunications & Probabilités</p>
+        <p>📅 Année 2024-2025</p>
     </footer>
 
     <script>
         // Navigation entre pages
-        document.querySelectorAll('.nav-link, .back-btn, .subject-card, .topic-card').forEach(element => {
-            element.addEventListener('click', function(e) {
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
                 e.preventDefault();
-                
-                const targetPage = this.dataset.page || this.dataset.td;
-                
-                // Masquer toutes les pages
-                document.querySelectorAll('.page').forEach(page => {
-                    page.classList.remove('active');
-                });
-                
-                // Afficher la page cible
-                document.getElementById(targetPage).classList.add('active');
+                const targetPage = e.target.getAttribute('data-page');
                 
                 // Mettre à jour la navigation active
-                document.querySelectorAll('.nav-link').forEach(link => {
-                    link.classList.remove('active');
-                });
+                document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
+                e.target.classList.add('active');
                 
-                // Mettre à jour la navigation principale si nécessaire
-                if (targetPage === 'home' || targetPage === 'proba' || targetPage === 'telecom' || targetPage === 'bureau') {
-                    document.querySelector(`.nav-link[data-page="${targetPage}"]`).classList.add('active');
-                }
-                
-                // Mettre à jour la progression
-                updateProgress();
+                // Afficher la page cible
+                document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+                document.getElementById(targetPage).classList.add('active');
             });
         });
 
-        // Gestion des checkboxes de progression
+        // Navigation via les cartes de sujet
+        document.querySelectorAll('.subject-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                const targetPage = card.getAttribute('data-page');
+                
+                // Mettre à jour la navigation
+                document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
+                document.querySelector(`[data-page="${targetPage}"]`).classList.add('active');
+                
+                // Afficher la page cible
+                document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+                document.getElementById(targetPage).classList.add('active');
+            });
+        });
+
+        // Navigation via les cartes de topics
+        document.querySelectorAll('.topic-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                const targetTD = card.getAttribute('data-td');
+                
+                // Afficher la page du TD
+                document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+                document.getElementById(targetTD).classList.add('active');
+            });
+        });
+
+        // Boutons retour
+        document.querySelectorAll('.back-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetPage = btn.getAttribute('data-page');
+                
+                // Mettre à jour la navigation
+                document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
+                document.querySelector(`[data-page="${targetPage}"]`).classList.add('active');
+                
+                // Afficher la page cible
+                document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+                document.getElementById(targetPage).classList.add('active');
+            });
+        });
+
+        // Gestion des cases à cocher pour la progression
         document.querySelectorAll('.checkbox').forEach(checkbox => {
-            checkbox.addEventListener('click', function() {
-                this.classList.toggle('checked');
+            checkbox.addEventListener('click', (e) => {
+                e.stopPropagation();
+                checkbox.classList.toggle('checked');
                 updateProgress();
             });
         });
 
-        // Gestion des solutions d'exercices
-        document.querySelectorAll('.toggle-solution').forEach(button => {
-            button.addEventListener('click', function() {
-                const solution = this.nextElementSibling;
-                solution.classList.toggle('active');
-                this.textContent = solution.classList.contains('active') ? 'Masquer la solution' : 'Voir la solution';
-            });
-        });
-
-        // Mise à jour de la progression
+        // Fonction pour mettre à jour la progression
         function updateProgress() {
             // Progression Probabilités
             const probaCheckboxes = document.querySelectorAll('#proba .checkbox');
             const probaChecked = document.querySelectorAll('#proba .checkbox.checked').length;
             const probaProgress = (probaChecked / probaCheckboxes.length) * 100;
             
-            document.getElementById('proba-progress').style.width = `${probaProgress}%`;
-            document.getElementById('proba-percentage').textContent = `${Math.round(probaProgress)}%`;
-            
+            document.getElementById('proba-progress').style.width = probaProgress + '%';
+            document.getElementById('proba-percentage').textContent = Math.round(probaProgress) + '%';
+
             // Progression Télécoms
             const telecomCheckboxes = document.querySelectorAll('#telecom .checkbox');
             const telecomChecked = document.querySelectorAll('#telecom .checkbox.checked').length;
             const telecomProgress = (telecomChecked / telecomCheckboxes.length) * 100;
             
-            document.getElementById('telecom-progress').style.width = `${telecomProgress}%`;
-            document.getElementById('telecom-percentage').textContent = `${Math.round(telecomProgress)}%`;
+            document.getElementById('telecom-progress').style.width = telecomProgress + '%';
+            document.getElementById('telecom-percentage').textContent = Math.round(telecomProgress) + '%';
         }
 
-        // Initialisation
+        // Gestion des solutions d'exercices
+        document.querySelectorAll('.toggle-solution').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const solution = e.target.nextElementSibling;
+                solution.classList.toggle('active');
+                
+                if (solution.classList.contains('active')) {
+                    e.target.textContent = '🔒 Cacher la solution';
+                } else {
+                    e.target.textContent = '🔓 Voir la solution';
+                }
+            });
+        });
+
+        // Initialiser la progression au chargement
         updateProgress();
+
+        // Animation au chargement de la page
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease-in';
+            
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
     </script>
 </body>
 </html>
