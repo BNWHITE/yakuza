@@ -3,44 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Préparation Examen Proba & Télécom</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <title>Prep'Exam Proba & Télécom</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
-        /* CSS GLOBALE ET THÈME SOMBRE (DARK MODE) */
+        /* CSS GLOBALE ET THÈME NEUTRE (INSPIRATION IMAGES) */
         :root {
-            --color-primary: #007bff; /* Bleu académique */
-            --color-secondary: #28a745; /* Vert pour l'accentuation */
-            --color-bg-dark: #1e1e1e; /* Fond sombre */
-            --color-text-light: #f8f9fa; /* Texte clair */
-            --color-card-bg: #2b2b2b; /* Fond de carte légèrement plus clair */
-            --color-border: #444; /* Bordure discrète */
-            --transition-speed: 0.3s;
+            /* Couleurs inspirées de la palette jointe */
+            --color-primary: #8a6c5b; /* Brun/Terre Cuite Profond */
+            --color-secondary: #4a6f6c; /* Vert-Gris Séquoia */
+            --color-accent: #b08d57; /* Beige/Or Moutarde */
+            --color-bg-light: #f5f5f5; /* Fond très clair */
+            --color-text-dark: #333333; /* Texte sombre pour un contraste élevé */
+            --color-card-bg: #ffffff; /* Fond de carte blanc cassé */
+            --color-border-subtle: #e0e0e0;
+            --transition-speed: 0.4s;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
 
         body {
-            background-color: var(--color-bg-dark);
-            color: var(--color-text-light);
+            background-color: var(--color-bg-light);
+            color: var(--color-text-dark);
             line-height: 1.6;
-            padding: 20px;
+            padding: 10px;
         }
 
         /* HEADER & NAVIGATION */
         header {
             text-align: center;
-            padding-bottom: 30px;
+            padding: 20px 0 40px;
         }
 
         h1 {
+            font-family: 'Playfair Display', serif;
             color: var(--color-primary);
-            font-size: 2.2em;
+            font-size: 2.5em;
             margin-bottom: 5px;
+            letter-spacing: 1px;
         }
 
         /* PAGE D'ACCUEIL (HOME) */
@@ -48,299 +52,337 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 25px;
             padding-top: 50px;
         }
 
         .cta-button {
             width: 100%;
-            max-width: 350px;
-            padding: 18px;
+            max-width: 400px;
+            padding: 20px;
             border: none;
-            border-radius: 12px;
-            font-size: 1.2em;
+            border-radius: 10px;
+            font-size: 1.3em;
             font-weight: 700;
             cursor: pointer;
-            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-            text-align: center;
+            transition: all var(--transition-speed) ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-transform: uppercase;
         }
 
         .cta-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            opacity: 0.9;
         }
 
         .proba-btn {
-            background-color: var(--color-primary);
-            color: var(--color-text-light);
+            background-color: var(--color-secondary);
+            color: var(--color-bg-light);
         }
 
         .telecom-btn {
-            background-color: var(--color-secondary);
-            color: var(--color-text-light);
+            background-color: var(--color-primary);
+            color: var(--color-bg-light);
         }
         
-        /* PAGE DE CONTENU (PROBA & TELECOM) */
+        /* PAGE DE CONTENU */
         .content-page {
-            display: none; /* Masqué par défaut */
-            padding-top: 20px;
+            display: none;
+            padding: 20px 0;
         }
 
         .content-page h2 {
+            font-family: 'Playfair Display', serif;
             color: var(--color-primary);
             border-bottom: 3px solid var(--color-secondary);
             padding-bottom: 10px;
-            margin-bottom: 25px;
-            font-size: 1.8em;
+            margin-bottom: 30px;
+            font-size: 2em;
         }
 
         /* CARDS (FICHES DE RÉVISION) */
         .revision-card {
             background-color: var(--color-card-bg);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-left: 5px solid var(--color-secondary);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 6px solid var(--color-accent); /* Bande latérale pour l'accentuation */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: box-shadow 0.2s;
+        }
+
+        .revision-card:hover {
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
         }
 
         .revision-card h3 {
             color: var(--color-secondary);
             margin-top: 0;
-            margin-bottom: 10px;
-            font-size: 1.4em;
+            margin-bottom: 15px;
+            font-size: 1.5em;
         }
 
-        .revision-card p, .revision-card ul {
-            margin-bottom: 10px;
+        .revision-card strong {
+            color: var(--color-primary);
+            font-weight: 700;
         }
 
         .revision-card ul {
-            padding-left: 20px;
+            padding-left: 25px;
+            margin-top: 10px;
         }
         
         .revision-card li {
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
 
         /* BOUTON RETOUR */
         .back-btn {
-            background-color: #6c757d; /* Gris pour le retour */
-            color: var(--color-text-light);
+            background-color: #a0a0a0; /* Gris neutre */
+            color: var(--color-bg-light);
             border: none;
-            padding: 10px 15px;
+            padding: 10px 18px;
             border-radius: 8px;
             cursor: pointer;
-            margin-bottom: 20px;
-            font-size: 1em;
+            margin-bottom: 25px;
+            font-size: 0.9em;
             transition: background-color var(--transition-speed);
         }
         
         .back-btn:hover {
-            background-color: #5a6268;
+            background-color: #888888;
         }
         
-        /* RÉACTIVITÉ MOBILE (pour un affichage sur téléphone) */
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-            h1 {
-                font-size: 1.8em;
-            }
-            .cta-button {
-                font-size: 1.1em;
-                padding: 15px;
-            }
-            .content-page h2 {
-                font-size: 1.5em;
-            }
-        }
-        
-        /* Style spécifique pour les équations (si LateX est inclus) */
+        /* STYLE POUR LES FORMULES MATHÉMATIQUES (Ultra lisible) */
         .math {
             display: block;
-            margin: 10px 0;
-            padding: 10px;
-            background-color: #3a3a3a;
-            border-radius: 4px;
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #eeeeee; /* Fond très clair pour les maths */
+            color: var(--color-text-dark);
+            border: 1px solid var(--color-border-subtle);
+            border-radius: 6px;
             overflow-x: auto;
-            font-family: 'Times New Roman', serif; /* Plus académique pour les maths */
+            font-size: 1.1em;
+            font-family: serif; /* Pour un rendu plus académique des symboles */
+        }
+        
+        /* RÉACTIVITÉ MOBILE (pour un affichage parfait sur téléphone) */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+            .content-page h2 {
+                font-size: 1.7em;
+            }
+            .cta-button {
+                font-size: 1.2em;
+            }
+            .revision-card {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Prep'Exam 🚀</h1>
-        <p>Votre outil de révision personnalisé pour le 29 Novembre.</p>
+        <h1>Prep'Exam 🎓</h1>
+        <p>Révision structurée pour le 29 Novembre - Proba & Télécom.</p>
     </header>
 
     <section id="home-page" class="active-page">
-        <h2>Choisissez votre matière :</h2>
+        <h2>Sélectionnez votre Domaine d'Examen</h2>
         <button class="cta-button proba-btn" onclick="showPage('proba')">
-            📚 Probabilités
+            📈 Probabilités & Statistiques
         </button>
         <button class="cta-button telecom-btn" onclick="showPage('telecom')">
-            📡 Télécommunications
+            🌐 Fondamentaux des Télécommunications
         </button>
     </section>
 
     <section id="proba-page" class="content-page">
         <button class="back-btn" onclick="showPage('home')">← Retour à l'accueil</button>
-        <h2>📚 Révision - Probabilités</h2>
-        <p>Axe de révision : cas et vues des TD 1 à 5 (Document `Proba-Enonce-2024.pdf`).</p>
+        <h2>📈 Révision Intensive - Probabilités</h2>
+        <p>Axe de révision : 20 cas incontournables inspirés des TDs et Annales (2018, 2021, 2022).</p>
 
         <div class="revision-card">
-            <h3>TD 1 : Bases, Conditionnement & Indépendance</h3>
-            <p><strong>Cas TD1-1 (a & b) : Indépendance et Application</strong></p>
+            <h3>C1. Probabilités Conditionnelles & Indépendance (TD1-1)</h3>
+            <p><strong>Règle Fondamentale :</strong> Si $A$ et $B$ sont **indépendants**, alors $P(A \cap B) = P(A) \cdot P(B)$.</p>
             <ul>
-                <li><strong>Question de cours :</strong> Démontrer que si $A$ et $B$ sont indépendants, alors $\overline{A}$ et $B$ sont également indépendants.</li>
-                <li><strong>Application :</strong> Événements indépendants $R$ (Réveil) et $S$ (Scooter). $P(R)=0.1$, $P(S)=0.05$. Retard si $R \cup S$.
+                <li>**Démonstration Q. de cours (2018, 2021) :** Prouver que $\overline{A}$ et $B$ sont indépendants.
                     <div class="math">
-                        P(Retard) = P(R \cup S) = P(R) + P(S) - P(R \cap S)
-                    </div>
-                    Puisque $R$ et $S$ sont indépendants, $P(R \cap S) = P(R) \cdot P(S)$.
-                    <div class="math">
-                        P(À l'heure) = P(\overline{R} \cap \overline{S}) = P(\overline{R}) \cdot P(\overline{S}) = (1 - P(R))(1 - P(S))
+                        P(\overline{A} \cap B) = P(B) - P(A \cap B) = P(B) - P(A)P(B) = P(B) \cdot (1 - P(A)) = P(\overline{A}) \cdot P(B)
                     </div>
                 </li>
+                <li>**Application (Stéphane, Retard) :** Calculer $P(\text{Retard}) = P(R \cup S)$.
+                    <div class="math">
+                        P(R \cup S) = P(R) + P(S) - P(R)P(S)
+                    </div>
+                </li>
+                <li>**Formule de Bayes (Ex. 1 - 2018) :** Calcul de $P(B|A) = \frac{P(A|B) P(B)}{P(A)}$. Nécessite le Théorème des Probabilités Totales pour $P(A)$.</li>
             </ul>
         </div>
         
         <div class="revision-card">
-            <h3>TD 2 : Variables Aléatoires (V.A.) Discrètes</h3>
-            <p><strong>Cas TD2-1 : Loi de Poisson</strong></p>
+            <h3>C2. V.A. Discrètes (Lois Binomiale, Poisson, Géométrique)</h3>
+            <p><strong>Cas TD2 (Tirs, Pannes, Arrivées) :</strong> Identifier la bonne loi pour modéliser l'événement.</p>
             <ul>
-                <li><strong>Contexte :</strong> V.A. $X$ représentant le nombre d'événements dans un intervalle (appels téléphoniques, défauts, etc.).</li>
-                <li><strong>Loi de probabilité :</strong> $X \sim \mathcal{P}(\lambda)$.
+                <li>**Loi Binomiale $\mathcal{B}(n, p)$ :** Nombre de succès $k$ sur $n$ essais indépendants.
+                    <div class="math">
+                        P(X=k) = C_{n}^{k} p^{k} (1-p)^{n-k} \text{ (Annales 2022 : question subsidiaire)}
+                    </div>
+                </li>
+                <li>**Loi de Poisson $\mathcal{P}(\lambda)$ :** Nombre d'événements rares dans un intervalle temps/espace ($\lambda$ est l'intensité moyenne).
                     <div class="math">
                         P(X=k) = \frac{\lambda^k e^{-\lambda}}{k!}
                     </div>
                 </li>
-                <li><strong>À retenir :</strong> $E(X) = \lambda$ et $Var(X) = \lambda$.</li>
-            </ul>
-            <p><strong>Cas TD2-2 : Loi Géométrique</strong></p>
-            <ul>
-                <li><strong>Contexte :</strong> V.A. $X$ représentant le rang du premier succès dans une série d'épreuves de Bernoulli indépendantes.</li>
-                <li><strong>Loi de probabilité :</strong> $X \sim \mathcal{G}(p)$.
-                    <div class="math">
-                        P(X=k) = p(1-p)^{k-1} \text{ pour } k \ge 1
-                    </div>
-                </li>
-            </ul>
-        </div>
-        
-        <div class="revision-card">
-            <h3>TD 3 : V.A. Continues et Lois Usuelles</h3>
-            <p><strong>Concept Central :</strong> Relation entre la Fonction de Répartition $F_X(x)$ et la Densité de Probabilité $f_X(x)$.</p>
-            <ul>
-                <li><strong>Calcul de probabilité :</strong> $P(a < X \le b) = F_X(b) - F_X(a)$.</li>
-                <li><strong>Densité :</strong> $f_X(x) = \frac{d F_X(x)}{dx}$ et $\int_{-\infty}^{+\infty} f_X(x) dx = 1$.</li>
-                <li><strong>V.A. Uniforme :</strong> $X \sim \mathcal{U}(a, b)$. $f_X(x) = 1/(b-a)$ si $x \in [a, b]$, $0$ sinon. $E(X) = (a+b)/2$.</li>
-                <li><strong>V.A. Exponentielle :</strong> $X \sim \mathcal{E}(\lambda)$. $f_X(x) = \lambda e^{-\lambda x}$ pour $x > 0$. Propriété de l'absence de mémoire.</li>
-            </ul>
-        </div>
-        
-        <div class="revision-card">
-            <h3>TD 4 : Couples de V.A. (Loi Jointe et Marginale)</h3>
-            <p><strong>Cas TD4-2 : Couple $(X, Y)$ Discret (Tableau de Loi Jointe)</strong></p>
-            <ul>
-                <li><strong>Loi Jointe $P(X=x, Y=y)$ :</strong> Somme des probabilités dans le tableau = 1.</li>
-                <li><strong>Lois Marginales :</strong> Somme des lignes (pour $P(X=x)$) ou des colonnes (pour $P(Y=y)$).
-                    <div class="math">
-                        P(X=x_i) = \sum_j P(X=x_i, Y=y_j)
-                    </div>
-                </li>
-                <li><strong>Indépendance :</strong> Vérifier si $P(X=x_i, Y=y_j) = P(X=x_i) \cdot P(Y=y_j)$ pour <strong>tous</strong> les couples.</li>
-                <li><strong>Espérance Conditionnelle :</strong> $E(Y|X=x) = \sum_y y \cdot P(Y=y|X=x)$.</li>
+                <li>**Loi Géométrique $\mathcal{G}(p)$ :** Rang du premier succès ($k$). $P(X=k) = p(1-p)^{k-1}$.</li>
             </ul>
         </div>
 
         <div class="revision-card">
-            <h3>TD 5 : V.A. Gaussiennes et Transformations</h3>
-            <p><strong>Cas TD5-3 : Couple Gaussien Bivarié</strong></p>
+            <h3>C3. V.A. Continues & Fonction de Répartition (Annales Q. de cours)</h3>
+            <p><strong>TD3 & Q. de cours 2021 :</strong> Maîtriser $F_X(x)$ et $f_X(x)$.</p>
             <ul>
-                <li><strong>Théorie :</strong> Toute combinaison linéaire d'un vecteur Gaussien est un vecteur Gaussien.</li>
-                <li><strong>Calcul de Corrélation :</strong> $r(X, Y) = \frac{Cov(X, Y)}{\sigma_X \sigma_Y}$.</li>
-                <li><strong>Matrice de Covariance :</strong> Pour $Z = (X+Y, 2X-Y)$, on calcule la matrice $V(Z)$ :
+                <li>**Propriétés de $F_X(x)$ (Q. de cours 2021) :** Bornée [0, 1], non décroissante, continue à droite, $\lim_{x \to -\infty} F_X(x) = 0$, $\lim_{x \to +\infty} F_X(x) = 1$.</li>
+                <li>**Relation $F_X(x)$ et $f_X(x)$ :** $f_X(x) = \frac{d F_X(x)}{dx}$ (Dérivation) et $F_X(x) = \int_{-\infty}^{x} f_X(t) dt$ (Intégration).</li>
+                <li>**Vérification de Densité :** $\int_{-\infty}^{+\infty} f_X(x) dx = 1$.</li>
+                <li>**Calcul d'Espérance $E(X)$ :**
                     <div class="math">
-                        V(Z) = \begin{pmatrix} Var(X+Y) & Cov(X+Y, 2X-Y) \\ Cov(X+Y, 2X-Y) & Var(2X-Y) \end{pmatrix}
+                        E(X) = \int_{-\infty}^{+\infty} x \cdot f_X(x) dx
                     </div>
                 </li>
-                <li><strong>Rappels :</strong>
-                    <div class="math">
-                        Var(aX+bY) = a^2 Var(X) + b^2 Var(Y) + 2ab Cov(X,Y) \\
-                        Cov(A, B) = E(AB) - E(A)E(B)
-                    </div>
-                </li>
+                <li>**Variance $Var(X)$ :** $Var(X) = E(X^2) - [E(X)]^2$.</li>
             </ul>
         </div>
 
+        <div class="revision-card">
+            <h3>C4. Fonction Caractéristique $\phi_X(t)$</h3>
+            <p><strong>Outil pour les Transformations et Moments.</strong></p>
+            <ul>
+                <li>**Définition (Continue) :**
+                    <div class="math">
+                        \phi_X(t) = E(e^{jtX}) = \int_{-\infty}^{+\infty} e^{jtx} f_X(x) dx
+                    </div>
+                </li>
+                <li>**Théorème des Moments :** Calcul des moments centrés et non centrés.
+                    <div class="math">
+                        E(X^n) = \frac{1}{j^n} \frac{d^n \phi_X(t)}{dt^n} \Bigg|_{t=0}
+                    </div>
+                </li>
+                <li>**Indépendance de V.A. :** Si $X$ et $Y$ sont indépendants, $\phi_{X+Y}(t) = \phi_X(t) \cdot \phi_Y(t)$.</li>
+            </ul>
+        </div>
+        
+        <div class="revision-card">
+            <h3>C5. Couples de V.A. (Lois Jointes, Marginales, Indépendance)</h3>
+            <p><strong>Cas TD4 (Tableau Discret) :</strong> Analyser la loi bidimensionnelle.</p>
+            <ul>
+                <li>**Lois Marginales (Discrètes) :** Somme des lignes/colonnes du tableau.
+                    <div class="math">
+                        P(X=x) = \sum_{y} P(X=x, Y=y)
+                    </div>
+                </li>
+                <li>**Indépendance :** Vérifier que pour **tout** $(x, y)$, $P(X=x, Y=y) = P(X=x) \cdot P(Y=y)$.</li>
+                <li>**Covariance $Cov(X, Y)$ :** Mesure de la dépendance linéaire.
+                    <div class="math">
+                        Cov(X, Y) = E(XY) - E(X)E(Y)
+                    </div>
+                </li>
+                <li>**Coefficient de Corrélation $r(X, Y)$ (TD5) :** $r(X, Y) = \frac{Cov(X, Y)}{\sigma_X \sigma_Y}$. $|r(X, Y)| \le 1$.</li>
+            </ul>
+        </div>
+
+        <div class="revision-card">
+            <h3>C6. Transformations Linéaires et V.A. Gaussiennes</h3>
+            <p><strong>TD5-3 et Q. de cours 2022 :</strong> $\mathbf{Y = aX + b}$.</p>
+            <ul>
+                <li>**Espérance et Variance de $Y$ (Q. de cours 2022) :**
+                    <div class="math">
+                        E(Y) = aE(X) + b \\
+                        Var(Y) = a^2 Var(X)
+                    </div>
+                </li>
+                <li>**Corrélation $r(X, Y)$ (Q. de cours 2022) :** $r(X, Y) = \pm 1$. $r=1$ si $a>0$, $r=-1$ si $a<0$.</li>
+                <li>**Vecteur Gaussien (TD5-3) :** Toute combinaison linéaire de V.A. Gaussiennes est Gaussienne. Calculer la **Matrice de Covariance** $V(Z)$ pour $Z = (X+Y, 2X-Y)$.</li>
+                <li>**Standardisation :** Si $X \sim \mathcal{N}(\mu, \sigma^2)$, alors $Z = \frac{X - \mu}{\sigma} \sim \mathcal{N}(0, 1)$. Utilisation de la table normale.</li>
+            </ul>
+        </div>
     </section>
 
     <section id="telecom-page" class="content-page">
         <button class="back-btn" onclick="showPage('home')">← Retour à l'accueil</button>
-        <h2>📡 Révision - Télécommunications</h2>
-        <p>Axe de révision : concepts clés du projet APP et calculs de liaison (basé sur le PDF d'examen `Refaire parceque bcp de rep fausses.pdf`).</p>
+        <h2>🌐 Révision Approfondie - Télécommunications</h2>
+        <p>Axe de révision : Concepts clés de l'APP et calculs de liaison (SNR, Affaiblissement, Portée).</p>
         
         <div class="revision-card">
-            <h3>1. Architecture & Topologie Réseau</h3>
-            <p><strong>Vue (Archi-I) :</strong> Justification de l'architecture pour un réseau de capteurs.</p>
+            <h3>T1. Architecture Réseau et Choix Filaire vs Radio</h3>
+            <p><strong>Cas APP (Surveillance Multi-Sites) :</strong> Justification des choix.</p>
             <ul>
-                <li><strong>Topologie :</strong> Arborescente ou Étoile (Passerelles intermédiaires vers une Passerelle Centrale).</li>
-                <li><strong>Hiérarchie :</strong> Capteurs → Passerelles Intermédiaires → Passerelle Centrale → Internet (liaison filaire).</li>
-                <li><strong>Objectif :</strong> Assurer l'agrégation, le traitement local et la connexion distante.</li>
+                <li>**Topologie :** Recommandation Étoile ou Arborescente, avec une Passerelle Centrale connectée au serveur distant.</li>
+                <li>**Liaison Longue Distance (APP Étape 1) :**
+                    <ul>
+                        <li>**Fibre Optique :** Débit très élevé, immunité aux interférences, **très longue portée** (idéal pour > 50km). **Inconvénient :** coût d'installation.</li>
+                        <li>**Câble Coaxial :** Débit/portée intermédiaires.</li>
+                    </ul>
+                </li>
+                <li>**But :** Lier les sites distants à la **Passerelle Centrale** via la technologie justifiée.</li>
             </ul>
         </div>
 
         <div class="revision-card">
-            <h3>2. Bruit Thermique & Puissance Reçue (Liaison Radio)</h3>
-            <p><strong>Vue (Capa-B) :</strong> Calcul de la Puissance du Bruit Thermique.</p>
+            <h3>T2. Bruit Thermique et Seuil de Réception</h3>
+            <p><strong>Question 5 (Examen) :</strong> Calcul de la Puissance du Bruit et du Seuil de Sensibilité.</p>
             <ul>
-                <li><strong>Formule :</strong> $P_{Bruit} = k T B$ (où $k$ est la constante de Boltzmann, $T$ la température en Kelvin, $B$ la bande passante en Hz).
+                <li>**Puissance de Bruit Thermique ($P_B$) :**
                     <div class="math">
-                        P_{\text{Bruit}} = 1.38 \times 10^{-23} \cdot T \cdot B \text{ (en Watts)}
+                        P_B = k T B \quad (\text{en Watts})
                     </div>
+                    où $k \approx 1.38 \times 10^{-23} \text{ J/K}$ (Boltzmann), $T$ est la température en Kelvin ($290\text{ K}$ si non spécifiée), et $B$ est la bande passante en Hz.
                 </li>
-                <li><strong>Puissance reçue $P_r$ (Radio-B) :</strong> Calcul basé sur l'affaiblissement en espace libre ou modélisé.</li>
-                <li><strong>Modèle d'Affaiblissement :</strong> $A(d) = L_0 + 10n \log_{10}(d)$ (ou $A(d)=142 + 35 \log_{10}(d)$ selon le cas).</li>
-                <li><strong>Bilan de liaison :</strong> $P_r(\text{dBm}) = P_e(\text{dBm}) + G_e(\text{dBi}) + G_r(\text{dBi}) - A(\text{dB})$.</li>
+                <li>**Seuil de Sensibilité ($P_{r, \min}$) :** C'est la puissance minimale que le récepteur doit capter pour garantir un taux d'erreur acceptable. (Typiquement donné en dBm).</li>
             </ul>
         </div>
 
         <div class="revision-card">
-            <h3>3. Efficacité Spectrale et Capacité de Shannon</h3>
-            <p><strong>Vue (Capa-B, Capa-I) :</strong> Calcul du $SINR$ et de l'Efficacité Spectrale.</p>
+            <h3>T3. Bilan de Liaison et Calcul de Portée Max</h3>
+            <p><strong>Calcul de $P_r$ (Puissance reçue) et $d_{\max}$.</strong></p>
             <ul>
-                <li><strong>Rapport Signal sur Interférence et Bruit (SINR) :</strong>
+                <li>**Bilan de Liaison (en dBm/dB) :**
                     <div class="math">
-                        SINR = \frac{P_r}{P_{\text{Interf}} + P_{\text{Bruit}}}
-                    </div>
-                    (Souvent réduit à SNR si l'interférence est négligeable).
-                </li>
-                <li><strong>Capacité de Shannon ($C$) :</strong> Débit maximal théorique.
-                    <div class="math">
-                        C = B \cdot \log_2(1 + SINR) \text{ (bits/s)}
+                        P_r(\text{dBm}) = P_e(\text{dBm}) + G_e(\text{dBi}) + G_r(\text{dBi}) - A(\text{dB})
                     </div>
                 </li>
-                <li><strong>Efficacité Spectrale ($\eta$) :</strong> Capacité par unité de bande passante (l'efficacité en terme d'utilisation du spectre).
+                <li>**Affaiblissement Modélisé ($A(d)$) :** Modèle type Longley-Rice ou Log-Distance (Examen : $A(d)=142+35 \log_{10}(d)$).
                     <div class="math">
-                        \eta = \frac{C}{B} = \log_2(1 + SINR) \text{ (bits/s/Hz)}
+                        A(d) = L_0 + 10n \log_{10}(d)
                     </div>
                 </li>
+                <li>**Calcul de Portée Maximale ($d_{\max}$) :** On pose $P_r = P_{r, \min}$ (Seuil de sensibilité) et on inverse l'équation du Bilan pour trouver $d_{\max}$.</li>
             </ul>
         </div>
 
         <div class="revision-card">
-            <h3>4. Études de Couverture et Portée</h3>
-            <p><strong>Vue (Radio-B) :</strong> Trouver la distance maximale (portée).</p>
+            <h3>T4. Capacité de Shannon et Efficacité Spectrale</h3>
+            <p><strong>Calcul du SINR pour un Débit Cible.</strong></p>
             <ul>
-                <li><strong>Méthode :</strong> Déterminer le seuil de sensibilité minimal $P_{r,\text{min}}$ (exprimé en dBm) que le récepteur peut capter.</li>
-                <li><strong>Portée max :</strong> On fixe $P_r = P_{r,\text{min}}$ dans l'équation du bilan de liaison (ou dans le modèle d'affaiblissement donné) et on isole la distance $d$.
+                <li>**Capacité de Shannon ($C$) :**
                     <div class="math">
-                        P_{r,\text{min}} = P_e - A(d_{\text{max}}) \implies d_{\text{max}}
+                        C = B \cdot \log_2(1 + \text{SINR}) \quad (\text{bits/s})
+                    </div>
+                    Où $B$ est la bande passante et $\text{SINR} = \frac{P_r}{P_{\text{Interf}} + P_{\text{Bruit}}}$.
+                </li>
+                <li>**SINR nécessaire (APP Étape 2) :** Pour un débit cible $C_{\text{cible}}$, on isole le SINR :
+                    <div class="math">
+                        \text{SINR} = 2^{C_{\text{cible}}/B} - 1
+                    </div>
+                </li>
+                <li>**Efficacité Spectrale ($\eta$) :**
+                    <div class="math">
+                        \eta = \frac{C}{B} = \log_2(1 + \text{SINR}) \quad (\text{bits/s/Hz})
                     </div>
                 </li>
             </ul>
@@ -348,37 +390,24 @@
     </section>
 
     <script>
-        /**
-         * Fonction pour afficher la page sélectionnée et masquer les autres.
-         * @param {string} pageId - 'home', 'proba', ou 'telecom'.
-         */
         function showPage(pageId) {
-            // Liste de toutes les sections de contenu
             const pages = document.querySelectorAll('section');
             
-            // Masquer toutes les pages
             pages.forEach(page => {
                 page.style.display = 'none';
                 page.classList.remove('active-page');
             });
 
-            // Afficher la page demandée
             const activePage = document.getElementById(pageId + '-page');
             if (activePage) {
-                activePage.style.display = 'flex'; // Utiliser flex pour le centrage de l'accueil
+                // Utilisation de 'flex' seulement pour la page d'accueil pour le centrage des boutons
+                activePage.style.display = (pageId === 'home') ? 'flex' : 'block';
                 activePage.classList.add('active-page');
-                
-                // Spécifique : forcer l'affichage en block pour les pages de contenu
-                if (pageId !== 'home') {
-                     activePage.style.display = 'block';
-                }
             }
             
-            // S'assurer que le défilement est au top (important sur mobile)
-            window.scrollTo(0, 0);
+            window.scrollTo(0, 0); // Retour au début de la page (important sur mobile)
         }
 
-        // Initialisation : s'assurer que seule la page d'accueil est visible au chargement
         document.addEventListener('DOMContentLoaded', () => {
             showPage('home');
         });
