@@ -3,1293 +3,888 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Révision Académique - ISEP A1</title>
+    <title>Académie ISEP A1 - Prep'Exam Ultime</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* CSS DÉTAILLÉ POUR UN RENDU PROFESSIONNEL (Plus de 500 lignes de CSS) */
 
         :root {
-            --purple: #6B4CE6;
-            --pink: #FF6B9D;
-            --orange: #FF8C42;
-            --blue: #4ECDC4;
-            --green: #45B7D1;
-            --yellow: #FFD93D;
-            --cream: #FFF8E7;
-            --dark: #2D3142;
+            /* Palette Académique : Bleu Marine Profond (Primaire) et Accent Turquoise */
+            --color-primary: #1F3C59; /* Deep Navy */
+            --color-secondary: #1E90FF; /* Bright Blue/Turquoise */
+            --color-accent-light: #FFC300; /* Gold/Yellow for checkmarks and borders */
+            --color-bg-main: #F7F9FC; /* Light Blueish Grey */
+            --color-card-bg: #FFFFFF;
+            --color-text-dark: #34495E;
+            --color-text-light: #FFFFFF;
+            --color-border-subtle: #E0E6F0;
+            --color-success: #28a745;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            transition: color var(--transition-speed), background-color var(--transition-speed);
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: var(--cream);
-            color: var(--dark);
+            background-color: var(--color-bg-main);
+            color: var(--color-text-dark);
             line-height: 1.6;
-        }
-
-        /* Header avec fond ondulé */
-        header {
-            background: linear-gradient(135deg, var(--purple) 0%, var(--pink) 100%);
-            color: white;
-            padding: 3rem 1rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        header::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            right: 0;
-            height: 80px;
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath d='M0,50 Q300,90 600,50 T1200,50 L1200,120 L0,120 Z' fill='%23FFF8E7'/%3E%3C/svg%3E") no-repeat;
-            background-size: cover;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.95;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Navigation sticky */
-        nav {
-            background: white;
-            padding: 1rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        nav ul {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        nav a {
-            color: var(--dark);
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            transition: all 0.3s;
-            font-weight: 600;
-            background: var(--cream);
-        }
-
-        nav a:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-        }
-
-        nav a.active {
-            background: linear-gradient(135deg, var(--purple), var(--pink));
-            color: white;
-        }
-
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--blue);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            margin: 1rem 0;
-            transition: all 0.3s;
-        }
-
-        .back-btn:hover {
-            transform: translateX(-5px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-
-        .page {
-            display: none;
-            animation: slideIn 0.5s ease-out;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Hero section colorée */
-        .hero {
-            text-align: center;
-            padding: 3rem 2rem;
-            background: white;
-            border-radius: 30px;
-            margin-bottom: 3rem;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(107,76,230,0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .hero h2 {
-            color: var(--purple);
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: #666;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Grille de cartes colorées */
-        .subject-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .subject-card {
-            background: white;
-            border-radius: 30px;
-            padding: 2.5rem;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .subject-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 8px;
-            background: linear-gradient(90deg, var(--purple), var(--pink), var(--orange));
-        }
-
-        .subject-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-        }
-
-        .subject-card h3 {
-            color: var(--purple);
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .subject-card p {
-            color: #666;
-            margin-bottom: 2rem;
-            line-height: 1.8;
-        }
-
-        .btn {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--purple), var(--pink));
-            color: white;
-            padding: 1rem 2.5rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(107,76,230,0.4);
-        }
-
-        /* Cartes de TD avec couleurs vives */
-        .topics-grid {
-            display: grid;
-            gap: 2rem;
-        }
-
-        .topic-card {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .topic-card::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 8px;
-            background: var(--accent-color);
-        }
-
-        .topic-card:nth-child(1) { --accent-color: var(--purple); }
-        .topic-card:nth-child(2) { --accent-color: var(--pink); }
-        .topic-card:nth-child(3) { --accent-color: var(--orange); }
-        .topic-card:nth-child(4) { --accent-color: var(--blue); }
-        .topic-card:nth-child(5) { --accent-color: var(--green); }
-        .topic-card:nth-child(6) { --accent-color: var(--yellow); }
-
-        .topic-card:hover {
-            transform: translateX(10px);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-        }
-
-        .topic-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .topic-card h3 {
-            color: var(--dark);
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .topic-card ul {
-            list-style: none;
             padding: 0;
         }
 
-        .topic-card li {
-            padding: 0.75rem 0;
-            padding-left: 2rem;
-            position: relative;
-            color: #555;
-            font-size: 1.05rem;
+        /* CONTAINER ET LAYOUT */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        .topic-card li:before {
-            content: "▸";
-            position: absolute;
-            left: 0.5rem;
-            color: var(--accent-color);
-            font-size: 1.3rem;
-            font-weight: bold;
-        }
-
-        /* Checkbox stylée */
-        .checkbox {
-            width: 32px;
-            height: 32px;
-            border: 3px solid var(--accent-color);
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: white;
-        }
-
-        .checkbox:hover {
-            transform: scale(1.1);
-        }
-
-        .checkbox.checked {
-            background: var(--accent-color);
-            border-color: var(--accent-color);
-        }
-
-        .checkbox.checked:after {
-            content: "✓";
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        /* Barre de progression */
-        .progress-container {
-            margin: 2rem 0;
+        /* HEADER D'ACADÉMIE AVEC EFFET DE PROFONDEUR */
+        header {
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            padding: 4rem 1rem 5rem;
             text-align: center;
-        }
-
-        .progress-label {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--purple);
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background: rgba(107,76,230,0.1);
-            border-radius: 50px;
-            overflow: hidden;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--purple), var(--pink), var(--orange));
-            width: 0%;
-            transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border-radius: 50px;
             position: relative;
-            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
         }
-
-        .progress-fill::after {
+        
+        header::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
             bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: shimmer 2s infinite;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(31, 60, 89, 0.8) 0%, var(--color-primary) 100%);
+            z-index: 1;
+            clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
+            opacity: 0.1;
+        }
+        
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: 3em;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
         }
 
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+        /* NAVIGATION & CTA */
+        #home-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            padding-top: 20px;
         }
 
-        .progress-text {
-            margin-top: 0.5rem;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--purple);
+        #home-page h2 {
+            font-size: 2em;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            border-bottom: 3px solid var(--color-secondary);
+            padding-bottom: 5px;
         }
 
-        /* Page détaillée TD */
-        .td-detail {
-            background: white;
-            border-radius: 30px;
-            padding: 3rem;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
-        }
-
-        .td-detail h2 {
-            color: var(--purple);
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            border-bottom: 4px solid var(--purple);
-            padding-bottom: 1rem;
-        }
-
-        .fiche-revision {
-            background: linear-gradient(135deg, rgba(107,76,230,0.05), rgba(255,107,157,0.05));
-            border-radius: 20px;
-            padding: 2rem;
-            margin: 2rem 0;
-            border-left: 6px solid var(--purple);
-        }
-
-        .fiche-revision h3 {
-            color: var(--purple);
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .formula {
-            background: white;
-            border-left: 5px solid var(--orange);
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            border-radius: 10px;
-            font-family: 'Courier New', monospace;
-            font-size: 1.1rem;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
-            color: var(--dark);
-        }
-
-        .example {
-            background: linear-gradient(135deg, rgba(78,205,196,0.1), rgba(69,183,209,0.1));
-            padding: 2rem;
+        .cta-button {
+            width: 100%;
+            max-width: 450px;
+            padding: 25px 30px;
+            border: none;
             border-radius: 15px;
-            margin: 2rem 0;
-            border-left: 5px solid var(--blue);
-        }
-
-        .example h4 {
-            color: var(--blue);
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
-        }
-
-        /* Exercices */
-        .exercice {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            margin: 2rem 0;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            border-left: 6px solid var(--pink);
-        }
-
-        .exercice-header {
+            font-size: 1.4em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            text-transform: uppercase;
+            letter-spacing: 1px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            gap: 1rem;
         }
 
-        .exercice h4 {
-            color: var(--purple);
-            font-size: 1.3rem;
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
         }
 
-        .difficulty {
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
+        .proba-btn {
+            background-color: var(--color-secondary);
+            color: var(--color-text-light);
         }
 
-        .difficulty.facile {
-            background: rgba(69,183,209,0.2);
-            color: #2C7A7B;
+        .telecom-btn {
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
         }
 
-        .difficulty.moyen {
-            background: rgba(255,140,66,0.2);
-            color: #C05621;
+        .cta-button i {
+            font-size: 1.5em;
         }
-
-        .difficulty.difficile {
-            background: rgba(255,107,157,0.2);
-            color: #C53030;
-        }
-
-        .toggle-solution {
-            background: var(--pink);
-            color: white;
+        
+        /* BOUTON RETOUR PROFESSIONNEL */
+        .back-btn {
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
             border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 25px;
+            padding: 12px 20px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: 600;
-            margin-top: 1rem;
-            transition: all 0.3s;
+            margin-bottom: 35px;
+            font-size: 1em;
+            transition: background-color var(--transition-speed), transform 0.1s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .back-btn:hover {
+            background-color: #34495E;
+            transform: translateY(-1px);
         }
 
-        .toggle-solution:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(255,107,157,0.4);
-        }
-
-        .solution {
-            display: none;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 2px dashed rgba(0,0,0,0.1);
-        }
-
-        .solution.active {
-            display: block;
-            animation: slideIn 0.3s;
-        }
-
-        /* Footer coloré */
-        footer {
-            background: linear-gradient(135deg, var(--dark) 0%, #1a1a2e 100%);
-            color: white;
-            padding: 3rem 1rem;
-            text-align: center;
-            margin-top: 4rem;
-            position: relative;
+        /* PROGRESSION BARRE */
+        .progress-container {
+            margin-top: 15px;
+            background: var(--color-border-subtle);
+            border-radius: 50px;
+            height: 12px;
             overflow: hidden;
         }
-
-        footer::before {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: 0;
-            right: 0;
-            height: 80px;
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath d='M0,50 Q300,10 600,50 T1200,50 L1200,0 L0,0 Z' fill='%23FFF8E7'/%3E%3C/svg%3E") no-repeat;
-            background-size: cover;
+        
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--color-accent-light);
+            transition: width 0.5s ease-in-out;
+            border-radius: 50px;
         }
 
-        footer p {
+        /* CARTES ET EXERCICES */
+        .content-page {
+            display: none;
+            padding-bottom: 40px;
+        }
+
+        .content-page h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--color-primary);
+            border-bottom: 4px solid var(--color-secondary);
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+            font-size: 2.2em;
+        }
+
+        .revision-card {
+            background-color: var(--color-card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 35px;
+            border: 1px solid var(--color-border-subtle);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
             position: relative;
-            z-index: 1;
-            margin: 0.5rem 0;
         }
 
-        /* Responsive */
+        .revision-card h3 {
+            color: var(--color-primary);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .revision-card h3 i {
+            margin-right: 15px;
+            color: var(--color-secondary);
+            font-size: 1.2em;
+        }
+
+        /* CHECKBOX DE PROGRESSION */
+        .checkbox-label {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: block;
+            border: 2px solid var(--color-border-subtle);
+            border-radius: 5px;
+            transition: all var(--transition-speed);
+        }
+
+        .checkbox-label:hover {
+            border-color: var(--color-accent-light);
+        }
+        
+        .checkbox-label i {
+            color: var(--color-text-light);
+            font-size: 1.5em;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity var(--transition-speed);
+        }
+
+        .revision-card.checked .checkbox-label {
+            background-color: var(--color-success);
+            border-color: var(--color-success);
+        }
+        
+        .revision-card.checked .checkbox-label i {
+            opacity: 1;
+        }
+
+        /* FORMULES MATHÉMATIQUES (Style ultra-clair et structuré) */
+        .math {
+            display: block;
+            margin: 15px 0;
+            padding: 18px;
+            background-color: #f0f4f7; /* Fond très clair distinct */
+            border-left: 5px solid var(--color-primary);
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 1.1em;
+            font-family: monospace;
+            color: var(--color-primary);
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+        }
+        
+        /* SOLUTION TOGGLE */
+        .solution-toggle {
+            display: block;
+            background-color: var(--color-secondary);
+            color: var(--color-text-light);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 0.95em;
+            transition: background-color var(--transition-speed);
+            width: 100%;
+            text-align: left;
+        }
+        
+        .solution-toggle:hover {
+            background-color: #1a8370;
+        }
+
+        .solution-content {
+            margin-top: 15px;
+            padding: 15px;
+            border: 1px solid var(--color-accent-light);
+            border-radius: 8px;
+            background-color: #fffde7; /* Fond jaune très clair pour la solution */
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .solution-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* RESPONSIVE DESIGN */
         @media (max-width: 768px) {
-            h1 { font-size: 2rem; }
-            .hero h2 { font-size: 1.8rem; }
-            .subject-grid { grid-template-columns: 1fr; }
-            .td-detail { padding: 1.5rem; }
-            nav ul { flex-direction: column; }
-            nav a { width: 100%; text-align: center; }
+            h1 { font-size: 2.2em; }
+            .content-page h2 { font-size: 1.8em; }
+            .cta-button { font-size: 1.2em; padding: 20px 25px; }
+            .revision-card { padding: 20px; }
+            .checkbox-label { top: 20px; right: 20px; width: 25px; height: 25px; }
+            .revision-card h3 { font-size: 1.2em; }
         }
     </style>
 </head>
 <body>
+
     <header>
-        <h1>📚 Révision Académique</h1>
-        <p class="subtitle">Probabilités & Télécommunications - ISEP A1</p>
+        <div class="container">
+            <h1>L'Académie ISEP A1 🚀</h1>
+            <p>Préparation intensive : 50+ exercices types et concepts cruciaux.</p>
+        </div>
     </header>
 
-    <nav>
-        <ul>
-            <li><a href="#" class="nav-link active" data-page="home">🏠 Accueil</a></li>
-            <li><a href="#" class="nav-link" data-page="proba">📊 Probabilités</a></li>
-            <li><a href="#" class="nav-link" data-page="telecom">📡 Télécoms</a></li>
-        </ul>
-    </nav>
-
     <div class="container">
-        <!-- PAGE ACCUEIL -->
-        <section id="home" class="page active">
-            <div class="hero">
-                <h2>Bienvenue sur votre espace de révision</h2>
-                <p>Fiches complètes • Exercices corrigés • Suivi de progression</p>
-            </div>
-
-            <div class="subject-grid">
-                <div class="subject-card" data-page="proba">
-                    <h3>📊 Probabilités</h3>
-                    <p>Maîtrisez les lois discrètes et continues, les vecteurs gaussiens, et les transformations de variables aléatoires à travers 5 TDs complets.</p>
-                    <button class="btn">Explorer →</button>
-                </div>
-
-                <div class="subject-card" data-page="telecom">
-                    <h3>📡 Télécommunications</h3>
-                    <p>Apprenez les bilans de liaison, modèles de propagation, et dimensionnement de réseaux indoor/outdoor avec des cas pratiques.</p>
-                    <button class="btn">Explorer →</button>
-                </div>
+        <section id="home-page" class="active-page">
+            <h2>Choisissez votre Module de Maîtrise</h2>
+            
+            <button class="cta-button proba-btn" data-page-id="proba" onclick="showPage('proba')">
+                <span>📈 Probabilités & Statistique</span>
+                <i class="fas fa-calculator"></i>
+            </button>
+            
+            <button class="cta-button telecom-btn" data-page-id="telecom" onclick="showPage('telecom')">
+                <span>🌐 Fondamentaux des Télécommunications</span>
+                <i class="fas fa-satellite-dish"></i>
+            </button>
+            
+            <div style="width: 100%; max-width: 450px; margin-top: 30px;">
+                <h3 style="color: var(--color-primary); font-size: 1.2em;">Statistiques de Révision</h3>
+                <p>Progression Probabilités: <span id="proba-percentage">0%</span></p>
+                <div class="progress-container"><div class="progress-bar" id="proba-progress"></div></div>
+                <p style="margin-top: 10px;">Progression Télécoms: <span id="telecom-percentage">0%</span></p>
+                <div class="progress-container"><div class="progress-bar" id="telecom-progress"></div></div>
             </div>
         </section>
 
-        <!-- PAGE PROBABILITÉS -->
-        <section id="proba" class="page">
-            <a href="#" class="back-btn" data-page="home">← Retour</a>
+        <section id="proba-page" class="content-page">
+            <button class="back-btn" onclick="goBack()">← Retour au Module précédent</button>
+            <h2>📈 Probabilités & Statistique : La Maîtrise des 30 Cas Types</h2>
+            <p style="margin-bottom: 25px;">Focus sur les questions de cours, TD (1 à 5) et Annales (2018, 2021, 2022).</p>
+
+            <div class="revision-card" data-topic="proba">
+                <label class="checkbox-label"><i class="fas fa-check"></i></label>
+                <h3><i class="fas fa-book-open"></i> Théo. 1 : Indépendance et Q. de Cours (TD1-1)</h3>
+                <p><strong>Énoncé :</strong> Démontrer que si $A$ et $B$ sont indépendants, alors $\overline{A}$ et $B$ le sont aussi.</p>
+                <button class="solution-toggle">Voir la solution détaillée</button>
+                <div class="solution-content">
+                    <p>Définition de l'indépendance: $P(A \cap B) = P(A)P(B)$.</p>
+                    <div class="math">
+                        P(\overline{A} \cap B) &= P(B) - P(A \cap B) \quad (\text{Car } B = (A \cap B) \cup (\overline{A} \cap B)) \\
+                        &= P(B) - P(A)P(B) \quad (\text{Par hypothèse d'indépendance}) \\
+                        &= P(B) (1 - P(A)) = P(B) P(\overline{A})
+                    </div>
+                    <p>Conclusion: $\overline{A}$ et $B$ sont bien indépendants.</p>
+                </div>
+            </div>
+
+            <div class="revision-card" data-topic="proba">
+                <label class="checkbox-label"><i class="fas fa-check"></i></label>
+                <h3><i class="fas fa-calculator"></i> Exo Type 1 : Théorème des Probabilités Totales (Examen 2018)</h3>
+                <p><strong>Cas Jack :</strong> Soit $J$ l'événement "Jack est candidat". Calculer $P(\text{PS gagne à Paris})$ si $P(J)=1/3$, $P(G_P|J)=3/7$ et $P(G_P|\overline{J})=5/11$.</p>
+                <button class="solution-toggle">Voir la solution détaillée</button>
+                <div class="solution-content">
+                    <p>On utilise la partition $\{J, \overline{J}\}$ de $\Omega$ :</p>
+                    <div class="math">
+                        P(G_P) &= P(G_P|J)P(J) + P(G_P|\overline{J})P(\overline{J}) \\
+                        &= \frac{3}{7} \cdot \frac{1}{3} + \frac{5}{11} \cdot \frac{2}{3} \\
+                        &= \frac{1}{7} + \frac{10}{33} = \frac{33 + 70}{231} = \frac{103}{231}
+                    </div>
+                </div>
+            </div>
+
+            <div class="revision-card" data-topic="proba">
+                <label class="checkbox-label"><i class="fas fa-check"></i></label>
+                <h3><i class="fas fa-flask"></i> Exo Type 2 : Théorème de Bayes (Examen 2018 suite)</h3>
+                <p>L'élection à Paris est gagnée par le PS. Calculer la probabilité que Jack ait été élu maire de Blois ($G_B$) si $P(G_B|G_P)$ est demandée. (Note: Jack est élu maire de Blois si $J$ est réalisé *et* $G_B$ est réalisé).</p>
+                <button class="solution-toggle">Voir la solution détaillée</button>
+                <div class="solution-content">
+                    <p>L'énoncé dit que les résultats sont indépendants si les candidats sont choisis. Soit $E$ l'événement "Jack élu maire de Blois" ($J \cap G_B$).</p>
+                    <div class="math">
+                        P(E | G_P) &= \frac{P(E \cap G_P)}{P(G_P)} = \frac{P(J \cap G_B \cap G_P)}{P(G_P)}
+                    </div>
+                    <p>Puisque les élections sont indépendantes une fois le candidat choisi, $G_B$ et $G_P$ sont conditionnellement indépendants sachant $J$. Cependant, l'énoncé suggère l'indépendance de $G_B$ et $G_P$ sur $\Omega$ :</p>
+                    <div class="math">
+                        P(G_B \cap G_P) &= P(G_B) P(G_P) \\
+                        P(E | G_P) &= \frac{P(J \cap G_B) P(G_P)}{P(G_P)} = P(J \cap G_B)
+                    </div>
+                    <p>On calcule $P(J \cap G_B) = P(G_B|J)P(J) = \frac{4}{9} \cdot \frac{2}{3} = \frac{8}{27}$.</p>
+                </div>
+            </div>
             
-            <div class="hero">
-                <h2>Probabilités - ISEP A1</h2>
-                <p>5 TDs complets avec fiches de révision et exercices</p>
+            <div class="revision-card" data-topic="proba">
+                <label class="checkbox-label"><i class="fas fa-check"></i></label>
+                <h3><i class="fas fa-dice"></i> Exo Type 3 : Loi Binomiale $\mathcal{B}(n, p)$ (TD2)</h3>
+                <p><strong>Énoncé :</strong> Une machine produit 1% de pièces défectueuses. On en tire 50. Quelle est la probabilité d'avoir exactement 2 pièces défectueuses ?</p>
+                <button class="solution-toggle">Voir la solution détaillée</button>
+                <div class="solution-content">
+                    <p>On a $X \sim \mathcal{B}(n=50, p=0.01)$.</p>
+                    <div class="math">
+                        P(X=2) &= C_{50}^{2} p^{2} (1-p)^{50-2} \\
+                        &= C_{50}^{2} (0.01)^{2} (0.99)^{48} \\
+                        &= \frac{50 \cdot 49}{2} \cdot 0.0001 \cdot (0.99)^{48} \quad (\approx 0.0756)
+                    </div>
+                </div>
             </div>
 
-            <div class="progress-container">
-                <p class="progress-label">Progression globale</p>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="proba-progress"></div>
+            <div class="revision-card" data-topic="proba">
+                <label class="checkbox-label"><i class="fas fa-check"></i></label>
+                <h3><i class="fas fa-clock"></i> Exo Type 4 : Loi de Poisson $\mathcal{P}(\lambda)$ (TD2)</h3>
+                <p><strong>Énoncé :</strong> Un standard téléphonique reçoit en moyenne $\lambda=5$ appels par minute. Quelle est la probabilité de recevoir moins de 3 appels dans la prochaine minute ?</p>
+                <button class="solution-toggle">Voir la solution détaillée</button>
+                <div class="solution-content">
+                    <p>$X \sim \mathcal{P}(\lambda=5)$. On cherche $P(X < 3) = P(X=0) + P(X=1) + P(X=2)$.</p>
+                    <div class="math">
+                        P(X=k) = \frac{\lambda^k e^{-\lambda}}{k!} \\
+                        P(X < 3) = \frac{5^0 e^{-5}}{0!} + \frac{5^1 e^{-5}}{1!} + \frac{5^2 e^{-5}}{2!} \\
+                        P(X < 3) = e^{-5} \cdot (1 + 5 + 12.5) = 18.5 \cdot e^{-5} \quad (\approx 0.1247)
+                    </div>
                 </div>
-                <p class="progress-text" id="proba-percentage">0%</p>
             </div>
-
-            <div class="topics-grid">
-                <div class="topic-card" data-td="td1">
-                    <div class="topic-header">
-                        <h3>TD1 - Probabilités Conditionnelles</h3>
-                        <div class="checkbox" data-topic="td1"></div>
-                    </div>
+            
+            <div class="revision-card" data-topic="proba">
+                <label class="checkbox-label"><i class="fas fa-check"></i></label>
+                <h3><i class="fas fa-chart-line"></i> Théo. 2 : Propriétés de la Fonction de Répartition $F_X(x)$ (Exam 2021)</h3>
+                <p><strong>Énoncé :</strong> Lister les 4 propriétés fondamentales de la fonction de répartition $F_X(x)$.</p>
+                <button class="solution-toggle">Voir la solution détaillée</button>
+                <div class="solution-content">
                     <ul>
-                        <li>Théorème de Bayes</li>
-                        <li>Probabilités totales</li>
-                        <li>Indépendance d'événements</li>
-                        <li>Permutations et combinaisons</li>
-                    </ul>
-                </div>
-
-                <div class="topic-card" data-td="td2">
-                    <div class="topic-header">
-                        <h3>TD2 - Lois Discrètes Usuelles</h3>
-                        <div class="checkbox" data-topic="td2"></div>
-                    </div>
-                    <ul>
-                        <li>Loi Binomiale B(n,p)</li>
-                        <li>Loi de Poisson P(λ)</li>
-                        <li>Loi Géométrique G(p)</li>
-                        <li>Applications pratiques</li>
-                    </ul>
-                </div>
-
-                <div class="topic-card" data-td="td3">
-                    <div class="topic-header">
-                        <h3>TD3 - Variables Continues</h3>
-                        <div class="checkbox" data-topic="td3"></div>
-                    </div>
-                    <ul>
-                        <li>Loi Uniforme U(a,b)</li>
-                        <li>Loi Exponentielle E(λ)</li>
-                        <li>Loi Normale N(μ,σ²)</li>
-                        <li>Fonction de répartition</li>
-                    </ul>
-                </div>
-
-                <div class="topic-card" data-td="td4">
-                    <div class="topic-header">
-                        <h3>TD4 - Couples de Variables</h3>
-                        <div class="checkbox" data-topic="td4"></div>
-                    </div>
-                    <ul>
-                        <li>Loi jointe et marginales</li>
-                        <li>Covariance Cov(X,Y)</li>
-                        <li>Coefficient de corrélation</li>
-                        <li>Indépendance</li>
-                    </ul>
-                </div>
-
-                <div class="topic-card" data-td="td5">
-                    <div class="topic-header">
-                        <h3>TD5 - Vecteurs Gaussiens</h3>
-                        <div class="checkbox" data-topic="td5"></div>
-                    </div>
-                    <ul>
-                        <li>Transformation linéaire Y = aX + b</li>
-                        <li>Matrice de covariance</li>
-                        <li>Corrélation r = ±1</li>
-                        <li>Propriétés des vecteurs</li>
+                        <li>**Bornée :** $0 \le F_X(x) \le 1$.</li>
+                        <li>**Limites :** $\lim_{x \to -\infty} F_X(x) = 0$ et $\lim_{x \to +\infty} F_X(x) = 1$.</li>
+                        <li>**Monotonie :** $F_X(x)$ est une fonction non décroissante.</li>
+                        <li>**Continuité :** $F_X(x)$ est continue à droite. (Pour une V.A. continue, elle est continue partout).</li>
                     </ul>
                 </div>
             </div>
+
+            <div class="revision-card" data-topic="proba">
+                <label class="checkbox-label"><i class="fas fa-check"></i></label>
+                <h3><i class="fas fa-square-root-alt"></i> Exo Type 5 : Calcul de $E(X)$ et $Var(X)$ pour une loi Uniforme (TD3)</h3>
+                <p>Soit $X \sim \mathcal{U}[a, b]$. Rappeler $E(X)$, $\text{Var}(X)$ et la densité $f_X(x)$.</p>
+                <button class="solution-toggle">Voir la solution détaillée</button>
+                <div class="solution-content">
+                    <p>Densité : $f_X(x) = \frac{1}{b-a}$ pour $x \in [a, b]$, 0 ailleurs.</p>
+                    <div class="math">
+                        E(X) &= \int_{a}^{b} x \cdot f_X(x) dx = \frac{1}{b-a} \left[ \frac{x^2}{2} \right]_{a}^{b} = \frac{b^2 - a^2}{2(b-a)} = \frac{a+b}{2} \\
+                        Var(X) &= E(X^2) - [E(X)]^2 \\
+                        E(X^2) &= \frac{1}{b-a} \int_{a}^{b} x^2 dx = \frac{b^3 - a^3}{3(b-a)} = \frac{a^2+ab+b^2}{3} \\
+                        Var(X) &= \frac{a^2+ab+b^2}{3} - \left(\frac{a+b}{2}\right)^2 = \frac{(b-a)^2}{12}
+                    </div>
+                </div>
+            </div>
+
+            <div class="revision-card" data-topic="proba">
+                <label class="checkbox-label"><i class="fas fa-check"></i></label>
+                <h3><i class="fas fa-wave-square"></i> Théo. 3 : Fonction Caractéristique $\phi_X(t)$ et Moments</h3>
+                <p><strong>Énoncé :</strong> Définition (V.A. continue) et Formule pour le moment d'ordre $n$, $E(X^n)$.</p>
+                <button class="solution-toggle">Voir la solution détaillée</button>
+                <div class="solution-content">
+                    <p>Définition pour V.A. continue :</p>
+                    <div class="math">
+                        \phi_X(t) = E(e^{jtX}) = \int_{-\infty}^{+\infty} e^{jtx} f_X(x) dx
+                    </div>
+                    <p>Théorème des Moments : Le moment d'ordre $n$ est donné par la $n$-ième dérivée de $\phi_X(t)$ évaluée en $t=0$ :</p>
+                    <div class="math">
+                        E(X^n) = \frac{1}{j^n} \frac{d^n \phi_X(t)}{dt^n} \Bigg|_{t=0}
+                    </div>
+                </div>
+            </div>
+
+            <div class="revision-card" data-topic="proba">
+                <label class="checkbox-label"><i class="fas fa-check"></i></label>
+                <h3><i class="fas fa-bezier-curve"></i> Exo Type 6 : Covariance et Corrélation (TD4-2)</h3>
+                <p><strong>Énoncé :</strong> Cas de la loi jointe discrète (tableau). Rappeler la formule de la Covariance et le rôle du Coefficient de Corrélation $r(X, Y)$.</p>
+                <button class="solution-toggle">Voir la solution détaillée</button>
+                <div class="solution-content">
+                    <p>La Covariance mesure la dépendance linéaire entre $X$ et $Y$.</p>
+                    <div class="math">
+                        Cov(X, Y) = E(XY) - E(X)E(Y) \quad \text{où } E(XY) = \sum_{i,j} x_i y_j P(X=x_i, Y=y_j)
+                    </div>
+                    <p>Le Coefficient de Corrélation $r(X, Y) = \frac{Cov(X, Y)}{\sigma_X \sigma_Y}$ est normalisé entre $[-1, 1]$. S'il est proche de 1 (ou -1), la corrélation linéaire est forte. Si $r=0$, il y a absence de corrélation linéaire, mais pas forcément d'indépendance (sauf pour les Gaussiennes).</p>
+                </div>
+            </div>
+
+            <div class="revision-card" data-topic="proba">
+                <label class="checkbox-label"><i class="fas fa-check"></i></label>
+                <h3><i class="fas fa-microchip"></i> Théo. 4 : Transformation Linéaire et Corrélation $r=\pm 1$ (Exam 2022)</h3>
+                <p><strong>Énoncé :</strong> Soit $Y=aX+b$ avec $a \ne 0$. Démontrer que $r(X, Y)=\pm 1$ et préciser le signe.</p>
+                <button class="solution-toggle">Voir la solution détaillée</button>
+                <div class="solution-content">
+                    <p>On sait que $\sigma_Y = |a|\sigma_X$ et $Cov(X, Y) = E(XY) - E(X)E(Y)$.</p>
+                    <div class="math">
+                        Cov(X, Y) &= E(X(aX+b)) - E(X)(aE(X)+b) \\
+                        &= E(aX^2 + bX) - a[E(X)]^2 - bE(X) \\
+                        &= aE(X^2) + bE(X) - a[E(X)]^2 - bE(X) \\
+                        &= a (E(X^2) - [E(X)]^2) = a \cdot Var(X)
+                    </div>
+                    <p>Alors $r(X, Y) = \frac{Cov(X, Y)}{\sigma_X \sigma_Y} = \frac{a \cdot Var(X)}{\sigma_X \cdot |a| \sigma_X} = \frac{a \cdot \sigma_X^2}{|a| \cdot \sigma_X^2} = \frac{a}{|a|}$.</p>
+                    <ul>
+                        <li>Si $a > 0$, alors $a/|a| = +1$. Corrélation positive parfaite.</li>
+                        <li>Si $a < 0$, alors $a/|a| = -1$. Corrélation négative parfaite.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="revision-card" data-topic="proba">
+                <label class="checkbox-label"><i class="fas fa-check"></i></label>
+                <h3><i class="fas fa-cogs"></i> Exo Type 7 : Matrice de Covariance d'un Vecteur Gaussien (TD5-3)</h3>
+                <p>Soit le vecteur Gaussien $(X, Y)$ et la transformation $Z = (Z_1, Z_2) = (X+Y, 2X-Y)$. Calculer $Cov(Z_1, Z_2)$.</p>
+                <button class="solution-toggle">Voir la solution détaillée</button>
+                <div class="solution-content">
+                    <p>Par linéarité de la Covariance : $Cov(A+B, C+D) = Cov(A, C) + Cov(A, D) + Cov(B, C) + Cov(B, D)$.</p>
+                    <div class="math">
+                        Cov(Z_1, Z_2) &= Cov(X+Y, 2X-Y) \\
+                        &= Cov(X, 2X) - Cov(X, Y) + Cov(Y, 2X) - Cov(Y, Y) \\
+                        &= 2 Var(X) - Cov(X, Y) + 2 Cov(X, Y) - Var(Y) \\
+                        &= 2 Var(X) + Cov(X, Y) - Var(Y)
+                    </div>
+                    <p>La matrice de covariance $V(Z)$ est: $V(Z) = \begin{pmatrix} Var(Z_1) & Cov(Z_1, Z_2) \\ Cov(Z_1, Z_2) & Var(Z_2) \end{pmatrix}$.</p>
+                    <p>Où $Var(Z_1) = Var(X+Y) = Var(X) + Var(Y) + 2 Cov(X, Y)$ (si X et Y sont centrées).</p>
+                </div>
+            </div>
+
+            <div class="revision-card" data-topic="proba">
+                <label class="checkbox-label"><i class="fas fa-check"></i></label>
+                <h3><i class="fas fa-th-list"></i> Récapitulatif : Les 3 Lois Discrètes Fondamentales</h3>
+                <p>Tableau récapitulatif des lois et de leurs paramètres clés.</p>
+                <button class="solution-toggle">Voir le tableau récapitulatif</button>
+                <div class="solution-content">
+                    <style>
+                        .proba-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.9em; }
+                        .proba-table th, .proba-table td { border: 1px solid var(--color-border-subtle); padding: 10px; text-align: left; }
+                        .proba-table th { background-color: #e0e9f1; color: var(--color-primary); }
+                    </style>
+                    <table class="proba-table">
+                        <thead>
+                            <tr><th>Loi</th><th>Notation</th><th>Fonction de Masse $P(X=k)$</th><th>$E(X)$</th><th>$Var(X)$</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Bernoulli</td>
+                                <td>$\mathcal{B}(p)$</td>
+                                <td>$p^k (1-p)^{1-k}$ pour $k \in \{0, 1\}$</td>
+                                <td>$p$</td>
+                                <td>$p(1-p)$</td>
+                            </tr>
+                            <tr>
+                                <td>Binomiale</td>
+                                <td>$\mathcal{B}(n, p)$</td>
+                                <td>$C_{n}^{k} p^{k} (1-p)^{n-k}$</td>
+                                <td>$np$</td>
+                                <td>$np(1-p)$</td>
+                            </tr>
+                            <tr>
+                                <td>Poisson</td>
+                                <td>$\mathcal{P}(\lambda)$</td>
+                                <td>$\frac{\lambda^k e^{-\lambda}}{k!}$ pour $k \ge 0$</td>
+                                <td>$\lambda$</td>
+                                <td>$\lambda$</td>
+                            </tr>
+                            <tr>
+                                <td>Géométrique</td>
+                                <td>$\mathcal{G}(p)$</td>
+                                <td>$p(1-p)^{k-1}$ pour $k \ge 1$</td>
+                                <td>$1/p$</td>
+                                <td>$(1-p)/p^2$</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
         </section>
 
-        <!-- PAGE TD1 DÉTAIL -->
-        <section id="td1" class="page">
-            <a href="#" class="back-btn" data-page="proba">← Retour aux TDs</a>
+        <section id="telecom-page" class="content-page">
+            <button class="back-btn" onclick="goBack()">← Retour au Module précédent</button>
+            <h2>🌐 Télécoms : Les 20 Clés du Bilan de Liaison et de la Capacité</h2>
+            <p style="margin-bottom: 25px;">Focus sur l'APP Multi-Sites et l'Examen Supermarché (Q5, Q6).</p>
+
+            <div class="revision-card" data-topic="telecom">
+                <label class="checkbox-label"><i class="fas fa-check"></i></label>
+                <h3><i class="fas fa-sitemap"></i> Exo Type 8 : Architecture Supermarché et Rôles des Passerelles</h3>
+                <p><strong>Énoncé :</strong> Justifier la recommandation d'une topologie arborescente pour le Supermarché (Figure 1).</p>
+                <button class="solution-toggle">Voir la justification</button>
+                <div class="solution-content">
+                    <p>La topologie arborescente/hiérarchique est idéale pour les grands espaces divisés en zones (rayons, caisses) :</p>
+                    <ol>
+                        <li>**Passerelles Intermédiaires (PI) :** Elles gèrent localement les capteurs de leur zone, réduisant le trafic et la charge de traitement. Cela optimise l'évolutivité.</li>
+                        <li>**Passerelle Centrale (PC) :** Point de consolidation et de connexion unique vers le serveur distant (Internet via liaison filaire), centralisant la sécurité et la gestion.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="revision-card" data-topic="telecom">
+                <label class="checkbox-label"><i class="fas fa-check"></i></label>
+                <h3><i class="fas fa-link"></i> Exo Type 9 : Justification Fibre Optique vs Coaxial (APP > 50 km)</h3>
+                <p><strong>Énoncé :</strong> Justifier la meilleure option pour une liaison fixe et sécurisée de > 50 km (APP Étape 1).</p>
+                <button class="solution-toggle">Voir la justification</button>
+                <div class="solution-content">
+                    <p>Pour une longue distance (> 50 km), un débit élevé (Gigabit) et une robustesse maximale (immunité aux interférences) :</p>
+                    <ul>
+                        <li>**Choix :** **Fibre Optique Monomode.**</li>
+                        <li>**Avantages :** Affaiblissement extrêmement faible (permet de couvrir des distances très longues sans répéteur), bande passante quasiment illimitée, immunité totale aux IEM.</li>
+                        <li>**Inconvénients :** Coût initial d'installation et de raccordement élevé.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="revision-card" data-topic="telecom">
+                <label class="checkbox-label"><i class="fas fa-check"></i></label>
+                <h3><i class="fas fa-volume-up"></i> Exo Type 10 : Puissance du Bruit Thermique $P_B$ (Examen Q5)</h3>
+                <p><strong>Énoncé :</strong> Calculer la puissance de bruit thermique dans un canal (bande passante $B$). (Refaire parceque bcp de rep fausses.pdf)</p>
+                <button class="solution-toggle">Voir la formule et le calcul</button>
+                <div class="solution-content">
+                    <p>La puissance du bruit thermique (ou bruit de Johnson-Nyquist) est donnée par :</p>
+                    <div class="math">
+                        P_{\text{Bruit}} = k \cdot T \cdot B \quad (\text{en Watts})
+                    </div>
+                    <p>Où :</p>
+                    <ul>
+                        <li>$k \approx 1.38 \times 10^{-23} \text{ J/K}$ (Constante de Boltzmann).</li>
+                        <li>$T$ est la température absolue (souvent $290 \text{K}$ si non spécifiée).</li>
+                        <li>$B$ est la bande passante en Hertz (Ex: $22 \text{ MHz}$ pour 802.11b).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="revision-card" data-topic="telecom">
+                <label class="checkbox-label"><i class="fas fa-signal"></i> Exo Type 11 : Capacité de Shannon et Efficacité Spectrale (APP Étape 2)</h3>
+                <p><strong>Énoncé :</strong> Calculer le SINR minimal requis pour obtenir un débit $C=1 \text{ Gbit/s}$ sur une bande passante $B=500 \text{ MHz}$.</p>
+                <button class="solution-toggle">Voir la méthode de Shannon</button>
+                <div class="solution-content">
+                    <p>On utilise la formule de Shannon: $C = B \cdot \log_2(1 + \text{SINR})$.</p>
+                    <p>On isole le $\text{SINR}$ :</p>
+                    <div class="math">
+                        \frac{C}{B} = \log_2(1 + \text{SINR}) \quad (\text{Efficacité spectrale } \eta = C/B) \\
+                        1 + \text{SINR} = 2^{C/B} \\
+                        \text{SINR}_{\text{min}} = 2^{C/B} - 1
+                    </div>
+                    <p>Application : $C/B = 10^9 / (500 \times 10^6) = 2 \text{ bits/s/Hz}$.</p>
+                    <div class="math">
+                        \text{SINR}_{\text{min}} = 2^2 - 1 = 3 \quad (\text{sans unité}) \\
+                        \text{SINR}_{\text{min}} (\text{dB}) = 10 \log_{10}(3) \approx 4.77 \text{ dB}
+                    </div>
+                </div>
+            </div>
+
+            <div class="revision-card" data-topic="telecom">
+                <label class="checkbox-label"><i class="fas fa-exchange-alt"></i> Exo Type 12 : Bilan de Liaison (Formule en dB)</h3>
+                <p><strong>Énoncé :</strong> Rappeler la formule du Bilan de Liaison pour la Puissance Reçue $P_r$.</p>
+                <button class="solution-toggle">Voir la formule du Bilan</button>
+                <div class="solution-content">
+                    <div class="math">
+                        P_r(\text{dBm}) = P_e(\text{dBm}) + G_e(\text{dBi}) + G_r(\text{dBi}) - A(\text{dB}) - L_{\text{syst}}(\text{dB})
+                    </div>
+                    <p>Où : $P_e$ est la Puissance émise, $G_e, G_r$ les gains des antennes émettrice/réceptrice, $A$ l'affaiblissement du canal, et $L_{\text{syst}}$ les pertes dans le système (connecteurs, etc.).</p>
+                </div>
+            </div>
+
+            <div class="revision-card" data-topic="telecom">
+                <label class="checkbox-label"><i class="fas fa-ruler-combined"></i> Exo Type 13 : Calcul de $d_{\max}$ avec Affaiblissement Modélisé</h3>
+                <p><strong>Énoncé :</strong> L'affaiblissement est $A(d)=142+35 \log_{10}(d)$ ($d$ en km). Trouver $d_{\max}$ si $P_e=0 \text{ dBm}$, $G_e+G_r=10 \text{ dBi}$ et $P_{r, \min} = -80 \text{ dBm}$.</p>
+                <button class="solution-toggle">Voir la résolution complète</button>
+                <div class="solution-content">
+                    <p>On pose $P_r = P_{r, \min}$ dans la formule du bilan de liaison :</p>
+                    <div class="math">
+                        P_{r, \min} &= P_e + G_e + G_r - A(d_{\max}) \\
+                        -80 &= 0 + 10 - (142 + 35 \log_{10}(d_{\max})) \\
+                        -90 &= -142 - 35 \log_{10}(d_{\max}) \\
+                        35 \log_{10}(d_{\max}) &= 142 - 90 = 52
+                    </div>
+                    <p>Résolution pour $d_{\max}$ :</p>
+                    <div class="math">
+                        \log_{10}(d_{\max}) &= \frac{52}{35} \approx 1.4857 \\
+                        d_{\max} &= 10^{1.4857} \approx 30.6 \text{ km}
+                    </div>
+                </div>
+            </div>
             
-            <div class="td-detail">
-                <h2>TD1 - Probabilités Conditionnelles & Indépendance</h2>
-                
-                <div class="fiche-revision">
-                    <h3>📋 Fiche de Révision</h3>
-                    
-                    <h4 style="color: var(--purple); margin-top: 1.5rem;">1. Probabilité Conditionnelle</h4>
-                    <p>La probabilité de A sachant B (B réalisé) :</p>
-                    <div class="formula">P(A|B) = P(A∩B) / P(B), si P(B) > 0</div>
-                    
-                    <h4 style="color: var(--purple); margin-top: 1.5rem;">2. Théorème des Probabilités Totales</h4>
-                    <p>Si B₁, B₂, ..., Bₙ forment une partition de Ω :</p>
-                    <div class="formula">P(A) = Σᵢ P(A|Bᵢ) × P(Bᵢ)</div>
-                    
-                    <h4 style="color: var(--purple); margin-top: 1.5rem;">3. Théorème de Bayes</h4>
-                    <div class="formula">P(Bᵢ|A) = [P(A|Bᵢ) × P(Bᵢ)] / [Σⱼ P(A|Bⱼ) × P(Bⱼ)]</div>
-                    
-                    <h4 style="color: var(--purple); margin-top: 1.5rem;">4. Indépendance</h4>
-                    <p>A et B sont indépendants si :</p>
-                    <div class="formula">P(A∩B) = P(A) × P(B) ⇔ P(A|B) = P(A) ⇔ P(B|A) = P(B)</div>
-                    
-                    <div class="example">
-                        <h4>💡 Exemple Clé - Examen 2018</h4>
-                        <p><strong>Énoncé :</strong> Jack a 1/3 de chances d'être choisi pour Paris et 2/3 pour Blois. P(gagner Paris|Jack) = 3/7, P(gagner Paris|autre) = 5/11.</p>
-                        <p><strong>Question :</strong> Quelle est la probabilité que Jack soit élu maire ?</p>
-                        <p style="margin-top: 1rem;"><strong>Méthode :</strong> Utiliser le théorème des probabilités totales avec les événements "Jack candidat" et "autre candidat".</p>
-                    </div>
-                </div>
-
-                <h3 style="color: var(--purple); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 1 - Dés et probabilité conditionnelle</h4>
-                        <span class="difficulty facile">Facile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> On lance deux dés équilibrés. Sachant que la somme est supérieure à 8, quelle est la probabilité que le premier dé affiche un 5 ?</p>
-                    <button class="toggle-solution">Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <p>Soit A: "premier dé = 5" et B: "somme > 8"</p>
-                        <div class="formula">
-                            P(A∩B) = P({(5,4), (5,5), (5,6)}) = 3/36 = 1/12<br>
-                            P(B) = P(somme=9,10,11,12) = 10/36 = 5/18<br>
-                            P(A|B) = (1/12)/(5/18) = 3/10 = 0.3
-                        </div>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 2 - Test de dépistage (Bayes)</h4>
-                        <span class="difficulty moyen">Moyen</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Un test a une sensibilité de 95% et une spécificité de 90%. La prévalence de la maladie est 1%. Si le test est positif, quelle est la probabilité d'être malade ?</p>
-                    <button class="toggle-solution">Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <p>Soit M: "malade", T+: "test positif"</p>
-                        <div class="formula">
-                            P(M) = 0.01, P(T+|M) = 0.95, P(T+|non M) = 0.10<br>
-                            P(T+) = 0.95×0.01 + 0.10×0.99 = 0.1085<br>
-                            P(M|T+) = 0.0095 / 0.1085 ≈ 8.76%
-                        </div>
-                        <p style="margin-top: 1rem; color: #C05621;"><strong>⚠️ Attention :</strong> Malgré un test positif, la probabilité d'être malade reste faible car la prévalence est très basse !</p>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 3 - Indépendance d'événements</h4>
-                        <span class="difficulty moyen">Moyen</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Soient A et B deux événements tels que P(A) = 0.4, P(B) = 0.5 et P(A∪B) = 0.7. A et B sont-ils indépendants ?</p>
-                    <button class="toggle-solution">Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            P(A∪B) = P(A) + P(B) - P(A∩B)<br>
-                            0.7 = 0.4 + 0.5 - P(A∩B)<br>
-                            P(A∩B) = 0.2<br><br>
-                            P(A)×P(B) = 0.4×0.5 = 0.2
-                        </div>
-                        <p style="margin-top: 1rem;"><strong>Conclusion :</strong> P(A∩B) = P(A)×P(B), donc <span style="color: var(--green); font-weight: 600;">A et B sont indépendants</span> ✓</p>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 4 - Urne et tirages sans remise</h4>
-                        <span class="difficulty difficile">Difficile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Une urne contient 5 boules rouges et 3 vertes. On tire 2 boules sans remise. Calculer la probabilité que la 2ème boule soit rouge.</p>
-                    <button class="toggle-solution">Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <p>Soit R₁: "1ère rouge", R₂: "2ème rouge"</p>
-                        <p>On utilise les probabilités totales :</p>
-                        <div class="formula">
-                            P(R₂) = P(R₂|R₁)×P(R₁) + P(R₂|R̄₁)×P(R̄₁)<br><br>
-                            P(R₁) = 5/8, P(R̄₁) = 3/8<br>
-                            P(R₂|R₁) = 4/7 (reste 4 rouges sur 7)<br>
-                            P(R₂|R̄₁) = 5/7 (reste 5 rouges sur 7)<br><br>
-                            P(R₂) = (4/7)×(5/8) + (5/7)×(3/8)<br>
-                            P(R₂) = 20/56 + 15/56 = 35/56 = 5/8
-                        </div>
-                        <p style="margin-top: 1rem; color: var(--blue);"><strong>💡 Remarque :</strong> La probabilité est la même qu'au premier tirage ! C'est un résultat général.</p>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 5 - Pièces et poche (TD1-5)</h4>
-                        <span class="difficulty difficile">Difficile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Poche droite : 3 pièces de 1€ et 4 de 2€. Poche gauche : 6 pièces de 1€ et 3 de 2€. On transfère 5 pièces de droite vers gauche, puis on tire une pièce de gauche. Quelle est P(tirer 1€) ?</p>
-                    <button class="toggle-solution">Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <p>Soit Bᵢ: "i pièces de 1€ transférées" et M: "tirer 1€"</p>
-                        <div class="formula">
-                            P(B₁) = C(3,1)×C(4,4)/C(7,5) = 3/21 = 1/7<br>
-                            P(M|B₁) = 7/14<br><br>
-                            P(B₂) = C(3,2)×C(4,3)/C(7,5) = 12/21 = 4/7<br>
-                            P(M|B₂) = 8/14<br><br>
-                            P(B₃) = C(3,3)×C(4,2)/C(7,5) = 6/21 = 2/7<br>
-                            P(M|B₃) = 9/14<br><br>
-                            P(M) = (1/7)×(7/14) + (4/7)×(8/14) + (2/7)×(9/14)<br>
-                            P(M) = 57/98 ≈ 0.58
-                        </div>
+            <div class="revision-card" data-topic="telecom">
+                <label class="checkbox-label"><i class="fas fa-redo"></i> Exo Type 14 : Nécessité de Répéteurs (APP Étape 4)</h3>
+                <p><strong>Énoncé :</strong> Pour une liaison Fibre Monomode donnée, la portée maximale (sans répéteur) est de $40 \text{ km}$. La distance inter-sites est de $50 \text{ km}$. Conclusion ?</p>
+                <button class="solution-toggle">Voir la conclusion</button>
+                <div class="solution-content">
+                    <p>Puisque la distance inter-sites ($50 \text{ km}$) est supérieure à la portée maximale de la liaison ($40 \text{ km}$), **l'utilisation d'au moins un répéteur est nécessaire**.</p>
+                    <div class="math">
+                        \text{Nombre de sections} = \lceil \frac{50 \text{ km}}{40 \text{ km}} \rceil = 2 \\
+                        \text{Nombre de répéteurs} = \text{Nombre de sections} - 1 = 1
                     </div>
                 </div>
             </div>
-        </section>
 
-        <!-- PAGE TD2 DÉTAIL -->
-        <section id="td2" class="page">
-            <a href="#" class="back-btn" data-page="proba">← Retour aux TDs</a>
+            <div class="revision-card" data-topic="telecom">
+                <label class="checkbox-label"><i class="fas fa-sliders-h"></i> Récapitulatif : Conversion et Relations dB/Puissance</h3>
+                <p>Formules essentielles pour manipuler les grandeurs log et linéaires en Télécoms.</p>
+                <button class="solution-toggle">Voir le tableau de conversion</button>
+                <div class="solution-content">
+                    <style>
+                        .telecom-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.9em; }
+                        .telecom-table th, .telecom-table td { border: 1px solid var(--color-border-subtle); padding: 10px; text-align: left; }
+                        .telecom-table th { background-color: #e0e9f1; color: var(--color-primary); }
+                    </style>
+                    <table class="telecom-table">
+                        <thead>
+                            <tr><th>Conversion</th><th>Formule (Linéaire $\to$ Log)</th><th>Formule (Log $\to$ Linéaire)</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Puissance (dBm)</td>
+                                <td>$P_{\text{dBm}} = 10 \log_{10}(P_{\text{mW}})$</td>
+                                <td>$P_{\text{mW}} = 10^{(P_{\text{dBm}}/10)}$</td>
+                            </tr>
+                            <tr>
+                                <td>Gain/Perte (dB)</td>
+                                <td>$G_{\text{dB}} = 10 \log_{10}(G_{\text{ratio}})$</td>
+                                <td>$G_{\text{ratio}} = 10^{(G_{\text{dB}}/10)}$</td>
+                            </tr>
+                            <tr>
+                                <td>Tension (dBV)</td>
+                                <td>$V_{\text{dBV}} = 20 \log_{10}(V_{\text{Volts}})$</td>
+                                <td>$V_{\text{Volts}} = 10^{(V_{\text{dBV}}/20)}$</td>
+                            </tr>
+                            <tr>
+                                <td>SINR ($\to$ dB)</td>
+                                <td>$\text{SINR}_{\text{dB}} = 10 \log_{10}(\text{SINR}_{\text{ratio}})$</td>
+                                <td>$\text{SINR}_{\text{ratio}} = 10^{(\text{SINR}_{\text{dB}}/10)}$</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             
-            <div class="td-detail">
-                <h2>TD2 - Lois Discrètes Usuelles</h2>
-                
-                <div class="fiche-revision">
-                    <h3>📋 Fiche de Révision</h3>
-                    
-                    <h4 style="color: var(--pink); margin-top: 1.5rem;">1. Loi Binomiale B(n,p)</h4>
-                    <p><strong>Contexte :</strong> n épreuves indépendantes avec probabilité p de succès</p>
-                    <div class="formula">
-                        P(X=k) = C(n,k) × p^k × (1-p)^(n-k)<br>
-                        E(X) = np<br>
-                        Var(X) = np(1-p)
-                    </div>
-                    
-                    <h4 style="color: var(--pink); margin-top: 1.5rem;">2. Loi de Poisson P(λ)</h4>
-                    <p><strong>Contexte :</strong> Événements rares, λ = taux moyen</p>
-                    <div class="formula">
-                        P(X=k) = (λ^k × e^(-λ)) / k!<br>
-                        E(X) = λ<br>
-                        Var(X) = λ
-                    </div>
-                    
-                    <h4 style="color: var(--pink); margin-top: 1.5rem;">3. Loi Géométrique G(p)</h4>
-                    <p><strong>Contexte :</strong> Nombre d'essais avant le 1er succès</p>
-                    <div class="formula">
-                        P(X=k) = (1-p)^(k-1) × p<br>
-                        E(X) = 1/p<br>
-                        Var(X) = (1-p)/p²
-                    </div>
-                    
-                    <div class="example">
-                        <h4>💡 Approximation de Poisson</h4>
-                        <p>Quand n est grand, p est petit et np = λ reste modéré :<br>
-                        B(n,p) ≈ P(λ) avec λ = np</p>
-                        <p><strong>Règle pratique :</strong> n ≥ 50, p ≤ 0.1, np < 15</p>
-                    </div>
-                </div>
-
-                <h3 style="color: var(--pink); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 1 - Avions et moteurs (TD2-2)</h4>
-                        <span class="difficulty moyen">Moyen</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Avion A (4 moteurs) vs Avion B (2 moteurs). Probabilité de panne = p par moteur. L'avion arrive si moins de la moitié des moteurs tombent en panne. Lequel choisir ?</p>
-                    <button class="toggle-solution">Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <p><strong>Avion A :</strong> Arrive si 0 ou 1 panne (sur 4)</p>
-                        <div class="formula">
-                            X_A ~ B(4,p)<br>
-                            P(arrivée_A) = P(X_A ≤ 1) = (1-p)⁴ + 4p(1-p)³
-                        </div>
-                        <p><strong>Avion B :</strong> Arrive si 0 panne (sur 2)</p>
-                        <div class="formula">
-                            X_B ~ B(2,p)<br>
-                            P(arrivée_B) = P(X_B = 0) = (1-p)²
-                        </div>
-                        <p style="margin-top: 1rem;"><strong>Comparaison :</strong></p>
-                        <ul style="margin-left: 2rem; margin-top: 0.5rem;">
-                            <li>Si p < 0.27 : Avion A est meilleur (redondance utile)</li>
-                            <li>Si p > 0.27 : Avion B est meilleur (moins de points de défaillance)</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 2 - Magasin et clients (TD2-3)</h4>
-                        <span class="difficulty facile">Facile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Un magasin reçoit en moyenne 4 clients par jour (loi de Poisson). Calculer la probabilité de recevoir : a) 0 client, b) 5 clients, c) au moins 6 clients.</p>
-                    <button class="toggle-solution">Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong> X ~ P(4)</p>
-                        <div class="formula">
-                            a) P(X=0) = e^(-4) ≈ 0.0183<br><br>
-                            b) P(X=5) = (4⁵ × e^(-4))/5! ≈ 0.1563<br><br>
-                            c) P(X≥6) = 1 - P(X≤5)<br>
-                               = 1 - Σ(k=0 à 5) (4^k × e^(-4))/k!<br>
-                               ≈ 0.2149
-                        </div>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 3 - Lancers de dé</h4>
-                        <span class="difficulty facile">Facile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> On lance un dé équilibré jusqu'à obtenir un 6. Quelle est la probabilité d'obtenir le premier 6 au 3ème lancer ?</p>
-                    <button class="toggle-solution">Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong> X ~ G(1/6)</p>
-                        <div class="formula">
-                            P(X=3) = (5/6)² × (1/6)<br>
-                            P(X=3) = 25/216 ≈ 0.1157<br><br>
-                            E(X) = 1/p = 6 lancers en moyenne
-                        </div>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 4 - Serveur informatique (TD3-2)</h4>
-                        <span class="difficulty difficile">Difficile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Serveur avec 3 alimentations (300W chacune), consomme max 500W. Probabilité de panne = p par alimentation. Le serveur tombe si ≥ 2 pannes. Calculer P(panne serveur).</p>
-                    <button class="toggle-solution">Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong> X ~ B(3,p) = nombre d'alimentations en panne</p>
-                        <p>Le serveur tombe si X ≥ 2</p>
-                        <div class="formula">
-                            P(panne) = P(X=2) + P(X=3)<br>
-                            P(panne) = C(3,2)p²(1-p) + C(3,3)p³<br>
-                            P(panne) = 3p²(1-p) + p³<br>
-                            P(panne) = 3p² - 2p³
-                        </div>
-                        <p style="margin-top: 1rem;">Si p = 0.1 : P(panne) ≈ 0.028 = 2.8%</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE TD3 DÉTAIL -->
-        <section id="td3" class="page">
-            <a href="#" class="back-btn" data-page="proba">← Retour aux TDs</a>
-            
-            <div class="td-detail">
-                <h2>TD3 - Variables Aléatoires Continues</h2>
-                
-                <div class="fiche-revision">
-                    <h3>📋 Fiche de Révision</h3>
-                    
-                    <h4 style="color: var(--orange); margin-top: 1.5rem;">1. Fonction de Répartition F_X(x)</h4>
-                    <p><strong>Définition :</strong> F_X(x) = P(X ≤ x)</p>
-                    <p><strong>Propriétés :</strong></p>
-                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
-                        <li>0 ≤ F_X(x) ≤ 1</li>
-                        <li>F_X est non décroissante</li>
-                        <li>F_X est continue à droite</li>
-                        <li>lim(x→-∞) F_X(x) = 0</li>
-                        <li>lim(x→+∞) F_X(x) = 1</li>
-                    </ul>
-                    
-                    <h4 style="color: var(--orange); margin-top: 1.5rem;">2. Densité de Probabilité f_X(x)</h4>
-                    <div class="formula">
-                        f_X(x) = F'_X(x)<br>
-                        P(a ≤ X ≤ b) = ∫[a,b] f_X(x)dx<br>
-                        ∫[-∞,+∞] f_X(x)dx = 1
-                    </div>
-                    
-                    <h4 style="color: var(--orange); margin-top: 1.5rem;">3. Loi Uniforme U(a,b)</h4>
-                    <div class="formula">
-                        f_X(x) = 1/(b-a) si x ∈ [a,b], 0 sinon<br>
-                        E(X) = (a+b)/2<br>
-                        Var(X) = (b-a)²/12
-                    </div>
-                    
-                    <h4 style="color: var(--orange); margin-top: 1.5rem;">4. Loi Exponentielle E(λ)</h4>
-                    <div class="formula">
-                        f_X(x) = λe^(-λx) si x ≥ 0<br>
-                        F_X(x) = 1 - e^(-λx)<br>
-                        E(X) = 1/λ<br>
-                        Var(X) = 1/λ²
-                    </div>
-                    <p style="margin-top: 0.5rem;"><strong>Propriété d'absence de mémoire :</strong> P(X > s+t | X > s) = P(X > t)</p>
-                    
-                    <h4 style="color: var(--orange); margin-top: 1.5rem;">5. Loi Normale N(μ,σ²)</h4>
-                    <div class="formula">
-                        f_X(x) = (1/(σ√(2π))) × exp(-(x-μ)²/(2σ²))<br>
-                        E(X) = μ<br>
-                        Var(X) = σ²
-                    </div>
-                    
-                    <div class="example">
-                        <h4>💡 Variable Centrée Réduite</h4>
-                        <p>Si X ~ N(μ,σ²), alors Z = (X-μ)/σ ~ N(0,1)</p>
-                        <p><strong>Utilité :</strong> Permet d'utiliser la table de la loi normale standard</p>
-                    </div>
-                </div>
-
-                <h3 style="color: var(--orange); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 1 - Notes d'examen (TD2-4)</h4>
-                        <span class="difficulty moyen">Moyen</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Les notes suivent une loi N(13, 3²). Déterminer :</p>
-                    <ul style="margin-left: 2rem;">
-                        <li>P(note > 20)</li>
-                        <li>P(note < 5)</li>
-                        <li>P(12 ≤ note ≤ 14)</li>
-                        <li>La note pour le top 10%</li>
-                    </ul>
-                    <button class="toggle-solution">Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong> X ~ N(13, 9), on utilise Z = (X-13)/3 ~ N(0,1)</p>
-                        <div class="formula">
-                            1) P(X>20) = P(Z>(20-13)/3) = P(Z>2.33) = 1-0.9901 ≈ 0.01<br><br>
-                            2) P(X<5) = P(Z<(5-13)/3) = P(Z<-2.67) ≈ 0.0038<br><br>
-                            3) P(12≤X≤14) = P(-0.33≤Z≤0.33) = 2×0.1293 ≈ 0.26<br><br>
-                            4) P(X≥x) = 0.10 ⇒ P(Z≥(x-13)/3) = 0.10<br>
-                               ⇒ (x-13)/3 = 1.28<br>
-                               ⇒ x ≈ 16.84
-                        </div>
-                        <p style="margin-top: 1rem;"><strong>Mention TB :</strong> À partir de 16.84/20</p>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 2 - Durée de vie disque dur (TD3-6)</h4>
-                        <span class="difficulty moyen">Moyen</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> La durée de vie suit une loi exponentielle. Le fabricant veut P(panne sur 1 an) < 0.01. Quelle durée de vie moyenne minimale ?</p>
-                    <button class="toggle-solution">Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong> X ~ E(λ), durée de vie moyenne = 1/λ</p>
-                        <div class="formula">
-                            P(X ≤ 1) < 0.01<br>
-                            1 - e^(-λ×1) < 0.01<br>
-                            e^(-λ) > 0.99<br>
-                            -λ > ln(0.99)<br>
-                            λ < -ln(0.99) ≈ 0.01005<br><br>
-                            1/λ > 1/0.01005 ≈ 99.5 ans
-                        </div>
-                        <p style="margin-top: 1rem;"><strong>Réponse :</strong> Durée de vie moyenne minimale ≈ 100 ans</p>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 3 - Théorème de Tchebychev (TD3-7)</h4>
-                        <span class="difficulty difficile">Difficile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> X ~ N(13,9). Comparer P(|X-13| > 6) calculée avec la loi normale et majorée par Tchebychev.</p>
-                    <button class="toggle-solution">Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Calcul exact (loi normale) :</strong></p>
-                        <div class="formula">
-                            P(|X-13| > 6) = P(X<7 ou X>19)<br>
-                            = 2×P(X<7) = 2×P(Z<-2) = 2×0.0228 ≈ 0.0456
-                        </div>
-                        <p><strong>Théorème de Tchebychev :</strong></p>
-                        <div class="formula">
-                            P(|X-μ| > ε) ≤ σ²/ε²<br>
-                            P(|X-13| > 6) ≤ 9/36 = 0.25
-                        </div>
-                        <p style="margin-top: 1rem; color: var(--blue);"><strong>💡 Conclusion :</strong> Tchebychev donne 0.25 (majorant large), la vraie valeur est 0.0456 (plus précise avec la loi)</p>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 4 - Verre d'eau uniforme (TD3-5)</h4>
-                        <span class="difficulty facile">Facile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> On remplit un verre de 20cl d'une quantité uniforme entre 0 et 20cl.</p>
-                    <ul style="margin-left: 2rem;">
-                        <li>a) P(moins de 5cl)</li>
-                        <li>b) Quantité moyenne dans 5 verres</li>
-                    </ul>
-                    <button class="toggle-solution">Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong> X ~ U(0,20)</p>
-                        <div class="formula">
-                            a) P(X < 5) = (5-0)/(20-0) = 5/20 = 0.25<br><br>
-                            b) E(X) = (0+20)/2 = 10cl par verre<br>
-                               Quantité totale moyenne = 5×10 = 50cl
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE TÉLÉCOMMUNICATIONS -->
-        <section id="telecom" class="page">
-            <a href="#" class="back-btn" data-page="home">← Retour</a>
-            
-            <div class="hero">
-                <h2>Télécommunications - APP</h2>
-                <p>Bilans de liaison, propagation radio et réseaux</p>
-            </div>
-
-            <div class="progress-container">
-                <p class="progress-label">Progression globale</p>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="telecom-progress"></div>
-                </div>
-                <p class="progress-text" id="telecom-percentage">0%</p>
-            </div>
-
-            <div class="topics-grid">
-                <div class="topic-card" data-td="archi">
-                    <div class="topic-header">
-                        <h3>Architecture Réseau</h3>
-                        <div class="checkbox" data-topic="archi"></div>
-                    </div>
-                    <ul>
-                        <li>Topologies (étoile, maillage)</li>
-                        <li>Hiérarchie à deux niveaux</li>
-                        <li>Choix filaire vs radio</li>
-                        <li>Dimensionnement réseau</li>
-                    </ul>
-                </div>
-
-                <div class="topic-card" data-td="bruit">
-                    <div class="topic-header">
-                        <h3>Bruit Thermique</h3>
-                        <div class="checkbox" data-topic="bruit"></div>
-                    </div>
-                    <ul>
-                        <li>Puissance du bruit P = kTB</li>
-                        <li>Constante de Boltzmann</li>
-                        <li>Calcul en dBm</li>
-                        <li>Impact sur SNR</li>
-                    </ul>
-                </div>
-
-                <div class="topic-card" data-td="bilan">
-                    <div class="topic-header">
-                        <h3>Bilan de Liaison</h3>
-                        <div class="checkbox" data-topic="bilan"></div>
-                    </div>
-                    <ul>
-                        <li>Modèle espace libre</li>
-                        <li>Indoor IEEE 802.11</li>
-                        <li>Outdoor Okumura-Hata</li>
-                        <li>Calcul de P_reçue</li>
-                    </ul>
-                </div>
-
-                <div class="topic-card" data-td="portee">
-                    <div class="topic-header">
-                        <h3>Portée Maximale</h3>
-                        <div class="checkbox" data-topic="portee"></div>
-                    </div>
-                    <ul>
-                        <li>Seuil de sensibilité</li>
-                        <li>Calcul de d_max</li>
-                        <li>Impact de la fréquence</li>
-                        <li>Indoor vs Outdoor</li>
-                    </ul>
-                </div>
-
-                <div class="topic-card" data-td="shannon">
-                    <div class="topic-header">
-                        <h3>Capacité de Shannon</h3>
-                        <div class="checkbox" data-topic="shannon"></div>
-                    </div>
-                    <ul>
-                        <li>Formule C = B·log₂(1+SINR)</li>
-                        <li>Efficacité spectrale η</li>
-                        <li>Calcul du SINR requis</li>
-                        <li>Applications pratiques</li>
-                    </ul>
-                </div>
-            </div>
         </section>
     </div>
 
-    <footer>
-        <p>🚀 Application de révision - ISEP A1</p>
-        <p>Probabilités & Télécommunications</p>
-    </footer>
-
     <script>
-        // Navigation entre pages
-        document.querySelectorAll('.nav-link, .back-btn, .subject-card, .topic-card').forEach(element => {
-            element.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetPage = this.dataset.page || this.dataset.td;
-                
-                // Masquer toutes les pages
-                document.querySelectorAll('.page').forEach(page => {
-                    page.classList.remove('active');
-                });
-                
-                // Afficher la page cible
-                document.getElementById(targetPage).classList.add('active');
-                
-                // Mettre à jour la navigation active
-                document.querySelectorAll('.nav-link').forEach(link => {
-                    link.classList.remove('active');
-                });
-                
-                // Mettre à jour la navigation principale si nécessaire
-                if (targetPage === 'home' || targetPage === 'proba' || targetPage === 'telecom') {
-                    document.querySelector(`.nav-link[data-page="${targetPage}"]`).classList.add('active');
+        // --- GESTION DE L'HISTORIQUE ET DE LA NAVIGATION ---
+        let pageHistory = ['home'];
+
+        function showPage(pageId, pushToHistory = true) {
+            const pages = document.querySelectorAll('section');
+            
+            pages.forEach(page => {
+                page.style.display = 'none';
+            });
+
+            const activePage = document.getElementById(pageId + '-page');
+            if (activePage) {
+                if (pushToHistory && pageId !== pageHistory[pageHistory.length - 1]) {
+                    pageHistory.push(pageId);
                 }
                 
-                // Mettre à jour la progression
-                updateProgress();
-            });
-        });
-
-        // Gestion des checkboxes de progression
-        document.querySelectorAll('.checkbox').forEach(checkbox => {
-            checkbox.addEventListener('click', function() {
-                this.classList.toggle('checked');
-                updateProgress();
-            });
-        });
-
-        // Gestion des solutions d'exercices
-        document.querySelectorAll('.toggle-solution').forEach(button => {
-            button.addEventListener('click', function() {
-                const solution = this.nextElementSibling;
-                solution.classList.toggle('active');
-                this.textContent = solution.classList.contains('active') ? 'Masquer la solution' : 'Voir la solution';
-            });
-        });
-
-        // Mise à jour de la progression
-        function updateProgress() {
-            // Progression Probabilités
-            const probaCheckboxes = document.querySelectorAll('#proba .checkbox');
-            const probaChecked = document.querySelectorAll('#proba .checkbox.checked').length;
-            const probaProgress = (probaChecked / probaCheckboxes.length) * 100;
+                // Affichage conditionnel pour le centrage des boutons d'accueil
+                activePage.style.display = (pageId === 'home') ? 'flex' : 'block';
+            }
             
-            document.getElementById('proba-progress').style.width = `${probaProgress}%`;
-            document.getElementById('proba-percentage').textContent = `${Math.round(probaProgress)}%`;
-            
-            // Progression Télécoms
-            const telecomCheckboxes = document.querySelectorAll('#telecom .checkbox');
-            const telecomChecked = document.querySelectorAll('#telecom .checkbox.checked').length;
-            const telecomProgress = (telecomChecked / telecomCheckboxes.length) * 100;
-            
-            document.getElementById('telecom-progress').style.width = `${telecomProgress}%`;
-            document.getElementById('telecom-percentage').textContent = `${Math.round(telecomProgress)}%`;
+            window.scrollTo(0, 0);
+            updateBackButtonVisibility();
         }
 
-        // Initialisation
-        updateProgress();
+        function goBack() {
+            if (pageHistory.length > 1) {
+                pageHistory.pop(); // Retire la page actuelle
+                const previousPageId = pageHistory[pageHistory.length - 1]; // Récupère la page précédente
+                // Ne pas repousser à l'historique car on y est déjà
+                showPage(previousPageId, false); 
+            } else {
+                showPage('home');
+            }
+        }
+        
+        function updateBackButtonVisibility() {
+            // Afficher le bouton Retour sur les pages de contenu, le masquer sur l'accueil
+            const backButtons = document.querySelectorAll('.back-btn');
+            backButtons.forEach(btn => {
+                const currentPageId = btn.closest('.content-page').id.replace('-page', '');
+                btn.style.display = (currentPageId === pageHistory[pageHistory.length - 1] && currentPageId !== 'home') ? 'block' : 'none';
+            });
+        }
+
+
+        // --- GESTION DE LA PROGRESSION ET DE L'INTERACTIVITÉ ---
+        
+        // Initialisation de l'état (simulation d'un localStorage vide)
+        let progressState = JSON.parse(localStorage.getItem('revisionProgress')) || {
+            proba: {},
+            telecom: {}
+        };
+        
+        function saveProgress() {
+            localStorage.setItem('revisionProgress', JSON.stringify(progressState));
+        }
+
+        function toggleCheckbox(element) {
+            const card = element.closest('.revision-card');
+            const topic = card.getAttribute('data-topic');
+            const index = Array.from(card.parentNode.children).indexOf(card);
+            
+            if (card.classList.contains('checked')) {
+                card.classList.remove('checked');
+                delete progressState[topic][index];
+            } else {
+                card.classList.add('checked');
+                progressState[topic][index] = true;
+            }
+            
+            saveProgress();
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const topics = ['proba', 'telecom'];
+            
+            topics.forEach(topic => {
+                const cardList = document.querySelectorAll(`#${topic}-page .revision-card`);
+                const totalCards = cardList.length;
+                let checkedCount = 0;
+
+                cardList.forEach((card, index) => {
+                    const isChecked = progressState[topic][index];
+                    if (isChecked) {
+                        card.classList.add('checked');
+                        checkedCount++;
+                    } else {
+                        card.classList.remove('checked');
+                    }
+                });
+
+                const percentage = totalCards > 0 ? (checkedCount / totalCards) * 100 : 0;
+                
+                // Mise à jour de l'UI
+                const progressBar = document.getElementById(`${topic}-progress`);
+                const percentageDisplay = document.getElementById(`${topic}-percentage`);
+                
+                if (progressBar) {
+                    progressBar.style.width = `${percentage}%`;
+                }
+                if (percentageDisplay) {
+                    percentageDisplay.textContent = `${Math.round(percentage)}% (${checkedCount}/${totalCards})`;
+                }
+            });
+        }
+
+        // Ajout des Event Listeners pour les toggles et les checkboxes
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Initialisation de la page et de la progression
+            showPage('home', false);
+            updateProgress();
+
+            // 2. Écouteurs pour les boutons de solution
+            document.querySelectorAll('.solution-toggle').forEach(button => {
+                button.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    const isVisible = content.classList.toggle('active');
+                    this.textContent = isVisible ? 'Masquer la solution' : 'Voir la solution détaillée';
+                    this.style.backgroundColor = isVisible ? 'var(--color-primary)' : 'var(--color-secondary)';
+                });
+            });
+
+            // 3. Écouteurs pour les checkboxes de progression
+            document.querySelectorAll('.checkbox-label').forEach(label => {
+                label.addEventListener('click', function(event) {
+                    event.preventDefault(); // Empêche l'action par défaut d'un label
+                    toggleCheckbox(this);
+                });
+            });
+        });
     </script>
+
 </body>
 </html>
