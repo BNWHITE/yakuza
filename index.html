@@ -3,1015 +3,1293 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Révision Académique - Probabilités & Télécoms</title>
+    <title>Révision Académique - ISEP A1</title>
     <style>
-        /* Variables de couleurs */
-        :root {
-            --primary: #8B7355; /* Terre cuite */
-            --secondary: #A9A9A9; /* Gris-vert */
-            --accent: #C19A6B; /* Beige */
-            --dark: #5D4037; /* Séquoia foncé */
-            --light: #F5F5F5; /* Beige clair */
-            --text: #333333; /* Texte principal */
-            --text-light: #666666; /* Texte secondaire */
-            --white: #FFFFFF;
-            --shadow: rgba(0, 0, 0, 0.1);
-            --completed: #4CAF50;
-        }
-
-        /* Reset et styles de base */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --purple: #6B4CE6;
+            --pink: #FF6B9D;
+            --orange: #FF8C42;
+            --blue: #4ECDC4;
+            --green: #45B7D1;
+            --yellow: #FFD93D;
+            --cream: #FFF8E7;
+            --dark: #2D3142;
         }
 
         body {
-            background-color: var(--light);
-            color: var(--text);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--cream);
+            color: var(--dark);
             line-height: 1.6;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+        /* Header avec fond ondulé */
+        header {
+            background: linear-gradient(135deg, var(--purple) 0%, var(--pink) 100%);
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Header */
-        header {
-            background-color: var(--white);
-            box-shadow: 0 2px 10px var(--shadow);
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath d='M0,50 Q300,90 600,50 T1200,50 L1200,120 L0,120 Z' fill='%23FFF8E7'/%3E%3C/svg%3E") no-repeat;
+            background-size: cover;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navigation sticky */
+        nav {
+            background: white;
+            padding: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--dark);
-        }
-
         nav ul {
             display: flex;
+            justify-content: center;
             list-style: none;
-        }
-
-        nav li {
-            margin-left: 25px;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         nav a {
-            text-decoration: none;
-            color: var(--text);
-            font-weight: 500;
-            transition: color 0.3s;
-            padding: 5px 10px;
-            border-radius: 4px;
-        }
-
-        nav a:hover, nav a.active {
-            color: var(--primary);
-            background-color: rgba(139, 115, 85, 0.1);
-        }
-
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
             color: var(--dark);
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            transition: all 0.3s;
+            font-weight: 600;
+            background: var(--cream);
         }
 
-        /* Pages */
+        nav a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        nav a.active {
+            background: linear-gradient(135deg, var(--purple), var(--pink));
+            color: white;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--blue);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 1rem 0;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
         .page {
             display: none;
-            padding: 40px 0;
-            min-height: calc(100vh - 120px);
+            animation: slideIn 0.5s ease-out;
         }
 
         .page.active {
             display: block;
         }
 
-        /* Page d'accueil */
-        .hero {
-            text-align: center;
-            padding: 60px 0;
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .hero h1 {
+        /* Hero section colorée */
+        .hero {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: white;
+            border-radius: 30px;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(107,76,230,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero h2 {
+            color: var(--purple);
             font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: var(--dark);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
         }
 
         .hero p {
             font-size: 1.2rem;
-            color: var(--text-light);
-            max-width: 700px;
-            margin: 0 auto 40px;
+            color: #666;
+            position: relative;
+            z-index: 1;
         }
 
-        .subject-cards {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
+        /* Grille de cartes colorées */
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
         }
 
         .subject-card {
-            background-color: var(--white);
-            border-radius: 10px;
-            box-shadow: 0 5px 15px var(--shadow);
-            padding: 30px;
-            width: 300px;
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
+            background: white;
+            border-radius: 30px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
             position: relative;
+            overflow: hidden;
+        }
+
+        .subject-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, var(--purple), var(--pink), var(--orange));
         }
 
         .subject-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px var(--shadow);
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
         }
 
         .subject-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: var(--dark);
+            color: var(--purple);
+            font-size: 2rem;
+            margin-bottom: 1rem;
         }
 
         .subject-card p {
-            color: var(--text-light);
-            margin-bottom: 20px;
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.8;
         }
 
         .btn {
             display: inline-block;
-            background-color: var(--primary);
-            color: var(--white);
-            padding: 10px 20px;
-            border-radius: 5px;
+            background: linear-gradient(135deg, var(--purple), var(--pink));
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
             text-decoration: none;
-            font-weight: 500;
-            transition: background-color 0.3s;
+            font-weight: 600;
+            transition: all 0.3s;
             border: none;
             cursor: pointer;
+            font-size: 1rem;
         }
 
         .btn:hover {
-            background-color: var(--dark);
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(107,76,230,0.4);
         }
 
-        .btn-outline {
-            background-color: transparent;
-            border: 1px solid var(--primary);
-            color: var(--primary);
-        }
-
-        .btn-outline:hover {
-            background-color: rgba(139, 115, 85, 0.1);
-        }
-
-        /* Pages de contenu */
-        .content-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .content-header h2 {
-            font-size: 2rem;
-            color: var(--dark);
-            margin-bottom: 10px;
-        }
-
-        .content-header p {
-            color: var(--text-light);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            margin-bottom: 20px;
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .back-btn:hover {
-            text-decoration: underline;
-        }
-
+        /* Cartes de TD avec couleurs vives */
         .topics-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
+            gap: 2rem;
         }
 
         .topic-card {
-            background-color: var(--white);
-            border-radius: 8px;
-            box-shadow: 0 3px 10px var(--shadow);
-            padding: 25px;
-            transition: transform 0.3s;
-            position: relative;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
             cursor: pointer;
-        }
-
-        .topic-card:hover {
-            transform: translateY(-3px);
-        }
-
-        .topic-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 15px;
-            color: var(--dark);
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 8px;
-        }
-
-        .topic-card ul {
-            list-style-type: none;
-        }
-
-        .topic-card li {
-            margin-bottom: 10px;
-            padding-left: 20px;
             position: relative;
+            overflow: hidden;
         }
 
-        .topic-card li:before {
-            content: "•";
-            color: var(--primary);
+        .topic-card::before {
+            content: '';
             position: absolute;
             left: 0;
+            top: 0;
+            bottom: 0;
+            width: 8px;
+            background: var(--accent-color);
         }
 
-        .completion-checkbox {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: 2px solid var(--primary);
-            cursor: pointer;
+        .topic-card:nth-child(1) { --accent-color: var(--purple); }
+        .topic-card:nth-child(2) { --accent-color: var(--pink); }
+        .topic-card:nth-child(3) { --accent-color: var(--orange); }
+        .topic-card:nth-child(4) { --accent-color: var(--blue); }
+        .topic-card:nth-child(5) { --accent-color: var(--green); }
+        .topic-card:nth-child(6) { --accent-color: var(--yellow); }
+
+        .topic-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
         }
 
-        .topic-card.completed .completion-checkbox {
-            background-color: var(--completed);
-            border-color: var(--completed);
-        }
-
-        .topic-card.completed .completion-checkbox:after {
-            content: "✓";
-            color: white;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 12px;
-        }
-
-        /* Page de détail d'un TD */
-        .td-content {
-            background-color: var(--white);
-            border-radius: 8px;
-            box-shadow: 0 3px 10px var(--shadow);
-            padding: 30px;
-            margin-bottom: 30px;
-        }
-
-        .td-header {
+        .topic-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
         }
 
-        .td-header h2 {
+        .topic-card h3 {
             color: var(--dark);
+            font-size: 1.5rem;
+            font-weight: 700;
         }
 
-        .completion-status {
-            display: flex;
+        .topic-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .topic-card li {
+            padding: 0.75rem 0;
+            padding-left: 2rem;
+            position: relative;
+            color: #555;
+            font-size: 1.05rem;
+        }
+
+        .topic-card li:before {
+            content: "▸";
+            position: absolute;
+            left: 0.5rem;
+            color: var(--accent-color);
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        /* Checkbox stylée */
+        .checkbox {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--accent-color);
+            border-radius: 50%;
+            display: inline-flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
         }
 
-        .completion-status span {
-            font-size: 0.9rem;
-            color: var(--text-light);
+        .checkbox:hover {
+            transform: scale(1.1);
+        }
+
+        .checkbox.checked {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .checkbox.checked:after {
+            content: "✓";
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Barre de progression */
+        .progress-container {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .progress-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--purple);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(107,76,230,0.1);
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--purple), var(--pink), var(--orange));
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-text {
+            margin-top: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--purple);
+        }
+
+        /* Page détaillée TD */
+        .td-detail {
+            background: white;
+            border-radius: 30px;
+            padding: 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .td-detail h2 {
+            color: var(--purple);
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            border-bottom: 4px solid var(--purple);
+            padding-bottom: 1rem;
         }
 
         .fiche-revision {
-            background-color: rgba(139, 115, 85, 0.05);
-            border-radius: 8px;
-            padding: 25px;
-            margin-bottom: 30px;
+            background: linear-gradient(135deg, rgba(107,76,230,0.05), rgba(255,107,157,0.05));
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-left: 6px solid var(--purple);
         }
 
         .fiche-revision h3 {
-            color: var(--dark);
-            margin-bottom: 15px;
-            border-bottom: 1px solid var(--accent);
-            padding-bottom: 10px;
+            color: var(--purple);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
         }
 
         .formula {
-            background-color: rgba(139, 115, 85, 0.05);
-            border-left: 3px solid var(--primary);
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 0 5px 5px 0;
+            background: white;
+            border-left: 5px solid var(--orange);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 10px;
             font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            color: var(--dark);
         }
 
         .example {
-            background-color: rgba(169, 169, 169, 0.05);
-            border-radius: 5px;
-            padding: 15px;
-            margin: 15px 0;
+            background: linear-gradient(135deg, rgba(78,205,196,0.1), rgba(69,183,209,0.1));
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border-left: 5px solid var(--blue);
         }
 
         .example h4 {
-            color: var(--dark);
-            margin-bottom: 10px;
+            color: var(--blue);
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
         }
 
-        .exercices {
-            margin-top: 40px;
-        }
-
+        /* Exercices */
         .exercice {
-            background-color: var(--white);
-            border-radius: 8px;
-            box-shadow: 0 2px 5px var(--shadow);
-            padding: 20px;
-            margin-bottom: 20px;
-            border-left: 4px solid var(--primary);
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-left: 6px solid var(--pink);
         }
 
         .exercice-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .exercice h4 {
+            color: var(--purple);
+            font-size: 1.3rem;
         }
 
         .difficulty {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
         }
 
         .difficulty.facile {
-            background-color: rgba(76, 175, 80, 0.1);
-            color: #2E7D32;
+            background: rgba(69,183,209,0.2);
+            color: #2C7A7B;
         }
 
         .difficulty.moyen {
-            background-color: rgba(255, 152, 0, 0.1);
-            color: #EF6C00;
+            background: rgba(255,140,66,0.2);
+            color: #C05621;
         }
 
         .difficulty.difficile {
-            background-color: rgba(244, 67, 54, 0.1);
-            color: #C62828;
+            background: rgba(255,107,157,0.2);
+            color: #C53030;
+        }
+
+        .toggle-solution {
+            background: var(--pink);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+
+        .toggle-solution:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255,107,157,0.4);
         }
 
         .solution {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px dashed rgba(0, 0, 0, 0.1);
             display: none;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px dashed rgba(0,0,0,0.1);
         }
 
         .solution.active {
             display: block;
+            animation: slideIn 0.3s;
         }
 
-        .toggle-solution {
-            background: none;
-            border: none;
-            color: var(--primary);
-            cursor: pointer;
-            font-weight: 500;
-            margin-top: 10px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        /* Footer */
+        /* Footer coloré */
         footer {
-            background-color: var(--dark);
-            color: var(--white);
-            padding: 30px 0;
+            background: linear-gradient(135deg, var(--dark) 0%, #1a1a2e 100%);
+            color: white;
+            padding: 3rem 1rem;
             text-align: center;
-        }
-
-        .footer-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .footer-links a {
-            color: var(--white);
-            text-decoration: none;
-        }
-
-        .footer-links a:hover {
-            text-decoration: underline;
-        }
-
-        .copyright {
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        /* Progress bar */
-        .progress-container {
-            margin: 20px 0;
-        }
-
-        .progress-bar {
-            height: 8px;
-            background-color: rgba(0, 0, 0, 0.1);
-            border-radius: 4px;
+            margin-top: 4rem;
+            position: relative;
             overflow: hidden;
         }
 
-        .progress-fill {
-            height: 100%;
-            background-color: var(--completed);
-            width: 0%;
-            transition: width 0.5s ease;
+        footer::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath d='M0,50 Q300,10 600,50 T1200,50 L1200,0 L0,0 Z' fill='%23FFF8E7'/%3E%3C/svg%3E") no-repeat;
+            background-size: cover;
         }
 
-        .progress-text {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 5px;
-            font-size: 0.9rem;
-            color: var(--text-light);
+        footer p {
+            position: relative;
+            z-index: 1;
+            margin: 0.5rem 0;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            nav ul {
-                margin-top: 15px;
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            nav li {
-                margin-left: 0;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-                position: absolute;
-                top: 15px;
-                right: 20px;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .subject-cards {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .subject-card {
-                width: 100%;
-                max-width: 350px;
-            }
-
-            .topics-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .td-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
+            h1 { font-size: 2rem; }
+            .hero h2 { font-size: 1.8rem; }
+            .subject-grid { grid-template-columns: 1fr; }
+            .td-detail { padding: 1.5rem; }
+            nav ul { flex-direction: column; }
+            nav a { width: 100%; text-align: center; }
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">Révision Académique</div>
-                <button class="mobile-menu-btn">☰</button>
-                <nav>
-                    <ul>
-                        <li><a href="#" class="nav-link active" data-page="home">Accueil</a></li>
-                        <li><a href="#" class="nav-link" data-page="probabilites">Probabilités</a></li>
-                        <li><a href="#" class="nav-link" data-page="telecom">Télécommunications</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
+        <h1>📚 Révision Académique</h1>
+        <p class="subtitle">Probabilités & Télécommunications - ISEP A1</p>
     </header>
 
-    <main>
-        <!-- Page d'accueil -->
+    <nav>
+        <ul>
+            <li><a href="#" class="nav-link active" data-page="home">🏠 Accueil</a></li>
+            <li><a href="#" class="nav-link" data-page="proba">📊 Probabilités</a></li>
+            <li><a href="#" class="nav-link" data-page="telecom">📡 Télécoms</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- PAGE ACCUEIL -->
         <section id="home" class="page active">
-            <div class="container">
-                <div class="hero">
-                    <h1>Révision Académique</h1>
-                    <p>Une plateforme complète pour réviser les concepts fondamentaux en probabilités et télécommunications, avec des fiches de révision, exercices résolus et suivi de progression.</p>
-                    <div class="subject-cards">
-                        <div class="subject-card" data-page="probabilites">
-                            <h3>Probabilités</h3>
-                            <p>Révisez les concepts fondamentaux des probabilités, des lois discrètes et continues, aux couples de variables aléatoires et aux vecteurs gaussiens.</p>
-                            <a href="#" class="btn">Commencer la révision</a>
-                        </div>
-                        <div class="subject-card" data-page="telecom">
-                            <h3>Télécommunications</h3>
-                            <p>Explorez les principes des télécommunications modernes, des architectures réseau aux calculs de capacité et de portée.</p>
-                            <a href="#" class="btn">Commencer la révision</a>
-                        </div>
-                    </div>
+            <div class="hero">
+                <h2>Bienvenue sur votre espace de révision</h2>
+                <p>Fiches complètes • Exercices corrigés • Suivi de progression</p>
+            </div>
+
+            <div class="subject-grid">
+                <div class="subject-card" data-page="proba">
+                    <h3>📊 Probabilités</h3>
+                    <p>Maîtrisez les lois discrètes et continues, les vecteurs gaussiens, et les transformations de variables aléatoires à travers 5 TDs complets.</p>
+                    <button class="btn">Explorer →</button>
+                </div>
+
+                <div class="subject-card" data-page="telecom">
+                    <h3>📡 Télécommunications</h3>
+                    <p>Apprenez les bilans de liaison, modèles de propagation, et dimensionnement de réseaux indoor/outdoor avec des cas pratiques.</p>
+                    <button class="btn">Explorer →</button>
                 </div>
             </div>
         </section>
 
-        <!-- Page Probabilités -->
-        <section id="probabilites" class="page">
-            <div class="container">
-                <a href="#" class="back-btn" data-page="home">← Retour à l'accueil</a>
-                <div class="content-header">
-                    <h2>Probabilités</h2>
-                    <p>Révision complète des concepts de probabilités, des bases aux sujets avancés, avec fiches de révision et exercices progressifs.</p>
+        <!-- PAGE PROBABILITÉS -->
+        <section id="proba" class="page">
+            <a href="#" class="back-btn" data-page="home">← Retour</a>
+            
+            <div class="hero">
+                <h2>Probabilités - ISEP A1</h2>
+                <p>5 TDs complets avec fiches de révision et exercices</p>
+            </div>
+
+            <div class="progress-container">
+                <p class="progress-label">Progression globale</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="proba-progress"></div>
+                </div>
+                <p class="progress-text" id="proba-percentage">0%</p>
+            </div>
+
+            <div class="topics-grid">
+                <div class="topic-card" data-td="td1">
+                    <div class="topic-header">
+                        <h3>TD1 - Probabilités Conditionnelles</h3>
+                        <div class="checkbox" data-topic="td1"></div>
+                    </div>
+                    <ul>
+                        <li>Théorème de Bayes</li>
+                        <li>Probabilités totales</li>
+                        <li>Indépendance d'événements</li>
+                        <li>Permutations et combinaisons</li>
+                    </ul>
                 </div>
 
-                <div class="progress-container">
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="proba-progress"></div>
-                    </div>
-                    <div class="progress-text">
-                        <span>Progression</span>
-                        <span id="proba-percentage">0%</span>
-                    </div>
-                </div>
-
-                <div class="topics-grid">
-                    <!-- TD1/Chapitre 1-2 -->
-                    <div class="topic-card" data-td="td1">
-                        <div class="completion-checkbox"></div>
-                        <h3>TD1 - Probabilités Conditionnelles & Indépendance</h3>
-                        <ul>
-                            <li>Probabilités conditionnelles</li>
-                            <li>Théorème des probabilités totales</li>
-                            <li>Théorème de Bayes</li>
-                            <li>Indépendance d'événements</li>
-                            <li>Permutations et combinaisons</li>
-                        </ul>
-                    </div>
-
-                    <!-- TD2/Chapitre 3 -->
-                    <div class="topic-card" data-td="td2">
-                        <div class="completion-checkbox"></div>
+                <div class="topic-card" data-td="td2">
+                    <div class="topic-header">
                         <h3>TD2 - Lois Discrètes Usuelles</h3>
-                        <ul>
-                            <li>Loi binomiale B(n,p)</li>
-                            <li>Loi de Poisson P(λ)</li>
-                            <li>Loi géométrique G(p)</li>
-                            <li>Paramètres des lois discrètes</li>
-                            <li>Application aux problèmes concrets</li>
-                        </ul>
+                        <div class="checkbox" data-topic="td2"></div>
                     </div>
+                    <ul>
+                        <li>Loi Binomiale B(n,p)</li>
+                        <li>Loi de Poisson P(λ)</li>
+                        <li>Loi Géométrique G(p)</li>
+                        <li>Applications pratiques</li>
+                    </ul>
+                </div>
 
-                    <!-- TD3/Chapitre 3-4 -->
-                    <div class="topic-card" data-td="td3">
-                        <div class="completion-checkbox"></div>
-                        <h3>TD3 - Variables Aléatoires Continues</h3>
-                        <ul>
-                            <li>Densité fX(x) et fonction de répartition FX(x)</li>
-                            <li>Loi uniforme U(a,b)</li>
-                            <li>Loi exponentielle E(λ)</li>
-                            <li>Loi normale N(μ,σ²)</li>
-                            <li>Propriétés des fonctions de répartition</li>
-                        </ul>
+                <div class="topic-card" data-td="td3">
+                    <div class="topic-header">
+                        <h3>TD3 - Variables Continues</h3>
+                        <div class="checkbox" data-topic="td3"></div>
                     </div>
+                    <ul>
+                        <li>Loi Uniforme U(a,b)</li>
+                        <li>Loi Exponentielle E(λ)</li>
+                        <li>Loi Normale N(μ,σ²)</li>
+                        <li>Fonction de répartition</li>
+                    </ul>
+                </div>
 
-                    <!-- TD4/Chapitre 7 -->
-                    <div class="topic-card" data-td="td4">
-                        <div class="completion-checkbox"></div>
-                        <h3>TD4 - Couples de Variables Aléatoires</h3>
-                        <ul>
-                            <li>Loi jointe et lois marginales</li>
-                            <li>Covariance et corrélation</li>
-                            <li>Indépendance de variables aléatoires</li>
-                            <li>Lois conditionnelles</li>
-                            <li>Transformation de variables</li>
-                        </ul>
+                <div class="topic-card" data-td="td4">
+                    <div class="topic-header">
+                        <h3>TD4 - Couples de Variables</h3>
+                        <div class="checkbox" data-topic="td4"></div>
                     </div>
+                    <ul>
+                        <li>Loi jointe et marginales</li>
+                        <li>Covariance Cov(X,Y)</li>
+                        <li>Coefficient de corrélation</li>
+                        <li>Indépendance</li>
+                    </ul>
+                </div>
 
-                    <!-- TD5/Chapitre 6 -->
-                    <div class="topic-card" data-td="td5">
-                        <div class="completion-checkbox"></div>
+                <div class="topic-card" data-td="td5">
+                    <div class="topic-header">
                         <h3>TD5 - Vecteurs Gaussiens</h3>
-                        <ul>
-                            <li>Vecteurs gaussiens et propriétés</li>
-                            <li>Transformation linéaire Y = aX + b</li>
-                            <li>Espérance et variance de transformations</li>
-                            <li>Corrélation r(X,Y) = ±1</li>
-                            <li>Matrice de covariance</li>
-                        </ul>
+                        <div class="checkbox" data-topic="td5"></div>
                     </div>
+                    <ul>
+                        <li>Transformation linéaire Y = aX + b</li>
+                        <li>Matrice de covariance</li>
+                        <li>Corrélation r = ±1</li>
+                        <li>Propriétés des vecteurs</li>
+                    </ul>
                 </div>
             </div>
         </section>
 
-        <!-- Page Télécommunications -->
-        <section id="telecom" class="page">
-            <div class="container">
-                <a href="#" class="back-btn" data-page="home">← Retour à l'accueil</a>
-                <div class="content-header">
-                    <h2>Télécommunications</h2>
-                    <p>Révision des principes fondamentaux des télécommunications, des architectures réseau aux calculs techniques.</p>
-                </div>
-
-                <div class="progress-container">
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="telecom-progress"></div>
-                    </div>
-                    <div class="progress-text">
-                        <span>Progression</span>
-                        <span id="telecom-percentage">0%</span>
-                    </div>
-                </div>
-
-                <div class="topics-grid">
-                    <!-- Architecture réseau -->
-                    <div class="topic-card" data-td="td6">
-                        <div class="completion-checkbox"></div>
-                        <h3>Architecture Réseau</h3>
-                        <ul>
-                            <li>Topologies réseau (étoile, bus, maillage)</li>
-                            <li>Hiérarchie à deux niveaux</li>
-                            <li>Justification des liaisons longue distance</li>
-                            <li>Filaire vs radio pour différentes applications</li>
-                            <li>Dimensionnement du réseau</li>
-                        </ul>
-                    </div>
-
-                    <!-- Bruit thermique -->
-                    <div class="topic-card" data-td="td7">
-                        <div class="completion-checkbox"></div>
-                        <h3>Bruit Thermique</h3>
-                        <ul>
-                            <li>Puissance du bruit thermique</li>
-                            <li>Constante de Boltzmann</li>
-                            <li>Bande passante et température</li>
-                            <li>Calcul en dBm</li>
-                            <li>Impact sur les communications</li>
-                        </ul>
-                    </div>
-
-                    <!-- Bilan de liaison -->
-                    <div class="topic-card" data-td="td8">
-                        <div class="completion-checkbox"></div>
-                        <h3>Bilan de Liaison</h3>
-                        <ul>
-                            <li>Modèles d'affaiblissement</li>
-                            <li>Espace libre: A(dB) = 32.4 + 20log10(d_km) + 20log10(f_MHz)</li>
-                            <li>Modèle indoor IEEE 802.11</li>
-                            <li>Modèle d'Okumura-Hata pour outdoor</li>
-                            <li>Calcul de la puissance reçue</li>
-                        </ul>
-                    </div>
-
-                    <!-- Portée maximale -->
-                    <div class="topic-card" data-td="td9">
-                        <div class="completion-checkbox"></div>
-                        <h3>Portée Maximale</h3>
-                        <ul>
-                            <li>Seuil de sensibilité du récepteur</li>
-                            <li>Calcul de d_max basé sur le seuil</li>
-                            <li>Impact de la fréquence sur la portée</li>
-                            <li>Environnements indoor vs outdoor</li>
-                            <li>Optimisation de la couverture</li>
-                        </ul>
-                    </div>
-
-                    <!-- Capacité de Shannon -->
-                    <div class="topic-card" data-td="td10">
-                        <div class="completion-checkbox"></div>
-                        <h3>Capacité de Shannon</h3>
-                        <ul>
-                            <li>Formule de la capacité maximale</li>
-                            <li>Efficacité spectrale</li>
-                            <li>Calcul du SINR nécessaire</li>
-                            <li>Application aux technologies sans fil</li>
-                            <li>Limitations pratiques</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Pages de détail des TDs -->
-        <!-- TD1 - Probabilités Conditionnelles & Indépendance -->
+        <!-- PAGE TD1 DÉTAIL -->
         <section id="td1" class="page">
-            <div class="container">
-                <a href="#" class="back-btn" data-page="probabilites">← Retour aux Probabilités</a>
+            <a href="#" class="back-btn" data-page="proba">← Retour aux TDs</a>
+            
+            <div class="td-detail">
+                <h2>TD1 - Probabilités Conditionnelles & Indépendance</h2>
                 
-                <div class="td-content">
-                    <div class="td-header">
-                        <h2>TD1 - Probabilités Conditionnelles & Indépendance</h2>
-                        <div class="completion-status">
-                            <span>Terminé</span>
-                            <div class="completion-checkbox"></div>
+                <div class="fiche-revision">
+                    <h3>📋 Fiche de Révision</h3>
+                    
+                    <h4 style="color: var(--purple); margin-top: 1.5rem;">1. Probabilité Conditionnelle</h4>
+                    <p>La probabilité de A sachant B (B réalisé) :</p>
+                    <div class="formula">P(A|B) = P(A∩B) / P(B), si P(B) > 0</div>
+                    
+                    <h4 style="color: var(--purple); margin-top: 1.5rem;">2. Théorème des Probabilités Totales</h4>
+                    <p>Si B₁, B₂, ..., Bₙ forment une partition de Ω :</p>
+                    <div class="formula">P(A) = Σᵢ P(A|Bᵢ) × P(Bᵢ)</div>
+                    
+                    <h4 style="color: var(--purple); margin-top: 1.5rem;">3. Théorème de Bayes</h4>
+                    <div class="formula">P(Bᵢ|A) = [P(A|Bᵢ) × P(Bᵢ)] / [Σⱼ P(A|Bⱼ) × P(Bⱼ)]</div>
+                    
+                    <h4 style="color: var(--purple); margin-top: 1.5rem;">4. Indépendance</h4>
+                    <p>A et B sont indépendants si :</p>
+                    <div class="formula">P(A∩B) = P(A) × P(B) ⇔ P(A|B) = P(A) ⇔ P(B|A) = P(B)</div>
+                    
+                    <div class="example">
+                        <h4>💡 Exemple Clé - Examen 2018</h4>
+                        <p><strong>Énoncé :</strong> Jack a 1/3 de chances d'être choisi pour Paris et 2/3 pour Blois. P(gagner Paris|Jack) = 3/7, P(gagner Paris|autre) = 5/11.</p>
+                        <p><strong>Question :</strong> Quelle est la probabilité que Jack soit élu maire ?</p>
+                        <p style="margin-top: 1rem;"><strong>Méthode :</strong> Utiliser le théorème des probabilités totales avec les événements "Jack candidat" et "autre candidat".</p>
+                    </div>
+                </div>
+
+                <h3 style="color: var(--purple); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 1 - Dés et probabilité conditionnelle</h4>
+                        <span class="difficulty facile">Facile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> On lance deux dés équilibrés. Sachant que la somme est supérieure à 8, quelle est la probabilité que le premier dé affiche un 5 ?</p>
+                    <button class="toggle-solution">Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <p>Soit A: "premier dé = 5" et B: "somme > 8"</p>
+                        <div class="formula">
+                            P(A∩B) = P({(5,4), (5,5), (5,6)}) = 3/36 = 1/12<br>
+                            P(B) = P(somme=9,10,11,12) = 10/36 = 5/18<br>
+                            P(A|B) = (1/12)/(5/18) = 3/10 = 0.3
                         </div>
                     </div>
+                </div>
 
-                    <div class="fiche-revision">
-                        <h3>Fiche de Révision</h3>
-                        <p><strong>Probabilité conditionnelle :</strong> P(A|B) = P(A∩B) / P(B)</p>
-                        <div class="formula">P(A|B) = P(A∩B) / P(B), si P(B) > 0</div>
-                        
-                        <p><strong>Théorème des probabilités totales :</strong> Si B₁, B₂, ..., Bₙ forment une partition de Ω, alors</p>
-                        <div class="formula">P(A) = Σ P(A|Bᵢ) × P(Bᵢ)</div>
-                        
-                        <p><strong>Théorème de Bayes :</strong></p>
-                        <div class="formula">P(Bᵢ|A) = [P(A|Bᵢ) × P(Bᵢ)] / [Σ P(A|Bⱼ) × P(Bⱼ)]</div>
-                        
-                        <p><strong>Indépendance :</strong> A et B sont indépendants si P(A∩B) = P(A) × P(B)</p>
-                        <div class="formula">A et B indépendants ⇔ P(A|B) = P(A) ⇔ P(B|A) = P(B)</div>
-                        
-                        <div class="example">
-                            <h4>Exemple d'application</h4>
-                            <p>Dans une usine, deux machines M1 et M2 produisent respectivement 60% et 40% des pièces. 
-                            Le taux de défauts est de 5% pour M1 et 3% pour M2. Quelle est la probabilité qu'une pièce défectueuse provienne de M1?</p>
-                            <p><strong>Solution :</strong> On applique le théorème de Bayes :</p>
-                            <div class="formula">P(M1|D) = [P(D|M1) × P(M1)] / [P(D|M1) × P(M1) + P(D|M2) × P(M2)]</div>
-                            <div class="formula">P(M1|D) = [0.05 × 0.6] / [0.05 × 0.6 + 0.03 × 0.4] = 0.03 / 0.042 ≈ 0.714</div>
-                        </div>
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 2 - Test de dépistage (Bayes)</h4>
+                        <span class="difficulty moyen">Moyen</span>
                     </div>
+                    <p><strong>Énoncé :</strong> Un test a une sensibilité de 95% et une spécificité de 90%. La prévalence de la maladie est 1%. Si le test est positif, quelle est la probabilité d'être malade ?</p>
+                    <button class="toggle-solution">Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <p>Soit M: "malade", T+: "test positif"</p>
+                        <div class="formula">
+                            P(M) = 0.01, P(T+|M) = 0.95, P(T+|non M) = 0.10<br>
+                            P(T+) = 0.95×0.01 + 0.10×0.99 = 0.1085<br>
+                            P(M|T+) = 0.0095 / 0.1085 ≈ 8.76%
+                        </div>
+                        <p style="margin-top: 1rem; color: #C05621;"><strong>⚠️ Attention :</strong> Malgré un test positif, la probabilité d'être malade reste faible car la prévalence est très basse !</p>
+                    </div>
+                </div>
 
-                    <div class="exercices">
-                        <h3>Exercices</h3>
-                        
-                        <div class="exercice">
-                            <div class="exercice-header">
-                                <h4>Exercice 1 - Probabilité conditionnelle</h4>
-                                <span class="difficulty facile">Facile</span>
-                            </div>
-                            <p>On lance deux dés équilibrés. Sachant que la somme des deux dés est supérieure à 8, quelle est la probabilité que le premier dé affiche un 5?</p>
-                            <button class="toggle-solution">Voir la solution ↓</button>
-                            <div class="solution">
-                                <p><strong>Solution :</strong></p>
-                                <p>Soit A: "le premier dé affiche 5" et B: "la somme > 8"</p>
-                                <p>P(A∩B) = P((5,4), (5,5), (5,6)) = 3/36 = 1/12</p>
-                                <p>P(B) = P(somme=9,10,11,12) = (4+3+2+1)/36 = 10/36 = 5/18</p>
-                                <p>P(A|B) = P(A∩B)/P(B) = (1/12)/(5/18) = (1/12)×(18/5) = 3/10 = 0.3</p>
-                            </div>
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 3 - Indépendance d'événements</h4>
+                        <span class="difficulty moyen">Moyen</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Soient A et B deux événements tels que P(A) = 0.4, P(B) = 0.5 et P(A∪B) = 0.7. A et B sont-ils indépendants ?</p>
+                    <button class="toggle-solution">Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <div class="formula">
+                            P(A∪B) = P(A) + P(B) - P(A∩B)<br>
+                            0.7 = 0.4 + 0.5 - P(A∩B)<br>
+                            P(A∩B) = 0.2<br><br>
+                            P(A)×P(B) = 0.4×0.5 = 0.2
                         </div>
-                        
-                        <div class="exercice">
-                            <div class="exercice-header">
-                                <h4>Exercice 2 - Théorème de Bayes</h4>
-                                <span class="difficulty moyen">Moyen</span>
-                            </div>
-                            <p>Un test de dépistage d'une maladie a une sensibilité de 95% (probabilité d'être positif si malade) et une spécificité de 90% (probabilité d'être négatif si sain). 
-                            Si la prévalence de la maladie est de 1%, quelle est la probabilité qu'une personne soit malade si son test est positif?</p>
-                            <button class="toggle-solution">Voir la solution ↓</button>
-                            <div class="solution">
-                                <p><strong>Solution :</strong></p>
-                                <p>Soit M: "être malade", T+: "test positif"</p>
-                                <p>P(M) = 0.01, P(T+|M) = 0.95, P(T-|non M) = 0.90 donc P(T+|non M) = 0.10</p>
-                                <p>P(T+) = P(T+|M)×P(M) + P(T+|non M)×P(non M) = 0.95×0.01 + 0.10×0.99 = 0.0095 + 0.099 = 0.1085</p>
-                                <p>P(M|T+) = P(T+|M)×P(M) / P(T+) = 0.0095 / 0.1085 ≈ 0.0876 ≈ 8.76%</p>
-                            </div>
+                        <p style="margin-top: 1rem;"><strong>Conclusion :</strong> P(A∩B) = P(A)×P(B), donc <span style="color: var(--green); font-weight: 600;">A et B sont indépendants</span> ✓</p>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 4 - Urne et tirages sans remise</h4>
+                        <span class="difficulty difficile">Difficile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Une urne contient 5 boules rouges et 3 vertes. On tire 2 boules sans remise. Calculer la probabilité que la 2ème boule soit rouge.</p>
+                    <button class="toggle-solution">Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <p>Soit R₁: "1ère rouge", R₂: "2ème rouge"</p>
+                        <p>On utilise les probabilités totales :</p>
+                        <div class="formula">
+                            P(R₂) = P(R₂|R₁)×P(R₁) + P(R₂|R̄₁)×P(R̄₁)<br><br>
+                            P(R₁) = 5/8, P(R̄₁) = 3/8<br>
+                            P(R₂|R₁) = 4/7 (reste 4 rouges sur 7)<br>
+                            P(R₂|R̄₁) = 5/7 (reste 5 rouges sur 7)<br><br>
+                            P(R₂) = (4/7)×(5/8) + (5/7)×(3/8)<br>
+                            P(R₂) = 20/56 + 15/56 = 35/56 = 5/8
                         </div>
-                        
-                        <div class="exercice">
-                            <div class="exercice-header">
-                                <h4>Exercice 3 - Indépendance</h4>
-                                <span class="difficulty moyen">Moyen</span>
-                            </div>
-                            <p>Soient A et B deux événements tels que P(A) = 0.4, P(B) = 0.5 et P(A∪B) = 0.7. 
-                            A et B sont-ils indépendants? Justifiez votre réponse.</p>
-                            <button class="toggle-solution">Voir la solution ↓</button>
-                            <div class="solution">
-                                <p><strong>Solution :</strong></p>
-                                <p>P(A∪B) = P(A) + P(B) - P(A∩B)</p>
-                                <p>0.7 = 0.4 + 0.5 - P(A∩B) ⇒ P(A∩B) = 0.9 - 0.7 = 0.2</p>
-                                <p>P(A)×P(B) = 0.4×0.5 = 0.2</p>
-                                <p>P(A∩B) = P(A)×P(B) = 0.2, donc A et B sont indépendants.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="exercice">
-                            <div class="exercice-header">
-                                <h4>Exercice 4 - Probabilités totales</h4>
-                                <span class="difficulty difficile">Difficile</span>
-                            </div>
-                            <p>Une urne contient 5 boules rouges et 3 boules vertes. On tire successivement 2 boules sans remise. 
-                            Calculer la probabilité que la deuxième boule tirée soit rouge.</p>
-                            <button class="toggle-solution">Voir la solution ↓</button>
-                            <div class="solution">
-                                <p><strong>Solution :</strong></p>
-                                <p>Soit R₁: "première boule rouge", R₂: "deuxième boule rouge"</p>
-                                <p>P(R₂) = P(R₂|R₁)×P(R₁) + P(R₂|non R₁)×P(non R₁)</p>
-                                <p>P(R₁) = 5/8, P(non R₁) = 3/8</p>
-                                <p>P(R₂|R₁) = 4/7 (il reste 4 rouges sur 7 boules)</p>
-                                <p>P(R₂|non R₁) = 5/7 (il reste 5 rouges sur 7 boules)</p>
-                                <p>P(R₂) = (4/7)×(5/8) + (5/7)×(3/8) = 20/56 + 15/56 = 35/56 = 5/8</p>
-                                <p>La probabilité que la deuxième boule soit rouge est 5/8.</p>
-                            </div>
+                        <p style="margin-top: 1rem; color: var(--blue);"><strong>💡 Remarque :</strong> La probabilité est la même qu'au premier tirage ! C'est un résultat général.</p>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 5 - Pièces et poche (TD1-5)</h4>
+                        <span class="difficulty difficile">Difficile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Poche droite : 3 pièces de 1€ et 4 de 2€. Poche gauche : 6 pièces de 1€ et 3 de 2€. On transfère 5 pièces de droite vers gauche, puis on tire une pièce de gauche. Quelle est P(tirer 1€) ?</p>
+                    <button class="toggle-solution">Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <p>Soit Bᵢ: "i pièces de 1€ transférées" et M: "tirer 1€"</p>
+                        <div class="formula">
+                            P(B₁) = C(3,1)×C(4,4)/C(7,5) = 3/21 = 1/7<br>
+                            P(M|B₁) = 7/14<br><br>
+                            P(B₂) = C(3,2)×C(4,3)/C(7,5) = 12/21 = 4/7<br>
+                            P(M|B₂) = 8/14<br><br>
+                            P(B₃) = C(3,3)×C(4,2)/C(7,5) = 6/21 = 2/7<br>
+                            P(M|B₃) = 9/14<br><br>
+                            P(M) = (1/7)×(7/14) + (4/7)×(8/14) + (2/7)×(9/14)<br>
+                            P(M) = 57/98 ≈ 0.58
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Autres pages de TD seraient structurées de manière similaire -->
-    </main>
+        <!-- PAGE TD2 DÉTAIL -->
+        <section id="td2" class="page">
+            <a href="#" class="back-btn" data-page="proba">← Retour aux TDs</a>
+            
+            <div class="td-detail">
+                <h2>TD2 - Lois Discrètes Usuelles</h2>
+                
+                <div class="fiche-revision">
+                    <h3>📋 Fiche de Révision</h3>
+                    
+                    <h4 style="color: var(--pink); margin-top: 1.5rem;">1. Loi Binomiale B(n,p)</h4>
+                    <p><strong>Contexte :</strong> n épreuves indépendantes avec probabilité p de succès</p>
+                    <div class="formula">
+                        P(X=k) = C(n,k) × p^k × (1-p)^(n-k)<br>
+                        E(X) = np<br>
+                        Var(X) = np(1-p)
+                    </div>
+                    
+                    <h4 style="color: var(--pink); margin-top: 1.5rem;">2. Loi de Poisson P(λ)</h4>
+                    <p><strong>Contexte :</strong> Événements rares, λ = taux moyen</p>
+                    <div class="formula">
+                        P(X=k) = (λ^k × e^(-λ)) / k!<br>
+                        E(X) = λ<br>
+                        Var(X) = λ
+                    </div>
+                    
+                    <h4 style="color: var(--pink); margin-top: 1.5rem;">3. Loi Géométrique G(p)</h4>
+                    <p><strong>Contexte :</strong> Nombre d'essais avant le 1er succès</p>
+                    <div class="formula">
+                        P(X=k) = (1-p)^(k-1) × p<br>
+                        E(X) = 1/p<br>
+                        Var(X) = (1-p)/p²
+                    </div>
+                    
+                    <div class="example">
+                        <h4>💡 Approximation de Poisson</h4>
+                        <p>Quand n est grand, p est petit et np = λ reste modéré :<br>
+                        B(n,p) ≈ P(λ) avec λ = np</p>
+                        <p><strong>Règle pratique :</strong> n ≥ 50, p ≤ 0.1, np < 15</p>
+                    </div>
+                </div>
+
+                <h3 style="color: var(--pink); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 1 - Avions et moteurs (TD2-2)</h4>
+                        <span class="difficulty moyen">Moyen</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Avion A (4 moteurs) vs Avion B (2 moteurs). Probabilité de panne = p par moteur. L'avion arrive si moins de la moitié des moteurs tombent en panne. Lequel choisir ?</p>
+                    <button class="toggle-solution">Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong></p>
+                        <p><strong>Avion A :</strong> Arrive si 0 ou 1 panne (sur 4)</p>
+                        <div class="formula">
+                            X_A ~ B(4,p)<br>
+                            P(arrivée_A) = P(X_A ≤ 1) = (1-p)⁴ + 4p(1-p)³
+                        </div>
+                        <p><strong>Avion B :</strong> Arrive si 0 panne (sur 2)</p>
+                        <div class="formula">
+                            X_B ~ B(2,p)<br>
+                            P(arrivée_B) = P(X_B = 0) = (1-p)²
+                        </div>
+                        <p style="margin-top: 1rem;"><strong>Comparaison :</strong></p>
+                        <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                            <li>Si p < 0.27 : Avion A est meilleur (redondance utile)</li>
+                            <li>Si p > 0.27 : Avion B est meilleur (moins de points de défaillance)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 2 - Magasin et clients (TD2-3)</h4>
+                        <span class="difficulty facile">Facile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Un magasin reçoit en moyenne 4 clients par jour (loi de Poisson). Calculer la probabilité de recevoir : a) 0 client, b) 5 clients, c) au moins 6 clients.</p>
+                    <button class="toggle-solution">Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong> X ~ P(4)</p>
+                        <div class="formula">
+                            a) P(X=0) = e^(-4) ≈ 0.0183<br><br>
+                            b) P(X=5) = (4⁵ × e^(-4))/5! ≈ 0.1563<br><br>
+                            c) P(X≥6) = 1 - P(X≤5)<br>
+                               = 1 - Σ(k=0 à 5) (4^k × e^(-4))/k!<br>
+                               ≈ 0.2149
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 3 - Lancers de dé</h4>
+                        <span class="difficulty facile">Facile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> On lance un dé équilibré jusqu'à obtenir un 6. Quelle est la probabilité d'obtenir le premier 6 au 3ème lancer ?</p>
+                    <button class="toggle-solution">Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong> X ~ G(1/6)</p>
+                        <div class="formula">
+                            P(X=3) = (5/6)² × (1/6)<br>
+                            P(X=3) = 25/216 ≈ 0.1157<br><br>
+                            E(X) = 1/p = 6 lancers en moyenne
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 4 - Serveur informatique (TD3-2)</h4>
+                        <span class="difficulty difficile">Difficile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Serveur avec 3 alimentations (300W chacune), consomme max 500W. Probabilité de panne = p par alimentation. Le serveur tombe si ≥ 2 pannes. Calculer P(panne serveur).</p>
+                    <button class="toggle-solution">Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong> X ~ B(3,p) = nombre d'alimentations en panne</p>
+                        <p>Le serveur tombe si X ≥ 2</p>
+                        <div class="formula">
+                            P(panne) = P(X=2) + P(X=3)<br>
+                            P(panne) = C(3,2)p²(1-p) + C(3,3)p³<br>
+                            P(panne) = 3p²(1-p) + p³<br>
+                            P(panne) = 3p² - 2p³
+                        </div>
+                        <p style="margin-top: 1rem;">Si p = 0.1 : P(panne) ≈ 0.028 = 2.8%</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE TD3 DÉTAIL -->
+        <section id="td3" class="page">
+            <a href="#" class="back-btn" data-page="proba">← Retour aux TDs</a>
+            
+            <div class="td-detail">
+                <h2>TD3 - Variables Aléatoires Continues</h2>
+                
+                <div class="fiche-revision">
+                    <h3>📋 Fiche de Révision</h3>
+                    
+                    <h4 style="color: var(--orange); margin-top: 1.5rem;">1. Fonction de Répartition F_X(x)</h4>
+                    <p><strong>Définition :</strong> F_X(x) = P(X ≤ x)</p>
+                    <p><strong>Propriétés :</strong></p>
+                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
+                        <li>0 ≤ F_X(x) ≤ 1</li>
+                        <li>F_X est non décroissante</li>
+                        <li>F_X est continue à droite</li>
+                        <li>lim(x→-∞) F_X(x) = 0</li>
+                        <li>lim(x→+∞) F_X(x) = 1</li>
+                    </ul>
+                    
+                    <h4 style="color: var(--orange); margin-top: 1.5rem;">2. Densité de Probabilité f_X(x)</h4>
+                    <div class="formula">
+                        f_X(x) = F'_X(x)<br>
+                        P(a ≤ X ≤ b) = ∫[a,b] f_X(x)dx<br>
+                        ∫[-∞,+∞] f_X(x)dx = 1
+                    </div>
+                    
+                    <h4 style="color: var(--orange); margin-top: 1.5rem;">3. Loi Uniforme U(a,b)</h4>
+                    <div class="formula">
+                        f_X(x) = 1/(b-a) si x ∈ [a,b], 0 sinon<br>
+                        E(X) = (a+b)/2<br>
+                        Var(X) = (b-a)²/12
+                    </div>
+                    
+                    <h4 style="color: var(--orange); margin-top: 1.5rem;">4. Loi Exponentielle E(λ)</h4>
+                    <div class="formula">
+                        f_X(x) = λe^(-λx) si x ≥ 0<br>
+                        F_X(x) = 1 - e^(-λx)<br>
+                        E(X) = 1/λ<br>
+                        Var(X) = 1/λ²
+                    </div>
+                    <p style="margin-top: 0.5rem;"><strong>Propriété d'absence de mémoire :</strong> P(X > s+t | X > s) = P(X > t)</p>
+                    
+                    <h4 style="color: var(--orange); margin-top: 1.5rem;">5. Loi Normale N(μ,σ²)</h4>
+                    <div class="formula">
+                        f_X(x) = (1/(σ√(2π))) × exp(-(x-μ)²/(2σ²))<br>
+                        E(X) = μ<br>
+                        Var(X) = σ²
+                    </div>
+                    
+                    <div class="example">
+                        <h4>💡 Variable Centrée Réduite</h4>
+                        <p>Si X ~ N(μ,σ²), alors Z = (X-μ)/σ ~ N(0,1)</p>
+                        <p><strong>Utilité :</strong> Permet d'utiliser la table de la loi normale standard</p>
+                    </div>
+                </div>
+
+                <h3 style="color: var(--orange); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 1 - Notes d'examen (TD2-4)</h4>
+                        <span class="difficulty moyen">Moyen</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> Les notes suivent une loi N(13, 3²). Déterminer :</p>
+                    <ul style="margin-left: 2rem;">
+                        <li>P(note > 20)</li>
+                        <li>P(note < 5)</li>
+                        <li>P(12 ≤ note ≤ 14)</li>
+                        <li>La note pour le top 10%</li>
+                    </ul>
+                    <button class="toggle-solution">Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong> X ~ N(13, 9), on utilise Z = (X-13)/3 ~ N(0,1)</p>
+                        <div class="formula">
+                            1) P(X>20) = P(Z>(20-13)/3) = P(Z>2.33) = 1-0.9901 ≈ 0.01<br><br>
+                            2) P(X<5) = P(Z<(5-13)/3) = P(Z<-2.67) ≈ 0.0038<br><br>
+                            3) P(12≤X≤14) = P(-0.33≤Z≤0.33) = 2×0.1293 ≈ 0.26<br><br>
+                            4) P(X≥x) = 0.10 ⇒ P(Z≥(x-13)/3) = 0.10<br>
+                               ⇒ (x-13)/3 = 1.28<br>
+                               ⇒ x ≈ 16.84
+                        </div>
+                        <p style="margin-top: 1rem;"><strong>Mention TB :</strong> À partir de 16.84/20</p>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 2 - Durée de vie disque dur (TD3-6)</h4>
+                        <span class="difficulty moyen">Moyen</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> La durée de vie suit une loi exponentielle. Le fabricant veut P(panne sur 1 an) < 0.01. Quelle durée de vie moyenne minimale ?</p>
+                    <button class="toggle-solution">Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong> X ~ E(λ), durée de vie moyenne = 1/λ</p>
+                        <div class="formula">
+                            P(X ≤ 1) < 0.01<br>
+                            1 - e^(-λ×1) < 0.01<br>
+                            e^(-λ) > 0.99<br>
+                            -λ > ln(0.99)<br>
+                            λ < -ln(0.99) ≈ 0.01005<br><br>
+                            1/λ > 1/0.01005 ≈ 99.5 ans
+                        </div>
+                        <p style="margin-top: 1rem;"><strong>Réponse :</strong> Durée de vie moyenne minimale ≈ 100 ans</p>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 3 - Théorème de Tchebychev (TD3-7)</h4>
+                        <span class="difficulty difficile">Difficile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> X ~ N(13,9). Comparer P(|X-13| > 6) calculée avec la loi normale et majorée par Tchebychev.</p>
+                    <button class="toggle-solution">Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Calcul exact (loi normale) :</strong></p>
+                        <div class="formula">
+                            P(|X-13| > 6) = P(X<7 ou X>19)<br>
+                            = 2×P(X<7) = 2×P(Z<-2) = 2×0.0228 ≈ 0.0456
+                        </div>
+                        <p><strong>Théorème de Tchebychev :</strong></p>
+                        <div class="formula">
+                            P(|X-μ| > ε) ≤ σ²/ε²<br>
+                            P(|X-13| > 6) ≤ 9/36 = 0.25
+                        </div>
+                        <p style="margin-top: 1rem; color: var(--blue);"><strong>💡 Conclusion :</strong> Tchebychev donne 0.25 (majorant large), la vraie valeur est 0.0456 (plus précise avec la loi)</p>
+                    </div>
+                </div>
+
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h4>Exercice 4 - Verre d'eau uniforme (TD3-5)</h4>
+                        <span class="difficulty facile">Facile</span>
+                    </div>
+                    <p><strong>Énoncé :</strong> On remplit un verre de 20cl d'une quantité uniforme entre 0 et 20cl.</p>
+                    <ul style="margin-left: 2rem;">
+                        <li>a) P(moins de 5cl)</li>
+                        <li>b) Quantité moyenne dans 5 verres</li>
+                    </ul>
+                    <button class="toggle-solution">Voir la solution</button>
+                    <div class="solution">
+                        <p><strong>Solution :</strong> X ~ U(0,20)</p>
+                        <div class="formula">
+                            a) P(X < 5) = (5-0)/(20-0) = 5/20 = 0.25<br><br>
+                            b) E(X) = (0+20)/2 = 10cl par verre<br>
+                               Quantité totale moyenne = 5×10 = 50cl
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE TÉLÉCOMMUNICATIONS -->
+        <section id="telecom" class="page">
+            <a href="#" class="back-btn" data-page="home">← Retour</a>
+            
+            <div class="hero">
+                <h2>Télécommunications - APP</h2>
+                <p>Bilans de liaison, propagation radio et réseaux</p>
+            </div>
+
+            <div class="progress-container">
+                <p class="progress-label">Progression globale</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="telecom-progress"></div>
+                </div>
+                <p class="progress-text" id="telecom-percentage">0%</p>
+            </div>
+
+            <div class="topics-grid">
+                <div class="topic-card" data-td="archi">
+                    <div class="topic-header">
+                        <h3>Architecture Réseau</h3>
+                        <div class="checkbox" data-topic="archi"></div>
+                    </div>
+                    <ul>
+                        <li>Topologies (étoile, maillage)</li>
+                        <li>Hiérarchie à deux niveaux</li>
+                        <li>Choix filaire vs radio</li>
+                        <li>Dimensionnement réseau</li>
+                    </ul>
+                </div>
+
+                <div class="topic-card" data-td="bruit">
+                    <div class="topic-header">
+                        <h3>Bruit Thermique</h3>
+                        <div class="checkbox" data-topic="bruit"></div>
+                    </div>
+                    <ul>
+                        <li>Puissance du bruit P = kTB</li>
+                        <li>Constante de Boltzmann</li>
+                        <li>Calcul en dBm</li>
+                        <li>Impact sur SNR</li>
+                    </ul>
+                </div>
+
+                <div class="topic-card" data-td="bilan">
+                    <div class="topic-header">
+                        <h3>Bilan de Liaison</h3>
+                        <div class="checkbox" data-topic="bilan"></div>
+                    </div>
+                    <ul>
+                        <li>Modèle espace libre</li>
+                        <li>Indoor IEEE 802.11</li>
+                        <li>Outdoor Okumura-Hata</li>
+                        <li>Calcul de P_reçue</li>
+                    </ul>
+                </div>
+
+                <div class="topic-card" data-td="portee">
+                    <div class="topic-header">
+                        <h3>Portée Maximale</h3>
+                        <div class="checkbox" data-topic="portee"></div>
+                    </div>
+                    <ul>
+                        <li>Seuil de sensibilité</li>
+                        <li>Calcul de d_max</li>
+                        <li>Impact de la fréquence</li>
+                        <li>Indoor vs Outdoor</li>
+                    </ul>
+                </div>
+
+                <div class="topic-card" data-td="shannon">
+                    <div class="topic-header">
+                        <h3>Capacité de Shannon</h3>
+                        <div class="checkbox" data-topic="shannon"></div>
+                    </div>
+                    <ul>
+                        <li>Formule C = B·log₂(1+SINR)</li>
+                        <li>Efficacité spectrale η</li>
+                        <li>Calcul du SINR requis</li>
+                        <li>Applications pratiques</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
 
     <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="logo">Révision Académique</div>
-                <div class="footer-links">
-                    <a href="#" data-page="home">Accueil</a>
-                    <a href="#" data-page="probabilites">Probabilités</a>
-                    <a href="#" data-page="telecom">Télécommunications</a>
-                </div>
-                <div class="copyright">
-                    &copy; 2023 Révision Académique. Tous droits réservés.
-                </div>
-            </div>
-        </div>
+        <p>🚀 Application de révision - ISEP A1</p>
+        <p>Probabilités & Télécommunications</p>
     </footer>
 
     <script>
-        // Navigation entre les pages
-        document.addEventListener('DOMContentLoaded', function() {
-            // Gestion de la navigation
-            const navLinks = document.querySelectorAll('.nav-link, .back-btn, .subject-card');
-            const pages = document.querySelectorAll('.page');
-            const topicCards = document.querySelectorAll('.topic-card');
-            
-            // Fonction pour changer de page
-            function showPage(pageId) {
-                pages.forEach(page => {
+        // Navigation entre pages
+        document.querySelectorAll('.nav-link, .back-btn, .subject-card, .topic-card').forEach(element => {
+            element.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetPage = this.dataset.page || this.dataset.td;
+                
+                // Masquer toutes les pages
+                document.querySelectorAll('.page').forEach(page => {
                     page.classList.remove('active');
                 });
-                document.getElementById(pageId).classList.add('active');
+                
+                // Afficher la page cible
+                document.getElementById(targetPage).classList.add('active');
                 
                 // Mettre à jour la navigation active
-                navLinks.forEach(link => {
+                document.querySelectorAll('.nav-link').forEach(link => {
                     link.classList.remove('active');
-                    if (link.getAttribute('data-page') === pageId) {
-                        link.classList.add('active');
-                    }
                 });
+                
+                // Mettre à jour la navigation principale si nécessaire
+                if (targetPage === 'home' || targetPage === 'proba' || targetPage === 'telecom') {
+                    document.querySelector(`.nav-link[data-page="${targetPage}"]`).classList.add('active');
+                }
                 
                 // Mettre à jour la progression
                 updateProgress();
-            }
-            
-            // Écouteurs d'événements pour la navigation
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const pageId = this.getAttribute('data-page');
-                    showPage(pageId);
-                });
             });
-            
-            // Navigation vers les pages de TD
-            topicCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    const tdId = this.getAttribute('data-td');
-                    showPage(tdId);
-                });
-            });
-            
-            // Gestion du menu mobile
-            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-            const nav = document.querySelector('nav');
-            
-            mobileMenuBtn.addEventListener('click', function() {
-                nav.style.display = nav.style.display === 'block' ? 'none' : 'block';
-            });
-            
-            // Fermer le menu mobile en cliquant à l'extérieur
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('nav') && !e.target.closest('.mobile-menu-btn')) {
-                    if (window.innerWidth <= 768) {
-                        nav.style.display = 'none';
-                    }
-                }
-            });
-            
-            // Ajuster l'affichage du menu en fonction de la taille de l'écran
-            window.addEventListener('resize', function() {
-                if (window.innerWidth > 768) {
-                    nav.style.display = 'block';
-                } else {
-                    nav.style.display = 'none';
-                }
-            });
-            
-            // Gestion des cases à cocher de progression
-            const completionCheckboxes = document.querySelectorAll('.completion-checkbox');
-            completionCheckboxes.forEach(checkbox => {
-                checkbox.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const card = this.closest('.topic-card, .completion-status');
-                    card.classList.toggle('completed');
-                    updateProgress();
-                    
-                    // Sauvegarder l'état dans le localStorage
-                    const cardId = card.closest('.topic-card') ? card.closest('.topic-card').getAttribute('data-td') : 'td1';
-                    localStorage.setItem(cardId, card.classList.contains('completed'));
-                });
-            });
-            
-            // Gestion des solutions d'exercices
-            const toggleButtons = document.querySelectorAll('.toggle-solution');
-            toggleButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const solution = this.nextElementSibling;
-                    solution.classList.toggle('active');
-                    this.textContent = solution.classList.contains('active') ? 'Masquer la solution ↑' : 'Voir la solution ↓';
-                });
-            });
-            
-            // Charger l'état de progression depuis le localStorage
-            function loadProgress() {
-                completionCheckboxes.forEach(checkbox => {
-                    const card = checkbox.closest('.topic-card, .completion-status');
-                    const cardId = card.closest('.topic-card') ? card.closest('.topic-card').getAttribute('data-td') : 'td1';
-                    const isCompleted = localStorage.getItem(cardId) === 'true';
-                    if (isCompleted) {
-                        card.classList.add('completed');
-                    }
-                });
-                updateProgress();
-            }
-            
-            // Mettre à jour les barres de progression
-            function updateProgress() {
-                // Progression pour les probabilités
-                const probaCards = document.querySelectorAll('#probabilites .topic-card');
-                const completedProba = document.querySelectorAll('#probabilites .topic-card.completed').length;
-                const probaPercentage = Math.round((completedProba / probaCards.length) * 100);
-                document.getElementById('proba-progress').style.width = `${probaPercentage}%`;
-                document.getElementById('proba-percentage').textContent = `${probaPercentage}%`;
-                
-                // Progression pour les télécoms
-                const telecomCards = document.querySelectorAll('#telecom .topic-card');
-                const completedTelecom = document.querySelectorAll('#telecom .topic-card.completed').length;
-                const telecomPercentage = Math.round((completedTelecom / telecomCards.length) * 100);
-                document.getElementById('telecom-progress').style.width = `${telecomPercentage}%`;
-                document.getElementById('telecom-percentage').textContent = `${telecomPercentage}%`;
-            }
-            
-            // Initialiser l'application
-            loadProgress();
         });
+
+        // Gestion des checkboxes de progression
+        document.querySelectorAll('.checkbox').forEach(checkbox => {
+            checkbox.addEventListener('click', function() {
+                this.classList.toggle('checked');
+                updateProgress();
+            });
+        });
+
+        // Gestion des solutions d'exercices
+        document.querySelectorAll('.toggle-solution').forEach(button => {
+            button.addEventListener('click', function() {
+                const solution = this.nextElementSibling;
+                solution.classList.toggle('active');
+                this.textContent = solution.classList.contains('active') ? 'Masquer la solution' : 'Voir la solution';
+            });
+        });
+
+        // Mise à jour de la progression
+        function updateProgress() {
+            // Progression Probabilités
+            const probaCheckboxes = document.querySelectorAll('#proba .checkbox');
+            const probaChecked = document.querySelectorAll('#proba .checkbox.checked').length;
+            const probaProgress = (probaChecked / probaCheckboxes.length) * 100;
+            
+            document.getElementById('proba-progress').style.width = `${probaProgress}%`;
+            document.getElementById('proba-percentage').textContent = `${Math.round(probaProgress)}%`;
+            
+            // Progression Télécoms
+            const telecomCheckboxes = document.querySelectorAll('#telecom .checkbox');
+            const telecomChecked = document.querySelectorAll('#telecom .checkbox.checked').length;
+            const telecomProgress = (telecomChecked / telecomCheckboxes.length) * 100;
+            
+            document.getElementById('telecom-progress').style.width = `${telecomProgress}%`;
+            document.getElementById('telecom-percentage').textContent = `${Math.round(telecomProgress)}%`;
+        }
+
+        // Initialisation
+        updateProgress();
     </script>
 </body>
 </html>
