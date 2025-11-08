@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Révision - Probabilités & Télécommunications</title>
+    <title>Révision Académique - Probabilités & Télécoms</title>
     <style>
         /* Variables de couleurs */
         :root {
@@ -16,6 +16,7 @@
             --text-light: #666666; /* Texte secondaire */
             --white: #FFFFFF;
             --shadow: rgba(0, 0, 0, 0.1);
+            --completed: #4CAF50;
         }
 
         /* Reset et styles de base */
@@ -138,6 +139,7 @@
             text-align: center;
             transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
+            position: relative;
         }
 
         .subject-card:hover {
@@ -165,10 +167,22 @@
             text-decoration: none;
             font-weight: 500;
             transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
         }
 
         .btn:hover {
             background-color: var(--dark);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(139, 115, 85, 0.1);
         }
 
         /* Pages de contenu */
@@ -214,6 +228,8 @@
             box-shadow: 0 3px 10px var(--shadow);
             padding: 25px;
             transition: transform 0.3s;
+            position: relative;
+            cursor: pointer;
         }
 
         .topic-card:hover {
@@ -245,6 +261,79 @@
             left: 0;
         }
 
+        .completion-checkbox {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            cursor: pointer;
+        }
+
+        .topic-card.completed .completion-checkbox {
+            background-color: var(--completed);
+            border-color: var(--completed);
+        }
+
+        .topic-card.completed .completion-checkbox:after {
+            content: "✓";
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+        }
+
+        /* Page de détail d'un TD */
+        .td-content {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 3px 10px var(--shadow);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .td-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .td-header h2 {
+            color: var(--dark);
+        }
+
+        .completion-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .completion-status span {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .fiche-revision {
+            background-color: rgba(139, 115, 85, 0.05);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .fiche-revision h3 {
+            color: var(--dark);
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--accent);
+            padding-bottom: 10px;
+        }
+
         .formula {
             background-color: rgba(139, 115, 85, 0.05);
             border-left: 3px solid var(--primary);
@@ -264,6 +353,72 @@
         .example h4 {
             color: var(--dark);
             margin-bottom: 10px;
+        }
+
+        .exercices {
+            margin-top: 40px;
+        }
+
+        .exercice {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px var(--shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .exercice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .difficulty.facile {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: #2E7D32;
+        }
+
+        .difficulty.moyen {
+            background-color: rgba(255, 152, 0, 0.1);
+            color: #EF6C00;
+        }
+
+        .difficulty.difficile {
+            background-color: rgba(244, 67, 54, 0.1);
+            color: #C62828;
+        }
+
+        .solution {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .solution.active {
+            display: block;
+        }
+
+        .toggle-solution {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         /* Footer */
@@ -299,6 +454,33 @@
             margin-top: 20px;
             font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Progress bar */
+        .progress-container {
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--completed);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 0.9rem;
+            color: var(--text-light);
         }
 
         /* Responsive */
@@ -342,6 +524,12 @@
             .topics-grid {
                 grid-template-columns: 1fr;
             }
+
+            .td-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
         }
     </style>
 </head>
@@ -368,7 +556,7 @@
             <div class="container">
                 <div class="hero">
                     <h1>Révision Académique</h1>
-                    <p>Une plateforme complète pour réviser les concepts fondamentaux en probabilités et télécommunications, avec des exercices résolus et des méthodologies détaillées.</p>
+                    <p>Une plateforme complète pour réviser les concepts fondamentaux en probabilités et télécommunications, avec des fiches de révision, exercices résolus et suivi de progression.</p>
                     <div class="subject-cards">
                         <div class="subject-card" data-page="probabilites">
                             <h3>Probabilités</h3>
@@ -391,12 +579,23 @@
                 <a href="#" class="back-btn" data-page="home">← Retour à l'accueil</a>
                 <div class="content-header">
                     <h2>Probabilités</h2>
-                    <p>Révision complète des concepts de probabilités, des bases aux sujets avancés, avec exercices résolus et méthodologies.</p>
+                    <p>Révision complète des concepts de probabilités, des bases aux sujets avancés, avec fiches de révision et exercices progressifs.</p>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="proba-progress"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>Progression</span>
+                        <span id="proba-percentage">0%</span>
+                    </div>
                 </div>
 
                 <div class="topics-grid">
                     <!-- TD1/Chapitre 1-2 -->
-                    <div class="topic-card">
+                    <div class="topic-card" data-td="td1">
+                        <div class="completion-checkbox"></div>
                         <h3>TD1 - Probabilités Conditionnelles & Indépendance</h3>
                         <ul>
                             <li>Probabilités conditionnelles</li>
@@ -405,15 +604,11 @@
                             <li>Indépendance d'événements</li>
                             <li>Permutations et combinaisons</li>
                         </ul>
-                        <div class="example">
-                            <h4>Exemple: Indépendance</h4>
-                            <p>Si A et B sont indépendants, alors P(A∩B) = P(A) × P(B)</p>
-                            <div class="formula">P(A|B) = P(A) et P(B|A) = P(B)</div>
-                        </div>
                     </div>
 
                     <!-- TD2/Chapitre 3 -->
-                    <div class="topic-card">
+                    <div class="topic-card" data-td="td2">
+                        <div class="completion-checkbox"></div>
                         <h3>TD2 - Lois Discrètes Usuelles</h3>
                         <ul>
                             <li>Loi binomiale B(n,p)</li>
@@ -422,13 +617,11 @@
                             <li>Paramètres des lois discrètes</li>
                             <li>Application aux problèmes concrets</li>
                         </ul>
-                        <div class="formula">
-                            Loi binomiale: P(X=k) = C(n,k) × p^k × (1-p)^(n-k)
-                        </div>
                     </div>
 
                     <!-- TD3/Chapitre 3-4 -->
-                    <div class="topic-card">
+                    <div class="topic-card" data-td="td3">
+                        <div class="completion-checkbox"></div>
                         <h3>TD3 - Variables Aléatoires Continues</h3>
                         <ul>
                             <li>Densité fX(x) et fonction de répartition FX(x)</li>
@@ -437,13 +630,11 @@
                             <li>Loi normale N(μ,σ²)</li>
                             <li>Propriétés des fonctions de répartition</li>
                         </ul>
-                        <div class="formula">
-                            Densité normale: f(x) = (1/√(2πσ²)) × e^(-(x-μ)²/(2σ²))
-                        </div>
                     </div>
 
                     <!-- TD4/Chapitre 7 -->
-                    <div class="topic-card">
+                    <div class="topic-card" data-td="td4">
+                        <div class="completion-checkbox"></div>
                         <h3>TD4 - Couples de Variables Aléatoires</h3>
                         <ul>
                             <li>Loi jointe et lois marginales</li>
@@ -452,13 +643,11 @@
                             <li>Lois conditionnelles</li>
                             <li>Transformation de variables</li>
                         </ul>
-                        <div class="formula">
-                            Cov(X,Y) = E(XY) - E(X)E(Y)
-                        </div>
                     </div>
 
                     <!-- TD5/Chapitre 6 -->
-                    <div class="topic-card">
+                    <div class="topic-card" data-td="td5">
+                        <div class="completion-checkbox"></div>
                         <h3>TD5 - Vecteurs Gaussiens</h3>
                         <ul>
                             <li>Vecteurs gaussiens et propriétés</li>
@@ -467,52 +656,6 @@
                             <li>Corrélation r(X,Y) = ±1</li>
                             <li>Matrice de covariance</li>
                         </ul>
-                        <div class="formula">
-                            Si Y = aX + b, alors E(Y) = aE(X) + b et V(Y) = a²V(X)
-                        </div>
-                    </div>
-
-                    <!-- Examen 2018 -->
-                    <div class="topic-card">
-                        <h3>Examen 2018 - Concepts Clés</h3>
-                        <ul>
-                            <li>Probabilités conditionnelles appliquées</li>
-                            <li>Loi normale et calcul de percentiles</li>
-                            <li>Loi binomiale et approximation</li>
-                            <li>Couples de variables et densité jointe</li>
-                            <li>Loi de Poisson et propriétés</li>
-                        </ul>
-                        <div class="example">
-                            <h4>Exercice type</h4>
-                            <p>Calculer P(|Fn - 1/6| < 0.99) ≥ 0.99 pour une loi binomiale</p>
-                        </div>
-                    </div>
-
-                    <!-- Examen 2021 -->
-                    <div class="topic-card">
-                        <h3>Examen 2021 - Applications</h3>
-                        <ul>
-                            <li>Fonction de répartition et propriétés</li>
-                            <li>Couples de variables discrètes</li>
-                            <li>Loi normale et applications</li>
-                            <li>Probabilités conditionnelles avec lois normales</li>
-                            <li>Combinaison linéaire de variables gaussiennes</li>
-                        </ul>
-                    </div>
-
-                    <!-- Examen 2022 -->
-                    <div class="topic-card">
-                        <h3>Examen 2022 - Transformations</h3>
-                        <ul>
-                            <li>Transformation linéaire Y = aX + b</li>
-                            <li>Espérance et variance de transformations</li>
-                            <li>Coefficient de corrélation r = ±1</li>
-                            <li>Probabilités conditionnelles avec tirages</li>
-                            <li>Loi normale et intervalles de confiance</li>
-                        </ul>
-                        <div class="formula">
-                            r(X,Y) = cov(X,Y) / (σ_X × σ_Y)
-                        </div>
                     </div>
                 </div>
             </div>
@@ -527,9 +670,20 @@
                     <p>Révision des principes fondamentaux des télécommunications, des architectures réseau aux calculs techniques.</p>
                 </div>
 
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="telecom-progress"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>Progression</span>
+                        <span id="telecom-percentage">0%</span>
+                    </div>
+                </div>
+
                 <div class="topics-grid">
                     <!-- Architecture réseau -->
-                    <div class="topic-card">
+                    <div class="topic-card" data-td="td6">
+                        <div class="completion-checkbox"></div>
                         <h3>Architecture Réseau</h3>
                         <ul>
                             <li>Topologies réseau (étoile, bus, maillage)</li>
@@ -538,14 +692,11 @@
                             <li>Filaire vs radio pour différentes applications</li>
                             <li>Dimensionnement du réseau</li>
                         </ul>
-                        <div class="example">
-                            <h4>Exemple: Campus multisites</h4>
-                            <p>Utilisation de fibre optique pour interconnecter les sites distants avec des réseaux locaux sans fil dans chaque bâtiment.</p>
-                        </div>
                     </div>
 
                     <!-- Bruit thermique -->
-                    <div class="topic-card">
+                    <div class="topic-card" data-td="td7">
+                        <div class="completion-checkbox"></div>
                         <h3>Bruit Thermique</h3>
                         <ul>
                             <li>Puissance du bruit thermique</li>
@@ -554,16 +705,11 @@
                             <li>Calcul en dBm</li>
                             <li>Impact sur les communications</li>
                         </ul>
-                        <div class="formula">
-                            P_bruit = k × T × B
-                        </div>
-                        <div class="formula">
-                            P_bruit(dBm) = -174 + 10×log10(B)
-                        </div>
                     </div>
 
                     <!-- Bilan de liaison -->
-                    <div class="topic-card">
+                    <div class="topic-card" data-td="td8">
+                        <div class="completion-checkbox"></div>
                         <h3>Bilan de Liaison</h3>
                         <ul>
                             <li>Modèles d'affaiblissement</li>
@@ -572,13 +718,11 @@
                             <li>Modèle d'Okumura-Hata pour outdoor</li>
                             <li>Calcul de la puissance reçue</li>
                         </ul>
-                        <div class="formula">
-                            P_r(dBm) = P_e(dBm) + Gains(dB) - Pertes(dB)
-                        </div>
                     </div>
 
                     <!-- Portée maximale -->
-                    <div class="topic-card">
+                    <div class="topic-card" data-td="td9">
+                        <div class="completion-checkbox"></div>
                         <h3>Portée Maximale</h3>
                         <ul>
                             <li>Seuil de sensibilité du récepteur</li>
@@ -587,14 +731,11 @@
                             <li>Environnements indoor vs outdoor</li>
                             <li>Optimisation de la couverture</li>
                         </ul>
-                        <div class="example">
-                            <h4>Application Bluetooth</h4>
-                            <p>Pour une puissance d'émission de 0dBm et un seuil de sensibilité de -70dBm, calculer la portée maximale en utilisant le modèle indoor.</p>
-                        </div>
                     </div>
 
                     <!-- Capacité de Shannon -->
-                    <div class="topic-card">
+                    <div class="topic-card" data-td="td10">
+                        <div class="completion-checkbox"></div>
                         <h3>Capacité de Shannon</h3>
                         <ul>
                             <li>Formule de la capacité maximale</li>
@@ -603,52 +744,128 @@
                             <li>Application aux technologies sans fil</li>
                             <li>Limitations pratiques</li>
                         </ul>
-                        <div class="formula">
-                            C = B × log2(1 + SINR)
-                        </div>
-                        <div class="formula">
-                            η = C / B = log2(1 + SINR)
-                        </div>
-                    </div>
-
-                    <!-- Technologies sans fil -->
-                    <div class="topic-card">
-                        <h3>Technologies Sans Fil</h3>
-                        <ul>
-                            <li>Bluetooth (portée, débit, consommation)</li>
-                            <li>Wi-Fi (canaux, débits, portée)</li>
-                            <li>LTE/4G (bandes, débits, couverture)</li>
-                            <li>Comparaison des technologies</li>
-                            <li>Choix technologique selon l'application</li>
-                        </ul>
-                    </div>
-
-                    <!-- Antennes et propagation -->
-                    <div class="topic-card">
-                        <h3>Antennes et Propagation</h3>
-                        <ul>
-                            <li>Diagramme de rayonnement</li>
-                            <li>Gain d'antenne et directivité</li>
-                            <li>Ouverture d'antenne (beamwidth)</li>
-                            <li>Périmètre de sécurité</li>
-                            <li>Exposition aux champs RF</li>
-                        </ul>
-                    </div>
-
-                    <!-- Planification fréquentielle -->
-                    <div class="topic-card">
-                        <h3>Planification Fréquentielle</h3>
-                        <ul>
-                            <li>Spectre électromagnétique</li>
-                            <li>Bandes licenciées vs non licenciées</li>
-                            <li>Réutilisation des fréquences</li>
-                            <li>Interférences inter-canaux</li>
-                            <li>Optimisation de la planification</li>
-                        </ul>
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- Pages de détail des TDs -->
+        <!-- TD1 - Probabilités Conditionnelles & Indépendance -->
+        <section id="td1" class="page">
+            <div class="container">
+                <a href="#" class="back-btn" data-page="probabilites">← Retour aux Probabilités</a>
+                
+                <div class="td-content">
+                    <div class="td-header">
+                        <h2>TD1 - Probabilités Conditionnelles & Indépendance</h2>
+                        <div class="completion-status">
+                            <span>Terminé</span>
+                            <div class="completion-checkbox"></div>
+                        </div>
+                    </div>
+
+                    <div class="fiche-revision">
+                        <h3>Fiche de Révision</h3>
+                        <p><strong>Probabilité conditionnelle :</strong> P(A|B) = P(A∩B) / P(B)</p>
+                        <div class="formula">P(A|B) = P(A∩B) / P(B), si P(B) > 0</div>
+                        
+                        <p><strong>Théorème des probabilités totales :</strong> Si B₁, B₂, ..., Bₙ forment une partition de Ω, alors</p>
+                        <div class="formula">P(A) = Σ P(A|Bᵢ) × P(Bᵢ)</div>
+                        
+                        <p><strong>Théorème de Bayes :</strong></p>
+                        <div class="formula">P(Bᵢ|A) = [P(A|Bᵢ) × P(Bᵢ)] / [Σ P(A|Bⱼ) × P(Bⱼ)]</div>
+                        
+                        <p><strong>Indépendance :</strong> A et B sont indépendants si P(A∩B) = P(A) × P(B)</p>
+                        <div class="formula">A et B indépendants ⇔ P(A|B) = P(A) ⇔ P(B|A) = P(B)</div>
+                        
+                        <div class="example">
+                            <h4>Exemple d'application</h4>
+                            <p>Dans une usine, deux machines M1 et M2 produisent respectivement 60% et 40% des pièces. 
+                            Le taux de défauts est de 5% pour M1 et 3% pour M2. Quelle est la probabilité qu'une pièce défectueuse provienne de M1?</p>
+                            <p><strong>Solution :</strong> On applique le théorème de Bayes :</p>
+                            <div class="formula">P(M1|D) = [P(D|M1) × P(M1)] / [P(D|M1) × P(M1) + P(D|M2) × P(M2)]</div>
+                            <div class="formula">P(M1|D) = [0.05 × 0.6] / [0.05 × 0.6 + 0.03 × 0.4] = 0.03 / 0.042 ≈ 0.714</div>
+                        </div>
+                    </div>
+
+                    <div class="exercices">
+                        <h3>Exercices</h3>
+                        
+                        <div class="exercice">
+                            <div class="exercice-header">
+                                <h4>Exercice 1 - Probabilité conditionnelle</h4>
+                                <span class="difficulty facile">Facile</span>
+                            </div>
+                            <p>On lance deux dés équilibrés. Sachant que la somme des deux dés est supérieure à 8, quelle est la probabilité que le premier dé affiche un 5?</p>
+                            <button class="toggle-solution">Voir la solution ↓</button>
+                            <div class="solution">
+                                <p><strong>Solution :</strong></p>
+                                <p>Soit A: "le premier dé affiche 5" et B: "la somme > 8"</p>
+                                <p>P(A∩B) = P((5,4), (5,5), (5,6)) = 3/36 = 1/12</p>
+                                <p>P(B) = P(somme=9,10,11,12) = (4+3+2+1)/36 = 10/36 = 5/18</p>
+                                <p>P(A|B) = P(A∩B)/P(B) = (1/12)/(5/18) = (1/12)×(18/5) = 3/10 = 0.3</p>
+                            </div>
+                        </div>
+                        
+                        <div class="exercice">
+                            <div class="exercice-header">
+                                <h4>Exercice 2 - Théorème de Bayes</h4>
+                                <span class="difficulty moyen">Moyen</span>
+                            </div>
+                            <p>Un test de dépistage d'une maladie a une sensibilité de 95% (probabilité d'être positif si malade) et une spécificité de 90% (probabilité d'être négatif si sain). 
+                            Si la prévalence de la maladie est de 1%, quelle est la probabilité qu'une personne soit malade si son test est positif?</p>
+                            <button class="toggle-solution">Voir la solution ↓</button>
+                            <div class="solution">
+                                <p><strong>Solution :</strong></p>
+                                <p>Soit M: "être malade", T+: "test positif"</p>
+                                <p>P(M) = 0.01, P(T+|M) = 0.95, P(T-|non M) = 0.90 donc P(T+|non M) = 0.10</p>
+                                <p>P(T+) = P(T+|M)×P(M) + P(T+|non M)×P(non M) = 0.95×0.01 + 0.10×0.99 = 0.0095 + 0.099 = 0.1085</p>
+                                <p>P(M|T+) = P(T+|M)×P(M) / P(T+) = 0.0095 / 0.1085 ≈ 0.0876 ≈ 8.76%</p>
+                            </div>
+                        </div>
+                        
+                        <div class="exercice">
+                            <div class="exercice-header">
+                                <h4>Exercice 3 - Indépendance</h4>
+                                <span class="difficulty moyen">Moyen</span>
+                            </div>
+                            <p>Soient A et B deux événements tels que P(A) = 0.4, P(B) = 0.5 et P(A∪B) = 0.7. 
+                            A et B sont-ils indépendants? Justifiez votre réponse.</p>
+                            <button class="toggle-solution">Voir la solution ↓</button>
+                            <div class="solution">
+                                <p><strong>Solution :</strong></p>
+                                <p>P(A∪B) = P(A) + P(B) - P(A∩B)</p>
+                                <p>0.7 = 0.4 + 0.5 - P(A∩B) ⇒ P(A∩B) = 0.9 - 0.7 = 0.2</p>
+                                <p>P(A)×P(B) = 0.4×0.5 = 0.2</p>
+                                <p>P(A∩B) = P(A)×P(B) = 0.2, donc A et B sont indépendants.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="exercice">
+                            <div class="exercice-header">
+                                <h4>Exercice 4 - Probabilités totales</h4>
+                                <span class="difficulty difficile">Difficile</span>
+                            </div>
+                            <p>Une urne contient 5 boules rouges et 3 boules vertes. On tire successivement 2 boules sans remise. 
+                            Calculer la probabilité que la deuxième boule tirée soit rouge.</p>
+                            <button class="toggle-solution">Voir la solution ↓</button>
+                            <div class="solution">
+                                <p><strong>Solution :</strong></p>
+                                <p>Soit R₁: "première boule rouge", R₂: "deuxième boule rouge"</p>
+                                <p>P(R₂) = P(R₂|R₁)×P(R₁) + P(R₂|non R₁)×P(non R₁)</p>
+                                <p>P(R₁) = 5/8, P(non R₁) = 3/8</p>
+                                <p>P(R₂|R₁) = 4/7 (il reste 4 rouges sur 7 boules)</p>
+                                <p>P(R₂|non R₁) = 5/7 (il reste 5 rouges sur 7 boules)</p>
+                                <p>P(R₂) = (4/7)×(5/8) + (5/7)×(3/8) = 20/56 + 15/56 = 35/56 = 5/8</p>
+                                <p>La probabilité que la deuxième boule soit rouge est 5/8.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Autres pages de TD seraient structurées de manière similaire -->
     </main>
 
     <footer>
@@ -673,6 +890,7 @@
             // Gestion de la navigation
             const navLinks = document.querySelectorAll('.nav-link, .back-btn, .subject-card');
             const pages = document.querySelectorAll('.page');
+            const topicCards = document.querySelectorAll('.topic-card');
             
             // Fonction pour changer de page
             function showPage(pageId) {
@@ -688,6 +906,9 @@
                         link.classList.add('active');
                     }
                 });
+                
+                // Mettre à jour la progression
+                updateProgress();
             }
             
             // Écouteurs d'événements pour la navigation
@@ -696,6 +917,14 @@
                     e.preventDefault();
                     const pageId = this.getAttribute('data-page');
                     showPage(pageId);
+                });
+            });
+            
+            // Navigation vers les pages de TD
+            topicCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const tdId = this.getAttribute('data-td');
+                    showPage(tdId);
                 });
             });
             
@@ -724,6 +953,64 @@
                     nav.style.display = 'none';
                 }
             });
+            
+            // Gestion des cases à cocher de progression
+            const completionCheckboxes = document.querySelectorAll('.completion-checkbox');
+            completionCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const card = this.closest('.topic-card, .completion-status');
+                    card.classList.toggle('completed');
+                    updateProgress();
+                    
+                    // Sauvegarder l'état dans le localStorage
+                    const cardId = card.closest('.topic-card') ? card.closest('.topic-card').getAttribute('data-td') : 'td1';
+                    localStorage.setItem(cardId, card.classList.contains('completed'));
+                });
+            });
+            
+            // Gestion des solutions d'exercices
+            const toggleButtons = document.querySelectorAll('.toggle-solution');
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const solution = this.nextElementSibling;
+                    solution.classList.toggle('active');
+                    this.textContent = solution.classList.contains('active') ? 'Masquer la solution ↑' : 'Voir la solution ↓';
+                });
+            });
+            
+            // Charger l'état de progression depuis le localStorage
+            function loadProgress() {
+                completionCheckboxes.forEach(checkbox => {
+                    const card = checkbox.closest('.topic-card, .completion-status');
+                    const cardId = card.closest('.topic-card') ? card.closest('.topic-card').getAttribute('data-td') : 'td1';
+                    const isCompleted = localStorage.getItem(cardId) === 'true';
+                    if (isCompleted) {
+                        card.classList.add('completed');
+                    }
+                });
+                updateProgress();
+            }
+            
+            // Mettre à jour les barres de progression
+            function updateProgress() {
+                // Progression pour les probabilités
+                const probaCards = document.querySelectorAll('#probabilites .topic-card');
+                const completedProba = document.querySelectorAll('#probabilites .topic-card.completed').length;
+                const probaPercentage = Math.round((completedProba / probaCards.length) * 100);
+                document.getElementById('proba-progress').style.width = `${probaPercentage}%`;
+                document.getElementById('proba-percentage').textContent = `${probaPercentage}%`;
+                
+                // Progression pour les télécoms
+                const telecomCards = document.querySelectorAll('#telecom .topic-card');
+                const completedTelecom = document.querySelectorAll('#telecom .topic-card.completed').length;
+                const telecomPercentage = Math.round((completedTelecom / telecomCards.length) * 100);
+                document.getElementById('telecom-progress').style.width = `${telecomPercentage}%`;
+                document.getElementById('telecom-percentage').textContent = `${telecomPercentage}%`;
+            }
+            
+            // Initialiser l'application
+            loadProgress();
         });
     </script>
 </body>
