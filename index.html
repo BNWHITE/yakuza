@@ -675,132 +675,366 @@
     </style>
 </head>
 <body>
+    <!-- Header -->
     <header>
-        <h1>📡 Révision Télécommunications & Probabilités</h1>
-        <p class="subtitle">ISEP A1 - Projet Campus Connecté</p>
+        <h1 class="typewriter">🎯 Probabilités ISEP - TDs Complets 2024</h1>
+        <p class="subtitle floating">TD1 à TD5 avec solutions détaillées et outils interactifs</p>
     </header>
 
+    <!-- Navigation -->
     <nav>
         <ul>
             <li><a href="#" class="nav-link active" data-page="home">🏠 Accueil</a></li>
-            <li><a href="#" class="nav-link" data-page="proba">📊 Probabilités</a></li>
-            <li><a href="#" class="nav-link" data-page="telecom">📡 Télécoms</a></li>
-            <li><a href="#" class="nav-link" data-page="bureau">📋 Bureau d'Études</a></li>
+            <li><a href="#" class="nav-link" data-page="td1">📘 TD1</a></li>
+            <li><a href="#" class="nav-link" data-page="td2">📗 TD2</a></li>
+            <li><a href="#" class="nav-link" data-page="td3">📙 TD3</a></li>
+            <li><a href="#" class="nav-link" data-page="td4">📕 TD4</a></li>
+            <li><a href="#" class="nav-link" data-page="td5">📓 TD5</a></li>
+            <li><a href="#" class="nav-link" data-page="outils">🛠️ Outils</a></li>
         </ul>
     </nav>
 
+    <!-- Contenu principal -->
     <div class="container">
+        <!-- Page d'accueil -->
         <section id="home" class="page active">
             <div class="hero">
-                <h2>Bienvenue sur votre espace de révision</h2>
-                <p>Fiches complètes • Exercices corrigés • Suivi de progression</p>
+                <h2>Bienvenue dans l'espace de révision des Probabilités ISEP</h2>
+                <p>TDs complets avec solutions interactives, visualisations et outils d'apprentissage</p>
             </div>
 
             <div class="subject-grid">
-                <div class="subject-card" data-page="proba">
-                    <h3>📊 Probabilités</h3>
-                    <p>Maîtrisez les lois discrètes et continues, les vecteurs gaussiens, et les transformations de variables aléatoires à travers 5 TDs complets.</p>
-                    <button class="btn">Explorer →</button>
+                <div class="subject-card" data-page="td1">
+                    <h3>📘 TD1 - Probabilités Conditionnelles</h3>
+                    <p>Événements indépendants, permutations, probabilités conditionnelles, théorème de Bayes</p>
+                    <div class="progress-container">
+                        <svg class="progress-ring" width="80" height="80">
+                            <circle class="progress-ring-circle" stroke="var(--electric)" stroke-width="4" fill="transparent" r="36" cx="40" cy="40" stroke-dasharray="226.194" stroke-dashoffset="0"/>
+                        </svg>
+                    </div>
+                    <button class="btn">Commencer →</button>
                 </div>
 
-                <div class="subject-card" data-page="telecom">
-                    <h3>📡 Télécommunications</h3>
-                    <p>Apprenez les bilans de liaison, modèles de propagation, et dimensionnement de réseaux indoor/outdoor avec des cas pratiques.</p>
-                    <button class="btn">Explorer →</button>
+                <div class="subject-card" data-page="td2">
+                    <h3>📗 TD2 - Variables Aléatoires Réelles</h3>
+                    <p>Lois de probabilité, variables binomiales, Poisson, normale, applications pratiques</p>
+                    <div class="progress-container">
+                        <svg class="progress-ring" width="80" height="80">
+                            <circle class="progress-ring-circle" stroke="var(--electric)" stroke-width="4" fill="transparent" r="36" cx="40" cy="40" stroke-dasharray="226.194" stroke-dashoffset="0"/>
+                        </svg>
+                    </div>
+                    <button class="btn">Commencer →</button>
                 </div>
 
-                <div class="subject-card" data-page="bureau">
-                    <h3>📋 Bureau d'Études</h3>
-                    <p>Approfondissez les notions fondamentales : unités, propagation radio, capacité de Shannon, antennes et réglementation.</p>
-                    <button class="btn">Explorer →</button>
+                <div class="subject-card" data-page="td3">
+                    <h3>📙 TD3 - Variables Continues & Applications</h3>
+                    <p>Espérance, variance, lois exponentielles, uniformes, théorème de Tchebychev</p>
+                    <div class="progress-container">
+                        <svg class="progress-ring" width="80" height="80">
+                            <circle class="progress-ring-circle" stroke="var(--electric)" stroke-width="4" fill="transparent" r="36" cx="40" cy="40" stroke-dasharray="226.194" stroke-dashoffset="0"/>
+                        </svg>
+                    </div>
+                    <button class="btn">Commencer →</button>
+                </div>
+
+                <div class="subject-card" data-page="td4">
+                    <h3>📕 TD4 - Transformations & Couples</h3>
+                    <p>Transformations de variables, couples aléatoires, lois marginales et conditionnelles</p>
+                    <div class="progress-container">
+                        <svg class="progress-ring" width="80" height="80">
+                            <circle class="progress-ring-circle" stroke="var(--electric)" stroke-width="4" fill="transparent" r="36" cx="40" cy="40" stroke-dasharray="226.194" stroke-dashoffset="0"/>
+                        </svg>
+                    </div>
+                    <button class="btn">Commencer →</button>
+                </div>
+
+                <div class="subject-card" data-page="td5">
+                    <h3>📓 TD5 - Vecteurs Gaussiens</h3>
+                    <p>Vecteurs gaussiens, covariance, corrélation, indépendance, applications avancées</p>
+                    <div class="progress-container">
+                        <svg class="progress-ring" width="80" height="80">
+                            <circle class="progress-ring-circle" stroke="var(--electric)" stroke-width="4" fill="transparent" r="36" cx="40" cy="40" stroke-dasharray="226.194" stroke-dashoffset="0"/>
+                        </svg>
+                    </div>
+                    <button class="btn">Commencer →</button>
                 </div>
             </div>
         </section>
 
-        <section id="proba" class="page">
-            <a href="#" class="back-btn" data-page="home">← Retour</a>
+        <!-- TD5 - Vecteurs Gaussiens -->
+        <section id="td5" class="page">
+            <a href="#" class="back-btn" data-page="home">← Retour à l'accueil</a>
             
             <div class="hero">
-                <h2>Probabilités - ISEP A1</h2>
-                <p>5 TDs complets avec fiches de révision et exercices</p>
+                <h2>📓 TD5 - Vecteurs Gaussiens</h2>
+                <p>Vecteurs gaussiens, covariance, corrélation, indépendance et applications avancées</p>
             </div>
 
-            <div class="progress-container">
-                <p class="progress-label">Progression globale</p>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="proba-progress"></div>
+            <!-- TD5-1 -->
+            <div class="exercice">
+                <div class="exercice-header">
+                    <h4>TD5-1 - Variable normale standardisée</h4>
+                    <span class="difficulty moyen">Moyen</span>
                 </div>
-                <p class="progress-text" id="proba-percentage">0%</p>
+                <p><strong>Énoncé :</strong> Soit X ~ N(2, 2²). On pose T = (X - μ)/σ</p>
+                
+                <div class="formula interactive-formula">
+                    T = (X - μ)/σ = (X - 2)/2
+                </div>
+
+                <button class="toggle-solution btn">🔓 Voir la solution complète</button>
+                <div class="solution">
+                    <p><strong>Solution :</strong></p>
+                    
+                    <div class="formula">
+                        <strong>a)</strong> T = (X - 2)/2 suit une loi normale centrée réduite N(0,1)
+                    </div>
+
+                    <div class="formula">
+                        <strong>b)</strong> Événement {X < 1.5} équivaut à {T < (1.5-2)/2 = -0.25}<br>
+                        P(X < 1.5) = P(T < -0.25) = Φ(-0.25) = 1 - Φ(0.25) ≈ 1 - 0.5987 = 0.4013
+                    </div>
+
+                    <div class="formula">
+                        <strong>c)</strong> Événement {X > 2} équivaut à {T > 0}<br>
+                        P(X > 2) = P(T > 0) = 0.5
+                    </div>
+
+                    <div class="formula">
+                        <strong>d)</strong> Événement {-1 ≤ T < 1} équivaut à {2 + 2×(-1) ≤ X < 2 + 2×1} = {0 ≤ X < 4}<br>
+                        P(-1 ≤ T < 1) = Φ(1) - Φ(-1) = 0.8413 - 0.1587 = 0.6826
+                    </div>
+
+                    <div class="formula">
+                        <strong>e)</strong> Valeurs de x :<br>
+                        • P(X < x) = 0.76 ⇒ Φ((x-2)/2) = 0.76 ⇒ (x-2)/2 = 0.71 ⇒ x = 3.42<br>
+                        • P(X > x) = 0.6 ⇒ P(X < x) = 0.4 ⇒ (x-2)/2 = -0.25 ⇒ x = 1.5<br>
+                        • P(0 ≤ X < x) = 0.40 ⇒ Φ((x-2)/2) - Φ(-1) = 0.40 ⇒ Φ((x-2)/2) = 0.40 + 0.1587 = 0.5587<br>
+                        ⇒ (x-2)/2 = 0.15 ⇒ x = 2.3
+                    </div>
+                </div>
             </div>
 
-            <div class="topics-grid">
-                <div class="topic-card" data-td="td1">
-                    <div class="topic-header">
-                        <h3>TD1 - Probabilités Conditionnelles</h3>
-                        <div class="checkbox" data-topic="td1"></div>
-                    </div>
-                    <ul>
-                        <li>Théorème de Bayes</li>
-                        <li>Probabilités totales</li>
-                        <li>Indépendance d'événements</li>
-                        <li>Permutations et combinaisons</li>
-                    </ul>
+            <!-- TD5-2 -->
+            <div class="exercice">
+                <div class="exercice-header">
+                    <h4>TD5-2 - Variables corrélées et indépendance</h4>
+                    <span class="difficulty difficile">Difficile</span>
                 </div>
+                <p><strong>Énoncé :</strong> X ~ N(0,1), ε telle que P(ε=+1)=P(ε=-1)=1/2, Y = εX</p>
 
-                <div class="topic-card" data-td="td2">
-                    <div class="topic-header">
-                        <h3>TD2 - Lois Discrètes Usuelles</h3>
-                        <div class="checkbox" data-topic="td2"></div>
+                <button class="toggle-solution btn">🔓 Voir la solution complète</button>
+                <div class="solution">
+                    <p><strong>Solution :</strong></p>
+                    
+                    <div class="formula">
+                        <strong>a)</strong> Fonction de répartition de Y :<br>
+                        F_Y(y) = P(Y ≤ y) = P(εX ≤ y)<br>
+                        = P(ε=1, X≤y) + P(ε=-1, -X≤y)<br>
+                        = ½P(X≤y) + ½P(X≥-y)<br>
+                        = ½Φ(y) + ½[1 - Φ(-y)] = ½Φ(y) + ½Φ(y) = Φ(y)<br>
+                        Donc Y ~ N(0,1)
                     </div>
-                    <ul>
-                        <li>Loi Binomiale B(n,p)</li>
-                        <li>Loi de Poisson P(λ)</li>
-                        <li>Loi Géométrique G(p)</li>
-                        <li>Applications pratiques</li>
-                    </ul>
+
+                    <div class="formula">
+                        <strong>b)</strong> Cov(X,Y) = E(XY) - E(X)E(Y) = E(εX²) - 0 = E(ε)E(X²) = 0×1 = 0<br>
+                        Donc X et Y sont non corrélées
+                    </div>
+
+                    <div class="formula">
+                        <strong>c)</strong> P(X+Y=0) = P(X+εX=0) = P(X(1+ε)=0)<br>
+                        Si ε=1 ⇒ P(2X=0) = P(X=0) = 0 (car X continue)<br>
+                        Si ε=-1 ⇒ P(0=0) = 1<br>
+                        Donc P(X+Y=0) = ½×0 + ½×1 = 0.5<br><br>
+                        
+                        Le vecteur (X,Y) n'est pas gaussien car X+Y n'est pas gaussienne :<br>
+                        P(X+Y=0) = 0.5 ≠ 0 pour une variable gaussienne continue<br><br>
+                        
+                        X et Y ne sont pas indépendantes car la connaissance de X donne des informations sur |Y|
+                    </div>
                 </div>
+            </div>
 
-                <div class="topic-card" data-td="td3">
-                    <div class="topic-header">
-                        <h3>TD3 - Variables Continues</h3>
-                        <div class="checkbox" data-topic="td3"></div>
-                    </div>
-                    <ul>
-                        <li>Loi Uniforme U(a,b)</li>
-                        <li>Loi Exponentielle E(λ)</li>
-                        <li>Loi Normale N(μ,σ²)</li>
-                        <li>Fonction de répartition</li>
-                    </ul>
+            <!-- TD5-3 -->
+            <div class="exercice">
+                <div class="exercice-header">
+                    <h4>TD5-3 - Vecteur gaussien et transformations</h4>
+                    <span class="difficulty difficile">Difficile</span>
                 </div>
+                <p><strong>Énoncé :</strong> (X,Y) vecteur gaussien centré avec E(X²)=4, E(Y²)=1, et (2X+Y) et (X-3Y) indépendantes</p>
 
-                <div class="topic-card" data-td="td4">
-                    <div class="topic-header">
-                        <h3>TD4 - Transformations & Couples</h3>
-                        <div class="checkbox" data-topic="td4"></div>
+                <button class="toggle-solution btn">🔓 Voir la solution complète</button>
+                <div class="solution">
+                    <p><strong>Solution :</strong></p>
+                    
+                    <div class="formula">
+                        <strong>a)</strong> On a Var(X)=4, Var(Y)=1<br>
+                        Cov(2X+Y, X-3Y) = 2Var(X) -6Cov(X,Y) + Cov(X,Y) -3Var(Y)<br>
+                        = 2×4 -5Cov(X,Y) -3×1 = 8 -5Cov(X,Y) -3 = 5 -5Cov(X,Y)<br><br>
+                        
+                        Comme (2X+Y) et (X-3Y) sont indépendantes, leur covariance est nulle :<br>
+                        5 -5Cov(X,Y) = 0 ⇒ Cov(X,Y) = 1<br><br>
+                        
+                        Coefficient de corrélation : r = Cov(X,Y)/(σ_Xσ_Y) = 1/(2×1) = 0.5<br><br>
+                        
+                        La loi de (X,Y) est N(0, V) avec V = [[4, 1], [1, 1]]
                     </div>
-                    <ul>
-                        <li>Transformation de variables</li>
-                        <li>Variables bidimensionnelles</li>
-                        <li>Lois marginales et jointes</li>
-                        <li>Indépendance</li>
-                    </ul>
+
+                    <div class="formula">
+                        <strong>b)</strong> (X+Y, 2X-Y) est une transformation linéaire de (X,Y) donc c'est un vecteur gaussien<br><br>
+                        
+                        Soit Z = [X+Y, 2X-Y]ᵀ = A[X,Y]ᵀ avec A = [[1,1],[2,-1]]<br><br>
+                        
+                        Matrice de covariance : V_Z = A V Aᵀ<br>
+                        A V = [[1,1],[2,-1]] × [[4,1],[1,1]] = [[5,2],[7,1]]<br>
+                        V_Z = [[5,2],[7,1]] × [[1,2],[1,-1]] = [[7,8],[8,13]]<br><br>
+                        
+                        Donc (X+Y, 2X-Y) ~ N(0, [[7,8],[8,13]])
+                    </div>
                 </div>
+            </div>
 
-                <div class="topic-card" data-td="td5">
-                    <div class="topic-header">
-                        <h3>TD5 - Vecteurs Gaussiens</h3>
-                        <div class="checkbox" data-topic="td5"></div>
+            <!-- TD5-4 -->
+            <div class="exercice">
+                <div class="exercice-header">
+                    <h4>TD5-4 - Espérances conditionnelles et covariance</h4>
+                    <span class="difficulty moyen">Moyen</span>
+                </div>
+                <p><strong>Énoncé :</strong> Reprise du TD4-2 avec calcul d'espérances conditionnelles</p>
+
+                <button class="toggle-solution btn">🔓 Voir la solution complète</button>
+                <div class="solution">
+                    <p><strong>Solution :</strong></p>
+                    
+                    <div class="formula">
+                        <strong>a)</strong> E(X|Y=1) à partir de la loi conditionnelle :<br>
+                        P(X=-2|Y=1) = 0.2/0.3 = 2/3<br>
+                        P(X=0|Y=1) = 0.1/0.3 = 1/3<br>
+                        P(X=1|Y=1) = 0/0.3 = 0<br><br>
+                        
+                        E(X|Y=1) = (-2)×(2/3) + 0×(1/3) + 1×0 = -4/3 ≈ -1.333
                     </div>
-                    <ul>
-                        <li>Covariance et corrélation</li>
-                        <li>Vecteurs gaussiens</li>
-                        <li>Matrice de covariance</li>
-                        <li>Applications</li>
-                    </ul>
+
+                    <div class="formula">
+                        <strong>b)</strong> E(X|Y≠2) :<br>
+                        P(Y≠2) = 1 - P(Y=2) = 1 - 0.2 = 0.8<br>
+                        P(X=-2|Y≠2) = 0.4/0.8 = 0.5<br>
+                        P(X=0|Y≠2) = 0.2/0.8 = 0.25<br>
+                        P(X=1|Y≠2) = 0.2/0.8 = 0.25<br><br>
+                        
+                        E(X|Y≠2) = (-2)×0.5 + 0×0.25 + 1×0.25 = -1 + 0.25 = -0.75
+                    </div>
+
+                    <div class="formula">
+                        <strong>c)</strong> E(XY) et Cov(X,Y) :<br>
+                        E(XY) = ΣΣ xy P(X=x,Y=y)<br>
+                        = (-2)×(-1)×0.2 + (-2)×1×0.2 + (-2)×2×0.05<br>
+                        + 0×(-1)×0.1 + 0×1×0.1 + 0×2×0.05<br>
+                        + 1×(-1)×0.2 + 1×1×0 + 1×2×0.1<br>
+                        = 0.4 -0.4 -0.2 + 0 + 0 + 0 -0.2 + 0 + 0.2 = -0.2<br><br>
+                        
+                        E(X) = (-2)×0.45 + 0×0.25 + 1×0.3 = -0.9 + 0.3 = -0.6<br>
+                        E(Y) = (-1)×0.5 + 1×0.3 + 2×0.2 = -0.5 + 0.3 + 0.4 = 0.2<br><br>
+                        
+                        Cov(X,Y) = E(XY) - E(X)E(Y) = -0.2 - (-0.6)×0.2 = -0.2 + 0.12 = -0.08
+                    </div>
+
+                    <div class="formula">
+                        <strong>d)</strong> Z = X+Y :<br>
+                        • Z = -3 : P=0.2 (X=-2,Y=-1)<br>
+                        • Z = -1 : P=0.2+0.1=0.3 (X=-2,Y=1 et X=0,Y=-1)<br>
+                        • Z = 0 : P=0.2+0.1=0.3 (X=-2,Y=2 et X=1,Y=-1)<br>
+                        • Z = 1 : P=0.1+0=0.1 (X=0,Y=1 et X=1,Y=0)<br>
+                        • Z = 2 : P=0.05+0.1=0.15 (X=0,Y=2 et X=1,Y=1)<br>
+                        • Z = 3 : P=0.05 (X=1,Y=2)<br><br>
+                        
+                        E(Z) = E(X)+E(Y) = -0.6+0.2 = -0.4<br>
+                        V(Z) = V(X)+V(Y)+2Cov(X,Y)<br>
+                        E(X²)=4×0.45+0×0.25+1×0.3=1.8+0.3=2.1, V(X)=2.1-0.36=1.74<br>
+                        E(Y²)=1×0.5+1×0.3+4×0.2=0.5+0.3+0.8=1.6, V(Y)=1.6-0.04=1.56<br>
+                        V(Z)=1.74+1.56+2×(-0.08)=3.3-0.16=3.14
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualisation vectorielle -->
+            <div class="visualization">
+                <h3>🎯 Visualisation des Vecteurs Gaussiens</h3>
+                <div id="gaussian-plot" style="width: 100%; height: 400px; background: var(--beige); border-radius: 10px; margin: 1rem 0;">
+                    <canvas id="covarianceCanvas"></canvas>
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                    <button class="btn" onclick="updateCovariance(0)">r = 0</button>
+                    <button class="btn" onclick="updateCovariance(0.5)">r = 0.5</button>
+                    <button class="btn" onclick="updateCovariance(0.9)">r = 0.9</button>
+                    <button class="btn" onclick="updateCovariance(-0.5)">r = -0.5</button>
                 </div>
             </div>
         </section>
 
+        <!-- Outils interactifs -->
+        <section id="outils" class="page">
+            <a href="#" class="back-btn" data-page="home">← Retour à l'accueil</a>
+            
+            <div class="hero">
+                <h2>🛠️ Outils Interactifs</h2>
+                <p>Calculateurs, visualisations et simulateurs pour mieux comprendre les probabilités</p>
+            </div>
+
+            <div class="quiz-container">
+                <h3>🧮 Calculateur de Probabilités Normales</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+                    <div>
+                        <label>Moyenne (μ):</label>
+                        <input type="number" id="mean" value="0" step="0.1" style="width: 100%; padding: 0.5rem; margin: 0.5rem 0; border: 2px solid var(--taupe); border-radius: 5px;">
+                        
+                        <label>Écart-type (σ):</label>
+                        <input type="number" id="std" value="1" step="0.1" style="width: 100%; padding: 0.5rem; margin: 0.5rem 0; border: 2px solid var(--taupe); border-radius: 5px;">
+                        
+                        <label>Valeur x:</label>
+                        <input type="number" id="xValue" value="0" step="0.1" style="width: 100%; padding: 0.5rem; margin: 0.5rem 0; border: 2px solid var(--taupe); border-radius: 5px;">
+                        
+                        <button class="btn" onclick="calculateNormal()">Calculer P(X ≤ x)</button>
+                    </div>
+                    <div>
+                        <div id="normalResult" style="background: var(--beige); padding: 2rem; border-radius: 10px; text-align: center;">
+                            <h4>Résultat</h4>
+                            <p id="probabilityResult">0.5</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-container">
+                <h3>📈 Simulateur de Loi Binomiale</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+                    <div>
+                        <label>Nombre d'épreuves (n):</label>
+                        <input type="number" id="nTrials" value="10" min="1" style="width: 100%; padding: 0.5rem; margin: 0.5rem 0; border: 2px solid var(--taupe); border-radius: 5px;">
+                        
+                        <label>Probabilité de succès (p):</label>
+                        <input type="number" id="pSuccess" value="0.5" min="0" max="1" step="0.1" style="width: 100%; padding: 0.5rem; margin: 0.5rem 0; border: 2px solid var(--taupe); border-radius: 5px;">
+                        
+                        <label>Nombre de succès (k):</label>
+                        <input type="number" id="kSuccess" value="5" min="0" style="width: 100%; padding: 0.5rem; margin: 0.5rem 0; border: 2px solid var(--taupe); border-radius: 5px;">
+                        
+                        <button class="btn" onclick="calculateBinomial()">Calculer P(X = k)</button>
+                    </div>
+                    <div>
+                        <div id="binomialResult" style="background: var(--beige); padding: 2rem; border-radius: 10px;">
+                            <h4>Résultat Binomial</h4>
+                            <p id="binomialProbability">P(X = 5) = 0.2461</p>
+                            <p id="binomialExpectation">E(X) = 5</p>
+                            <p id="binomialVariance">V(X) = 2.5</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+                            
         <section id="td1" class="page">
             <a href="#" class="back-btn" data-page="proba">← Retour</a>
             
@@ -1186,6 +1420,7 @@
                 </div>
             </div>
         </section>
+                        
 
         <section id="telecom" class="page">
             <a href="#" class="back-btn" data-page="home">← Retour</a>
@@ -1752,9 +1987,12 @@
         <p>🎯 Seydi - Révision Télécommunications & Probabilités</p>
         <p>📅 Année 2024-2025</p>
     </footer>
-
+                                
+<!-- Bouton mode sombre -->
+    <button class="dark-mode-toggle" id="darkModeToggle">🌙</button>
+                                
     <script>
-        // Navigation entre pages
+        // ========== SYSTÈME DE NAVIGATION ==========
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -1764,83 +2002,26 @@
                 document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
                 e.target.classList.add('active');
                 
-                // Afficher la page cible
-                document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+                // Afficher la page cible avec animation
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
                 document.getElementById(targetPage).classList.add('active');
             });
         });
 
-        // Navigation via les cartes de sujet
+        // Navigation via les cartes
         document.querySelectorAll('.subject-card').forEach(card => {
             card.addEventListener('click', (e) => {
                 const targetPage = card.getAttribute('data-page');
-                
-                // Mettre à jour la navigation
                 document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
                 document.querySelector(`[data-page="${targetPage}"]`).classList.add('active');
-                
-                // Afficher la page cible
                 document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
                 document.getElementById(targetPage).classList.add('active');
             });
         });
 
-        // Navigation via les cartes de topics
-        document.querySelectorAll('.topic-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                const targetTD = card.getAttribute('data-td');
-                
-                // Afficher la page du TD
-                document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-                document.getElementById(targetTD).classList.add('active');
-            });
-        });
-
-        // Boutons retour
-        document.querySelectorAll('.back-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetPage = btn.getAttribute('data-page');
-                
-                // Mettre à jour la navigation
-                document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
-                document.querySelector(`[data-page="${targetPage}"]`).classList.add('active');
-                
-                // Afficher la page cible
-                document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-                document.getElementById(targetPage).classList.add('active');
-            });
-        });
-
-        // Gestion des cases à cocher pour la progression
-        document.querySelectorAll('.checkbox').forEach(checkbox => {
-            checkbox.addEventListener('click', (e) => {
-                e.stopPropagation();
-                checkbox.classList.toggle('checked');
-                updateProgress();
-            });
-        });
-
-        // Fonction pour mettre à jour la progression
-        function updateProgress() {
-            // Progression Probabilités
-            const probaCheckboxes = document.querySelectorAll('#proba .checkbox');
-            const probaChecked = document.querySelectorAll('#proba .checkbox.checked').length;
-            const probaProgress = (probaChecked / probaCheckboxes.length) * 100;
-            
-            document.getElementById('proba-progress').style.width = probaProgress + '%';
-            document.getElementById('proba-percentage').textContent = Math.round(probaProgress) + '%';
-
-            // Progression Télécoms
-            const telecomCheckboxes = document.querySelectorAll('#telecom .checkbox');
-            const telecomChecked = document.querySelectorAll('#telecom .checkbox.checked').length;
-            const telecomProgress = (telecomChecked / telecomCheckboxes.length) * 100;
-            
-            document.getElementById('telecom-progress').style.width = telecomProgress + '%';
-            document.getElementById('telecom-percentage').textContent = Math.round(telecomProgress) + '%';
-        }
-
-        // Gestion des solutions d'exercices
+        // ========== SYSTÈME DE SOLUTIONS ==========
         document.querySelectorAll('.toggle-solution').forEach(button => {
             button.addEventListener('click', (e) => {
                 const solution = e.target.nextElementSibling;
@@ -1848,24 +2029,314 @@
                 
                 if (solution.classList.contains('active')) {
                     e.target.textContent = '🔒 Cacher la solution';
+                    solution.style.animation = 'bounceIn 0.5s ease-out';
                 } else {
                     e.target.textContent = '🔓 Voir la solution';
                 }
             });
         });
 
-        // Initialiser la progression au chargement
-        updateProgress();
+        // ========== MODE SOMBRE ==========
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            darkModeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        });
 
-        // Animation au chargement de la page
+        // Restaurer le mode sombre
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.textContent = '☀️';
+        }
+
+        // ========== VISUALISATION VECTEURS GAUSSIENS ==========
+        function updateCovariance(correlation) {
+            const canvas = document.getElementById('covarianceCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Redimensionner le canvas
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = 400;
+            
+            // Effacer
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Paramètres
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const scale = 30;
+            
+            // Dessiner les axes
+            ctx.strokeStyle = document.body.classList.contains('dark-mode') ? '#F0F0F0' : '#344E41';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(canvas.width, centerY);
+            ctx.moveTo(centerX, 0);
+            ctx.lineTo(centerX, canvas.height);
+            ctx.stroke();
+            
+            // Dessiner les points selon la corrélation
+            ctx.fillStyle = document.body.classList.contains('dark-mode') ? '#4CC9F0' : '#4361EE';
+            
+            for (let i = 0; i < 200; i++) {
+                // Générer des points avec la corrélation spécifiée
+                const x = randn_bm() * 2;
+                const y = correlation * x + Math.sqrt(1 - correlation*correlation) * randn_bm();
+                
+                const plotX = centerX + x * scale;
+                const plotY = centerY - y * scale;
+                
+                ctx.beginPath();
+                ctx.arc(plotX, plotY, 2, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+            
+            // Afficher la valeur de r
+            ctx.fillStyle = document.body.classList.contains('dark-mode') ? '#F0F0F0' : '#344E41';
+            ctx.font = '16px Arial';
+            ctx.fillText(`Coefficient de corrélation r = ${correlation}`, 20, 30);
+        }
+
+        // Fonction pour générer des nombres aléatoires gaussiens
+        function randn_bm() {
+            let u = 0, v = 0;
+            while(u === 0) u = Math.random();
+            while(v === 0) v = Math.random();
+            return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+        }
+
+        // Initialiser la visualisation
+        setTimeout(() => updateCovariance(0.5), 100);
+
+        // ========== CALCULATEUR NORMAL ==========
+        function calculateNormal() {
+            const mean = parseFloat(document.getElementById('mean').value);
+            const std = parseFloat(document.getElementById('std').value);
+            const x = parseFloat(document.getElementById('xValue').value);
+            
+            const z = (x - mean) / std;
+            const probability = (1 + erf(z / Math.sqrt(2))) / 2;
+            
+            document.getElementById('probabilityResult').textContent = 
+                `P(X ≤ ${x}) = ${probability.toFixed(4)} (Z = ${z.toFixed(2)})`;
+        }
+
+        // Fonction d'erreur pour la loi normale
+        function erf(x) {
+            const a1 = 0.254829592;
+            const a2 = -0.284496736;
+            const a3 = 1.421413741;
+            const a4 = -1.453152027;
+            const a5 = 1.061405429;
+            const p = 0.3275911;
+            
+            const sign = (x < 0) ? -1 : 1;
+            x = Math.abs(x);
+            
+            const t = 1.0 / (1.0 + p * x);
+            const y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+            
+            return sign * y;
+        }
+
+        // ========== CALCULATEUR BINOMIAL ==========
+        function calculateBinomial() {
+            const n = parseInt(document.getElementById('nTrials').value);
+            const p = parseFloat(document.getElementById('pSuccess').value);
+            const k = parseInt(document.getElementById('kSuccess').value);
+            
+            // Calcul de P(X = k)
+            const probability = binomialProbability(n, k, p);
+            const expectation = n * p;
+            const variance = n * p * (1 - p);
+            
+            document.getElementById('binomialProbability').textContent = 
+                `P(X = ${k}) = ${probability.toFixed(4)}`;
+            document.getElementById('binomialExpectation').textContent = 
+                `E(X) = ${expectation.toFixed(2)}`;
+            document.getElementById('binomialVariance').textContent = 
+                `V(X) = ${variance.toFixed(2)}`;
+        }
+
+        function binomialProbability(n, k, p) {
+            return combination(n, k) * Math.pow(p, k) * Math.pow(1 - p, n - k);
+        }
+
+        function combination(n, k) {
+            if (k < 0 || k > n) return 0;
+            if (k === 0 || k === n) return 1;
+            
+            k = Math.min(k, n - k);
+            let result = 1;
+            for (let i = 1; i <= k; i++) {
+                result = result * (n - i + 1) / i;
+            }
+            return result;
+        }
+
+        // ========== SYSTÈME DE PROGRESSION ==========
+        function updateProgressRings() {
+            const rings = document.querySelectorAll('.progress-ring-circle');
+            rings.forEach((ring, index) => {
+                const progress = [25, 40, 60, 75, 90][index] || 50;
+                const circumference = 226.194;
+                const offset = circumference - (progress / 100) * circumference;
+                ring.style.strokeDashoffset = offset;
+            });
+        }
+
+        // ========== ANIMATIONS AVANCÉES ==========
         document.addEventListener('DOMContentLoaded', function() {
+            // Animation d'entrée
             document.body.style.opacity = '0';
             document.body.style.transition = 'opacity 0.5s ease-in';
             
             setTimeout(() => {
                 document.body.style.opacity = '1';
             }, 100);
+            
+            // Mettre à jour les progress rings
+            updateProgressRings();
+            
+            // Effets de hover avancés
+            document.querySelectorAll('.subject-card, .exercice').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+            
+            // Initialiser les calculateurs
+            calculateNormal();
+            calculateBinomial();
         });
+
+        // ========== SYSTÈME DE ACHIEVEMENTS ==========
+        function unlockAchievement(name) {
+            const badge = document.createElement('div');
+            badge.className = 'achievement-badge';
+            badge.innerHTML = `
+                <h3>🎉 Félicitations !</h3>
+                <p style="margin: 1rem 0; font-size: 1.2rem;">${name}</p>
+                <p style="font-size: 0.9rem; opacity: 0.8;">Badge débloqué</p>
+            `;
+            document.body.appendChild(badge);
+
+            setTimeout(() => {
+                badge.classList.add('show');
+            }, 100);
+
+            setTimeout(() => {
+                badge.remove();
+            }, 3000);
+        }
+
+        // Débloquer des achievements basés sur l'interaction
+        let exercisesCompleted = 0;
+        document.querySelectorAll('.toggle-solution').forEach(button => {
+            button.addEventListener('click', () => {
+                exercisesCompleted++;
+                if (exercisesCompleted === 5) {
+                    unlockAchievement('Apprenti Probabiliste');
+                } else if (exercisesCompleted === 10) {
+                    unlockAchievement('Maître des Probabilités');
+                }
+            });
+        });
+
+        // ========== GESTIONNAIRE DE ÉTAT ==========
+        class StateManager {
+            constructor() {
+                this.state = {
+                    darkMode: localStorage.getItem('darkMode') === 'true',
+                    progress: JSON.parse(localStorage.getItem('progress')) || {},
+                    achievements: JSON.parse(localStorage.getItem('achievements')) || []
+                };
+            }
+            
+            saveProgress(topic, value) {
+                this.state.progress[topic] = value;
+                localStorage.setItem('progress', JSON.stringify(this.state.progress));
+            }
+            
+            unlockAchievement(achievement) {
+                if (!this.state.achievements.includes(achievement)) {
+                    this.state.achievements.push(achievement);
+                    localStorage.setItem('achievements', JSON.stringify(this.state.achievements));
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        const stateManager = new StateManager();
+
+        // ========== SERVICE WORKER POUR LE HORS-LIGNE ==========
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => console.log('SW registered'))
+                .catch(error => console.log('SW registration failed'));
+        }
+
+        // ========== FONCTIONNALITÉS AVANCÉES ==========
+        
+        // Système de recherche
+        function searchContent(query) {
+            const content = document.body.innerText.toLowerCase();
+            const results = content.split('\n').filter(line => 
+                line.toLowerCase().includes(query.toLowerCase())
+            );
+            return results.slice(0, 5);
+        }
+
+        // Export des données de progression
+        function exportProgress() {
+            const data = {
+                progress: stateManager.state.progress,
+                achievements: stateManager.state.achievements,
+                exportDate: new Date().toISOString()
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'progression-probabilites.json';
+            a.click();
+        }
+
+        // Import des données de progression
+        function importProgress(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    stateManager.state.progress = data.progress || {};
+                    stateManager.state.achievements = data.achievements || [];
+                    localStorage.setItem('progress', JSON.stringify(stateManager.state.progress));
+                    localStorage.setItem('achievements', JSON.stringify(stateManager.state.achievements));
+                    updateProgressRings();
+                    alert('Progression importée avec succès !');
+                } catch (error) {
+                    alert('Erreur lors de l\'importation des données');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        console.log('🚀 Application Probabilités ISEP chargée avec succès !');
+        console.log('📊 Fonctionnalités disponibles:');
+        console.log('   • Navigation interactive');
+        console.log('   • Mode sombre/clair');
+        console.log('   • Visualisations gaussiennes');
+        console.log('   • Calculateurs de probabilités');
+        console.log('   • Système de progression');
+        console.log('   • Achievements et badges');
+        console.log('   • Export/import des données');
     </script>
 </body>
 </html>
