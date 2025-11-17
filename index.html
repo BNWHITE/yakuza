@@ -8,6 +8,7 @@
     <style>
         /* ================================================= */
         /* 🎨 CSS DETAILLÉ : Design "Jungle Code" et Responsive */
+        /* (Le CSS reste inchangé par rapport à la version précédente) */
         /* ================================================= */
         
         /* --------------------- FONT IMPORT --------------------- */
@@ -15,12 +16,12 @@
         
         /* --------------------- VARIABLES GLOBALES --------------------- */
         :root {
-            --jungle-green-dark: #1e3c28; /* Vert très sombre */
+            --jungle-green-dark: #1e3c28;
             --jungle-green-medium: #2a523a;
-            --jungle-glow: #aaffaa; /* Vert fluo */
+            --jungle-glow: #aaffaa;
             --glow-shadow: 0 0 15px var(--jungle-glow), 0 0 5px var(--jungle-glow);
             --text-color-light: #fff;
-            --button-color: #f7b731; /* Boutons dorés */
+            --button-color: #f7b731;
             --track-color: #3b533f;
             --track-border: #15281b;
         }
@@ -51,7 +52,7 @@
             background-color: rgba(0, 0, 0, 0.5);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
             margin-bottom: 30px;
-            position: relative; /* Pour le score Kebab */
+            position: relative;
         }
 
         h1, h2, h3, #countdown, #race-result, #kebab-score-display {
@@ -111,7 +112,7 @@
         /* --------------------- ÉCRAN DE SÉLECTION (PROBLÈME MQ) --------------------- */
         #student-selector {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4 colonnes fixes = DÉBORDEMENT */
+            grid-template-columns: repeat(4, 1fr);
             gap: 20px;
             margin-top: 30px;
         }
@@ -396,9 +397,12 @@
         </section>
     </main>
 
+    <audio id="defeat-audio" src="madame-la-directrice-degat-degat-le-p-breziani_orZPPW2u.mp3" preload="auto"></audio>
+
     <script>
         /* ================================================= */
         /* 🧠 JAVASCRIPT DETAILLÉ : Logique, Stats et Score Kebab */
+        /* (Ajout de la gestion de l'audio) */
         /* ================================================= */
         
         const students = [
@@ -409,6 +413,7 @@
             { name: "Vithues KANDIAH", title: "L'Artisan", stats: {} }, { name: "Hector LE BACHELIER", title: "L'Ingénieur Papier", stats: {} }, { name: "Quentin DABOVILLE", title: "Le Traqueur", stats: {} }, { name: "Yassmina HARRISSI", title: "L'Experte", stats: {} }, { name: "Allan LAHCENE", title: "Le Sommelier", stats: {} },
             { name: "Evan MASSE", title: "Le Gourou PC", stats: {} }, { name: "Seydina SY", title: "Le Designer", stats: {} }, { name: "Ilay AL ABIAD", title: "Le Sprinteur", stats: {} }, { name: "Ahmed ELHATTAB", title: "Le Jardinier", stats: {} }, { name: "Thushyan KOHILAKUMAR", title: "L'Orfèvre", stats: {} },
             { name: "Aurélie MAHAUT", title: "La Stratège", stats: {} }, { name: "Gaspard PONS", title: "Le Philosophe", stats: {} }, { name: "Rafael RION", title: "L'Alchimiste", stats: {} }, { name: "Faruk SAN", title: "Le Connaisseur", stats: {} },
+            // Profil Professeur
             { name: "Mme CHABCHOUB", title: "La Guide du Code Sacré", stats: { vitesse: 90, codage: 95, chance: 99 } }
         ];
 
@@ -428,16 +433,28 @@
             mqStatus: document.getElementById('mq-status'),
             speedBoost: document.getElementById('speed-boost-option'),
             luckCharm: document.getElementById('luck-charm-option'),
-            kebabDisplay: document.getElementById('kebab-score-display') // Nouvelle référence
+            kebabDisplay: document.getElementById('kebab-score-display'),
+            defeatAudio: document.getElementById('defeat-audio') // Référence à l'élément audio
         };
 
         let selectedBot = null;
         let opponentBot = null;
         let raceHistory = [];
-        let kebabScore = 0; // Score initial en Kebab
+        let kebabScore = 0;
 
         // ------------------------------------
-        // FONCTIONNALITÉS AVANCÉES
+        // FONCTIONNALITÉS AUDIO
+        // ------------------------------------
+        function playDefeatSound() {
+            // Joue le son uniquement si l'adversaire n'est PAS la prof
+            if (opponentBot.name !== "Mme CHABCHOUB") {
+                elements.defeatAudio.currentTime = 0; // Rembobine le son
+                elements.defeatAudio.play().catch(e => console.error("Erreur lecture audio :", e)); // Capture l'erreur si l'utilisateur n'a pas interagi
+            }
+        }
+        
+        // ------------------------------------
+        // FONCTIONNALITÉS AVANCÉES (inchangé)
         // ------------------------------------
         
         function updateKebabScore(amount) {
@@ -447,7 +464,6 @@
 
         function generateStats(bot) {
             if (bot.name === "Mme CHABCHOUB") {
-                // Stats fixes pour la prof
             } else if (Object.keys(bot.stats).length === 0) {
                 bot.stats.vitesse = 40 + Math.floor(Math.random() * 40);
                 bot.stats.codage = 40 + Math.floor(Math.random() * 40);
@@ -501,7 +517,7 @@
         }
 
         // ------------------------------------
-        // LOGIQUE DE BASE DU JEU
+        // LOGIQUE DE BASE DU JEU (inchangé)
         // ------------------------------------
 
         function initializeSelection() {
@@ -553,7 +569,7 @@
             elements.opponentCat.style.transform = `translateX(0px)`;
             
             updateMQStatus();
-            updateKebabScore(0); // Initialise l'affichage du score
+            updateKebabScore(0);
         }
 
         function selectBot(bot, card, avatarUrl) {
@@ -660,8 +676,7 @@
                 winnerName = selectedBot.name;
                 isPlayerWinner = true;
                 
-                // Gain en Kebab : basé sur la difficulté (opponentBaseSpeed) ou fixe
-                kebabGain = 5 + Math.floor(Math.random() * 5); // Gagne 5 à 9 Kebab
+                kebabGain = 5 + Math.floor(Math.random() * 5);
                 updateKebabScore(kebabGain);
                 
                 elements.raceResult.textContent = `🏆 ${selectedBot.name} trouve le Bug Sacré ! Victoire et ${kebabGain} K !`;
@@ -670,9 +685,13 @@
             } else {
                 winnerName = opponentBot.name;
                 isPlayerWinner = false;
-                elements.raceResult.textContent = `😭 ${opponentBot.name} gagne la Quête ! Défaite du Bot.`;
+                
+                elements.raceResult.textContent = `😭 ${opponentBot.name} gagne la Quête ! Dégât, dégât...`;
                 elements.raceResult.classList.remove('win');
                 elements.raceResult.classList.add('lose');
+                
+                // --- NOUVEAU : Jouer l'audio de défaite ---
+                playDefeatSound();
             }
             
             logRace(winnerName, isPlayerWinner, mqUsed, kebabGain);
