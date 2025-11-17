@@ -3,1869 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Révision Télécommunications - ISEP A1 - Seydi</title>
+    <title>ISEP Qui est Qui ? - Media Queries Demo</title>
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --beige: #F5F1E8;
-            --taupe: #D8CFC4;
-            --sage: #A3B18A;
-            --forest: #588157;
-            --slate: #3A5A40;
-            --charcoal: #344E41;
-            --sand: #E9D8C8;
-            --stone: #C4B7A6;
-            --clay: #BC6C25;
-            --cream: #FFFCF5;
-        }
-
+        /* ================================================= */
+        /* 🎨 STYLE.CSS : Le Problème et la Solution (Intégration) */
+        /* ================================================= */
+        
+        /* Styles généraux */
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: var(--beige);
-            color: var(--charcoal);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
+            color: #333;
             line-height: 1.6;
-            overflow-x: hidden;
         }
 
         header {
-            background: linear-gradient(135deg, var(--slate) 0%, var(--forest) 100%);
+            background-color: #004a7c; /* Bleu ISEP */
             color: white;
-            padding: 3rem 1rem;
+            padding: 20px 0;
             text-align: center;
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%233a5a40' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
-            opacity: 0.1;
-        }
-
-        header::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            right: 0;
-            height: 80px;
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath d='M0,50 Q300,90 600,50 T1200,50 L1200,120 L0,120 Z' fill='%23F5F1E8'/%3E%3C/svg%3E") no-repeat;
-            background-size: cover;
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
         h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-            position: relative;
-            z-index: 1;
+            font-size: 2.8em;
+            margin-bottom: 5px;
         }
 
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.95;
-            position: relative;
-            z-index: 1;
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
         }
 
-        nav {
-            background: var(--cream);
-            padding: 1rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid var(--taupe);
-        }
-
-        nav ul {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            flex-wrap: wrap;
-            gap: 0.5rem;
+        main {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 20px auto;
+            padding: 0 20px;
         }
 
-        nav a {
-            color: var(--charcoal);
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            transition: all 0.3s;
-            font-weight: 600;
-            background: var(--beige);
-            border: 1px solid var(--taupe);
+        /* 💥 ZONE DU PROBLÈME : Grille non-responsive 💥 */
+        #student-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 colonnes fixes = DÉBORDEMENT sur petit écran */
+            gap: 25px; 
+            padding: 20px 0;
         }
 
-        nav a:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-            background: var(--sage);
-            color: white;
-        }
-
-        nav a.active {
-            background: linear-gradient(135deg, var(--forest), var(--slate));
-            color: white;
-            border-color: var(--forest);
-        }
-
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--sage);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            margin: 1rem 0;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-        }
-
-        .back-btn:hover {
-            transform: translateX(-5px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-            background: var(--forest);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-
-        .page {
-            display: none;
-            animation: slideIn 0.5s ease-out;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero {
+        .student-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 20px;
             text-align: center;
-            padding: 3rem 2rem;
-            background: var(--cream);
-            border-radius: 20px;
-            margin-bottom: 3rem;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            position: relative;
-            overflow: hidden;
-            border: 1px solid var(--taupe);
+            border: 1px solid #ddd;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(163,177,138,0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .hero h2 {
-            color: var(--slate);
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--charcoal);
-            position: relative;
-            z-index: 1;
-        }
-
-        .subject-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .subject-card {
-            background: var(--cream);
-            border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid var(--taupe);
-        }
-
-        .subject-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, var(--sage), var(--forest), var(--slate));
-        }
-
-        .subject-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-        }
-
-        .subject-card h3 {
-            color: var(--slate);
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
-
-        .subject-card p {
-            color: var(--charcoal);
-            margin-bottom: 2rem;
-            line-height: 1.8;
-        }
-
-        .btn {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--sage), var(--forest));
-            color: white;
-            padding: 1rem 2.5rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            box-shadow: 0 4px 15px rgba(88,129,87,0.3);
-        }
-
-        .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(88,129,87,0.4);
-        }
-
-        .topics-grid {
-            display: grid;
-            gap: 2rem;
-        }
-
-        .topic-card {
-            background: var(--cream);
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            transition: all 0.3s;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid var(--taupe);
-        }
-
-        .topic-card::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 6px;
-            background: var(--accent-color);
-        }
-
-        .topic-card:nth-child(1) { --accent-color: var(--sage); }
-        .topic-card:nth-child(2) { --accent-color: var(--forest); }
-        .topic-card:nth-child(3) { --accent-color: var(--slate); }
-        .topic-card:nth-child(4) { --accent-color: var(--clay); }
-        .topic-card:nth-child(5) { --accent-color: var(--charcoal); }
-
-        .topic-card:hover {
-            transform: translateX(10px);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.12);
-        }
-
-        .topic-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .topic-card h3 {
-            color: var(--charcoal);
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .topic-card ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .topic-card li {
-            padding: 0.75rem 0;
-            padding-left: 2rem;
-            position: relative;
-            color: var(--charcoal);
-            font-size: 1.05rem;
-        }
-
-        .topic-card li:before {
-            content: "▸";
-            position: absolute;
-            left: 0.5rem;
-            color: var(--accent-color);
-            font-size: 1.3rem;
-            font-weight: bold;
-        }
-
-        .checkbox {
-            width: 32px;
-            height: 32px;
-            border: 3px solid var(--accent-color);
+        .student-avatar {
+            /* Avatar générique */
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: var(--cream);
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 3px solid #007bff;
         }
 
-        .checkbox:hover {
-            transform: scale(1.1);
+        .student-card h3 {
+            color: #004a7c;
+            margin-bottom: 8px;
+            font-size: 1.5em;
         }
 
-        .checkbox.checked {
-            background: var(--accent-color);
-            border-color: var(--accent-color);
-        }
-
-        .checkbox.checked:after {
-            content: "✓";
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .progress-container {
-            margin: 2rem 0;
-            text-align: center;
-        }
-
-        .progress-label {
-            font-size: 1.2rem;
+        .student-card h4 {
             font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--slate);
+            margin-bottom: 5px;
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background: rgba(163,177,138,0.2);
-            border-radius: 50px;
-            overflow: hidden;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
-            border: 1px solid var(--taupe);
+        .student-card p {
+            font-size: 0.95em;
+            color: #555;
+            min-height: 60px; /* Pour aligner les cartes sur PC */
         }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--sage), var(--forest), var(--slate));
-            width: 0%;
-            transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border-radius: 50px;
-            position: relative;
-            overflow: hidden;
-        }
+        /* ================================================= */
+        /* 🛠️ ZONE DE LA SOLUTION : Les Media Queries 🛠️ */
+        /* ================================================= */
 
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .progress-text {
-            margin-top: 0.5rem;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--slate);
-        }
-
-        .td-detail {
-            background: var(--cream);
-            border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            margin-bottom: 2rem;
-            border: 1px solid var(--taupe);
-        }
-
-        .td-detail h2 {
-            color: var(--slate);
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            border-bottom: 3px solid var(--sage);
-            padding-bottom: 1rem;
-        }
-
-        .fiche-revision {
-            background: linear-gradient(135deg, rgba(163,177,138,0.05), rgba(88,129,87,0.05));
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 2rem 0;
-            border-left: 6px solid var(--sage);
-        }
-
-        .fiche-revision h3 {
-            color: var(--slate);
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .formula {
-            background: var(--beige);
-            border-left: 5px solid var(--clay);
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            border-radius: 10px;
-            font-family: 'Courier New', monospace;
-            font-size: 1.1rem;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
-            color: var(--charcoal);
-            border: 1px solid var(--taupe);
-        }
-
-        .example {
-            background: linear-gradient(135deg, rgba(188,108,37,0.05), rgba(163,177,138,0.05));
-            padding: 2rem;
-            border-radius: 15px;
-            margin: 2rem 0;
-            border-left: 5px solid var(--clay);
-            border: 1px solid var(--taupe);
-        }
-
-        .example h4 {
-            color: var(--clay);
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
-        }
-
-        .exercice {
-            background: var(--cream);
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 2rem 0;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            border-left: 6px solid var(--forest);
-            border: 1px solid var(--taupe);
-        }
-
-        .exercice-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .exercice h4 {
-            color: var(--slate);
-            font-size: 1.3rem;
-        }
-
-        .difficulty {
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        .difficulty.facile {
-            background: rgba(163,177,138,0.2);
-            color: var(--forest);
-        }
-
-        .difficulty.moyen {
-            background: rgba(188,108,37,0.2);
-            color: var(--clay);
-        }
-
-        .difficulty.difficile {
-            background: rgba(58,90,64,0.2);
-            color: var(--slate);
-        }
-
-        .toggle-solution {
-            background: var(--forest);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 600;
-            margin-top: 1rem;
-            transition: all 0.3s;
-        }
-
-        .toggle-solution:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(88,129,87,0.4);
-        }
-
-        .solution {
-            display: none;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 2px dashed var(--taupe);
-        }
-
-        .solution.active {
-            display: block;
-            animation: slideIn 0.3s;
-        }
-
-        footer {
-            background: linear-gradient(135deg, var(--charcoal) 0%, var(--slate) 100%);
-            color: white;
-            padding: 3rem 1rem;
-            text-align: center;
-            margin-top: 4rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        footer::before {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: 0;
-            right: 0;
-            height: 80px;
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath d='M0,50 Q300,10 600,50 T1200,50 L1200,0 L0,0 Z' fill='%23F5F1E8'/%3E%3C/svg%3E") no-repeat;
-            background-size: cover;
-        }
-
-        footer p {
-            position: relative;
-            z-index: 1;
-            margin: 0.5rem 0;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
+        /* 1. Écrans de taille moyenne (Tablettes) */
+        @media (max-width: 992px) {
+            #student-grid {
+                grid-template-columns: repeat(2, 1fr); /* On passe à 2 colonnes */
+                gap: 20px;
             }
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
+        /* 2. Petits écrans (Smartphones) */
+        @media (max-width: 600px) {
+            #student-grid {
+                grid-template-columns: 1fr; /* Une seule colonne, les cartes s'empilent parfaitement */
+                gap: 15px;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+
+            .student-card p {
+                min-height: auto; /* Supprime la hauteur minimale sur mobile */
             }
-        }
 
-        .subject-card {
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        .subject-card:nth-child(1) { animation-delay: 0.1s; }
-        .subject-card:nth-child(2) { animation-delay: 0.2s; }
-        .subject-card:nth-child(3) { animation-delay: 0.3s; }
-
-        .topic-card {
-            animation: slideInLeft 0.5s ease-out;
-        }
-
-        .topic-card:nth-child(1) { animation-delay: 0.1s; }
-        .topic-card:nth-child(2) { animation-delay: 0.2s; }
-        .topic-card:nth-child(3) { animation-delay: 0.3s; }
-        .topic-card:nth-child(4) { animation-delay: 0.4s; }
-        .topic-card:nth-child(5) { animation-delay: 0.5s; }
-
-        .btn:active {
-            transform: scale(0.95);
-        }
-
-        .exercice {
-            animation: fadeInUp 0.5s ease-out;
-            animation-fill-mode: both;
-        }
-
-        .exercice:nth-child(1) { animation-delay: 0.1s; }
-        .exercice:nth-child(2) { animation-delay: 0.2s; }
-        .exercice:nth-child(3) { animation-delay: 0.3s; }
-        .exercice:nth-child(4) { animation-delay: 0.4s; }
-        .exercice:nth-child(5) { animation-delay: 0.5s; }
-        .exercice:nth-child(6) { animation-delay: 0.6s; }
-        .exercice:nth-child(7) { animation-delay: 0.7s; }
-
-        .formula:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-        }
-
-        @media (max-width: 768px) {
-            h1 { font-size: 2rem; }
-            .hero h2 { font-size: 1.8rem; }
-            .subject-grid { grid-template-columns: 1fr; }
-            .td-detail { padding: 1.5rem; }
-            nav ul { flex-direction: column; }
-            nav a { width: 100%; text-align: center; }
+            /* Ajustements mineurs de taille pour le mobile */
+            .header-content h1 {
+                font-size: 1.8em;
+            }
+            main {
+                padding: 0 10px;
+            }
+            .student-avatar {
+                width: 80px;
+                height: 80px;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>📡 Révision Télécommunications & Probabilités</h1>
-        <p class="subtitle">ISEP A1 - Projet Campus Connecté</p>
+        <div class="header-content">
+            <h1>ISEP "Qui est Qui ?"</h1>
+            <p>Découvrez les légendes de votre promo !</p>
+        </div>
     </header>
 
-    <nav>
-        <ul>
-            <li><a href="#" class="nav-link active" data-page="home">🏠 Accueil</a></li>
-            <li><a href="#" class="nav-link" data-page="proba">📊 Probabilités</a></li>
-            <li><a href="#" class="nav-link" data-page="telecom">📡 Télécoms</a></li>
-            <li><a href="#" class="nav-link" data-page="bureau">📋 Bureau d'Études</a></li>
-        </ul>
-    </nav>
-
-    <div class="container">
-        <section id="home" class="page active">
-            <div class="hero">
-                <h2>Bienvenue sur votre espace de révision</h2>
-                <p>Fiches complètes • Exercices corrigés • Suivi de progression</p>
+    <main>
+        <div id="student-grid">
             </div>
-
-            <div class="subject-grid">
-                <div class="subject-card" data-page="proba">
-                    <h3>📊 Probabilités</h3>
-                    <p>Maîtrisez les lois discrètes et continues, les vecteurs gaussiens, et les transformations de variables aléatoires à travers 5 TDs complets.</p>
-                    <button class="btn">Explorer →</button>
-                </div>
-
-                <div class="subject-card" data-page="telecom">
-                    <h3>📡 Télécommunications</h3>
-                    <p>Apprenez les bilans de liaison, modèles de propagation, et dimensionnement de réseaux indoor/outdoor avec des cas pratiques.</p>
-                    <button class="btn">Explorer →</button>
-                </div>
-
-                <div class="subject-card" data-page="bureau">
-                    <h3>📋 Bureau d'Études</h3>
-                    <p>Approfondissez les notions fondamentales : unités, propagation radio, capacité de Shannon, antennes et réglementation.</p>
-                    <button class="btn">Explorer →</button>
-                </div>
-            </div>
-        </section>
-
-        <section id="proba" class="page">
-            <a href="#" class="back-btn" data-page="home">← Retour</a>
-            
-            <div class="hero">
-                <h2>Probabilités - ISEP A1</h2>
-                <p>5 TDs complets avec fiches de révision et exercices</p>
-            </div>
-
-            <div class="progress-container">
-                <p class="progress-label">Progression globale</p>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="proba-progress"></div>
-                </div>
-                <p class="progress-text" id="proba-percentage">0%</p>
-            </div>
-
-            <div class="topics-grid">
-                <div class="topic-card" data-td="td1">
-                    <div class="topic-header">
-                        <h3>TD1 - Probabilités Conditionnelles</h3>
-                        <div class="checkbox" data-topic="td1"></div>
-                    </div>
-                    <ul>
-                        <li>Théorème de Bayes</li>
-                        <li>Probabilités totales</li>
-                        <li>Indépendance d'événements</li>
-                        <li>Permutations et combinaisons</li>
-                    </ul>
-                </div>
-
-                <div class="topic-card" data-td="td2">
-                    <div class="topic-header">
-                        <h3>TD2 - Lois Discrètes Usuelles</h3>
-                        <div class="checkbox" data-topic="td2"></div>
-                    </div>
-                    <ul>
-                        <li>Loi Binomiale B(n,p)</li>
-                        <li>Loi de Poisson P(λ)</li>
-                        <li>Loi Géométrique G(p)</li>
-                        <li>Applications pratiques</li>
-                    </ul>
-                </div>
-
-                <div class="topic-card" data-td="td3">
-                    <div class="topic-header">
-                        <h3>TD3 - Variables Continues</h3>
-                        <div class="checkbox" data-topic="td3"></div>
-                    </div>
-                    <ul>
-                        <li>Loi Uniforme U(a,b)</li>
-                        <li>Loi Exponentielle E(λ)</li>
-                        <li>Loi Normale N(μ,σ²)</li>
-                        <li>Fonction de répartition</li>
-                    </ul>
-                </div>
-
-                <div class="topic-card" data-td="td4">
-                    <div class="topic-header">
-                        <h3>TD4 - Transformations & Couples</h3>
-                        <div class="checkbox" data-topic="td4"></div>
-                    </div>
-                    <ul>
-                        <li>Transformation de variables</li>
-                        <li>Variables bidimensionnelles</li>
-                        <li>Lois marginales et jointes</li>
-                        <li>Indépendance</li>
-                    </ul>
-                </div>
-
-                <div class="topic-card" data-td="td5">
-                    <div class="topic-header">
-                        <h3>TD5 - Vecteurs Gaussiens</h3>
-                        <div class="checkbox" data-topic="td5"></div>
-                    </div>
-                    <ul>
-                        <li>Covariance et corrélation</li>
-                        <li>Vecteurs gaussiens</li>
-                        <li>Matrice de covariance</li>
-                        <li>Applications</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section id="td1" class="page">
-            <a href="#" class="back-btn" data-page="proba">← Retour</a>
-            
-            <div class="td-detail">
-                <h2>TD1 - Probabilités Conditionnelles</h2>
-                
-                <div class="fiche-revision">
-                    <h3>📋 Rappels théoriques</h3>
-                    
-                    <div class="formula">
-                        Théorème de Bayes : P(A|B) = P(B|A) · P(A) / P(B)<br><br>
-                        Probabilités totales : P(B) = Σ P(A_i) · P(B|A_i)<br><br>
-                        Indépendance : P(A∩B) = P(A) · P(B)<br><br>
-                        Si A et B indépendants ⟹ A et B̅ indépendants
-                    </div>
-                    
-                    <div class="example">
-                        <h4>💡 Combinaisons</h4>
-                        <p><strong>Permutations :</strong> n! arrangements de n objets</p>
-                        <p><strong>Arrangements :</strong> A(n,k) = n!/(n-k)!</p>
-                        <p><strong>Combinaisons :</strong> C(n,k) = n!/(k!(n-k)!)</p>
-                    </div>
-                </div>
-
-                <h3 style="color: var(--slate); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 1 - Indépendance d'événements</h4>
-                        <span class="difficulty moyen">Moyen</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Montrer que si A et B sont indépendants, alors A et B̅ sont aussi indépendants.</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            On sait que A = (A∩B) ∪ (A∩B̅) avec les deux événements disjoints<br>
-                            Donc P(A) = P(A∩B) + P(A∩B̅)<br><br>
-                            Si A et B indépendants : P(A∩B) = P(A)·P(B)<br>
-                            Alors P(A∩B̅) = P(A) - P(A)·P(B) = P(A)·(1-P(B)) = P(A)·P(B̅)<br><br>
-                            ✓ Donc A et B̅ sont indépendants
-                        </div>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 2 - Probabilités totales</h4>
-                        <span class="difficulty moyen">Moyen</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Dans une bibliothèque : 30% des livres sur étagère haute, 50% sur moyenne, 20% sur basse. Sur l'étagère haute : 25% romans. Sur moyenne : 40% romans. Sur basse : 80% romans. Quelle est la probabilité de choisir un roman au hasard ?</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            Événements : H (haute), M (moyenne), B (basse), R (roman)<br><br>
-                            P(R) = P(H)·P(R|H) + P(M)·P(R|M) + P(B)·P(R|B)<br>
-                            P(R) = 0.30×0.25 + 0.50×0.40 + 0.20×0.80<br>
-                            P(R) = 0.075 + 0.20 + 0.16 = 0.435<br><br>
-                            ✓ La probabilité est 43.5%
-                        </div>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 3 - Combinaisons</h4>
-                        <span class="difficulty facile">Facile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Combien de mains de 5 cartes différentes peut-on faire avec un jeu de 32 cartes ?</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            Il s'agit d'une combinaison (l'ordre n'importe pas)<br>
-                            C(32,5) = 32!/(5!×27!) = (32×31×30×29×28)/(5×4×3×2×1)<br>
-                            C(32,5) = 20,358,520/120 = 201,376<br><br>
-                            ✓ Il y a 201,376 mains possibles
-                        </div>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 4 - Dés et probabilités conditionnelles</h4>
-                        <span class="difficulty moyen">Moyen</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> On jette deux dés. Soit S la somme des deux dés. Calculer P(S≥10 | premier dé = 5).</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            Si le premier dé = 5, alors S≥10 ⟺ deuxième dé ≥ 5<br>
-                            Valeurs possibles pour le 2ème dé : {5, 6}<br>
-                            P(S≥10 | D1=5) = P(D2≥5) = 2/6 = 1/3<br><br>
-                            ✓ La probabilité est 1/3 ≈ 33.3%
-                        </div>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 5 - Bayes appliqué</h4>
-                        <span class="difficulty difficile">Difficile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Un test médical détecte une maladie avec 99% de précision (sensibilité). La maladie touche 0.1% de la population. Si le test est positif, quelle est la probabilité d'être réellement malade ?</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            Soit M : malade, T+ : test positif<br>
-                            P(M) = 0.001, P(M̅) = 0.999<br>
-                            P(T+|M) = 0.99 (sensibilité)<br>
-                            P(T+|M̅) = 0.01 (faux positif)<br><br>
-                            P(T+) = P(M)·P(T+|M) + P(M̅)·P(T+|M̅)<br>
-                            P(T+) = 0.001×0.99 + 0.999×0.01 = 0.00099 + 0.00999 = 0.01098<br><br>
-                            P(M|T+) = P(T+|M)·P(M) / P(T+)<br>
-                            P(M|T+) = (0.99×0.001) / 0.01098 ≈ 0.090 = 9%<br><br>
-                            ✓ Seulement 9% de chances d'être malade !<br>
-                            Paradoxe : test très précis mais maladie très rare
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="td2" class="page">
-            <a href="#" class="back-btn" data-page="proba">← Retour</a>
-            
-            <div class="td-detail">
-                <h2>TD2 - Lois Discrètes Usuelles</h2>
-                
-                <div class="fiche-revision">
-                    <h3>📋 Lois de probabilités discrètes</h3>
-                    
-                    <h4 style="color: var(--forest); margin-top: 1.5rem;">1. Loi Binomiale B(n,p)</h4>
-                    <div class="formula">
-                        P(X=k) = C(n,k) · p^k · (1-p)^(n-k)<br>
-                        E(X) = n·p<br>
-                        Var(X) = n·p·(1-p)<br><br>
-                        Usage : n épreuves indépendantes, succès avec probabilité p
-                    </div>
-                    
-                    <h4 style="color: var(--forest); margin-top: 1.5rem;">2. Loi de Poisson P(λ)</h4>
-                    <div class="formula">
-                        P(X=k) = (λ^k · e^(-λ)) / k!<br>
-                        E(X) = λ<br>
-                        Var(X) = λ<br><br>
-                        Usage : événements rares, approximation binomiale si n grand et p petit
-                    </div>
-                    
-                    <h4 style="color: var(--forest); margin-top: 1.5rem;">3. Loi Géométrique G(p)</h4>
-                    <div class="formula">
-                        P(X=k) = (1-p)^(k-1) · p<br>
-                        E(X) = 1/p<br>
-                        Var(X) = (1-p)/p²<br><br>
-                        Usage : nombre d'essais jusqu'au premier succès
-                    </div>
-                </div>
-
-                <h3 style="color: var(--slate); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 6 - Loi Binomiale</h4>
-                        <span class="difficulty facile">Facile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> On lance 10 fois une pièce équilibrée. Quelle est la probabilité d'obtenir exactement 6 fois pile ?</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            X ~ B(10, 0.5)<br>
-                            P(X=6) = C(10,6) · (0.5)^6 · (0.5)^4<br>
-                            C(10,6) = 10!/(6!×4!) = 210<br>
-                            P(X=6) = 210 · (0.5)^10 = 210/1024 ≈ 0.205<br><br>
-                            ✓ Probabilité ≈ 20.5%
-                        </div>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 7 - Loi de Poisson</h4>
-                        <span class="difficulty moyen">Moyen</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Un magasin reçoit en moyenne 4 clients par heure. Quelle est la probabilité de recevoir exactement 5 clients dans la prochaine heure ? Au moins 6 clients ?</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            X ~ P(4)<br><br>
-                            P(X=5) = (4^5 · e^(-4)) / 5!<br>
-                            P(X=5) = (1024 · e^(-4)) / 120<br>
-                            P(X=5) ≈ (1024 × 0.0183) / 120 ≈ 0.156<br>
-                            ✓ Exactement 5 clients : 15.6%<br><br>
-                            P(X≥6) = 1 - P(X≤5)<br>
-                            = 1 - [P(X=0) + P(X=1) + P(X=2) + P(X=3) + P(X=4) + P(X=5)]<br>
-                            = 1 - 0.785 ≈ 0.215<br>
-                            ✓ Au moins 6 clients : 21.5%
-                        </div>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 8 - Loi Géométrique</h4>
-                        <span class="difficulty moyen">Moyen</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> On lance un dé jusqu'à obtenir un 6. Quelle est la probabilité d'y arriver en moins de 5 lancers ? Quel est le nombre moyen de lancers ?</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            X ~ G(1/6)<br><br>
-                            P(X<5) = P(X=1) + P(X=2) + P(X=3) + P(X=4)<br>
-                            P(X=k) = (5/6)^(k-1) · (1/6)<br><br>
-                            P(X=1) = 1/6<br>
-                            P(X=2) = (5/6)·(1/6) = 5/36<br>
-                            P(X=3) = (5/6)²·(1/6) = 25/216<br>
-                            P(X=4) = (5/6)³·(1/6) = 125/1296<br><br>
-                            P(X<5) = 1/6 + 5/36 + 25/216 + 125/1296 ≈ 0.518<br>
-                            ✓ Probabilité : 51.8%<br><br>
-                            E(X) = 1/p = 6 lancers en moyenne<br>
-                            ✓ Nombre moyen : 6 lancers
-                        </div>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 9 - Approximation Poisson</h4>
-                        <span class="difficulty difficile">Difficile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Un composant électronique a 0.1% de chances d'être défectueux. Sur un lot de 1000, calculer la probabilité d'avoir exactement 2 défectueux (avec binomiale puis Poisson).</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            <strong>Méthode 1 : Binomiale</strong><br>
-                            X ~ B(1000, 0.001)<br>
-                            P(X=2) = C(1000,2) · (0.001)² · (0.999)^998<br>
-                            C(1000,2) = 499,500<br>
-                            P(X=2) ≈ 499,500 × 10^(-6) × 0.368 ≈ 0.184<br><br>
-                            
-                            <strong>Méthode 2 : Approximation Poisson</strong><br>
-                            λ = n·p = 1000 × 0.001 = 1<br>
-                            X ~ P(1)<br>
-                            P(X=2) = (1² · e^(-1)) / 2! = e^(-1)/2 ≈ 0.368/2 ≈ 0.184<br><br>
-                            
-                            ✓ Les deux méthodes donnent ~18.4%<br>
-                            ✓ Approximation Poisson excellente car n grand et p petit
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="td3" class="page">
-            <a href="#" class="back-btn" data-page="proba">← Retour</a>
-            
-            <div class="td-detail">
-                <h2>TD3 - Variables Continues</h2>
-                
-                <div class="fiche-revision">
-                    <h3>📋 Lois continues usuelles</h3>
-                    
-                    <h4 style="color: var(--forest); margin-top: 1.5rem;">1. Loi Uniforme U(a,b)</h4>
-                    <div class="formula">
-                        f(x) = 1/(b-a) si x∈[a,b], 0 sinon<br>
-                        E(X) = (a+b)/2<br>
-                        Var(X) = (b-a)²/12<br>
-                        F(x) = (x-a)/(b-a) pour x∈[a,b]
-                    </div>
-                    
-                    <h4 style="color: var(--forest); margin-top: 1.5rem;">2. Loi Exponentielle E(λ)</h4>
-                    <div class="formula">
-                        f(x) = λe^(-λx) si x≥0<br>
-                        E(X) = 1/λ<br>
-                        Var(X) = 1/λ²<br>
-                        F(x) = 1 - e^(-λx)<br>
-                        Propriété : sans mémoire P(X>s+t|X>s) = P(X>t)
-                    </div>
-                    
-                    <h4 style="color: var(--forest); margin-top: 1.5rem;">3. Loi Normale N(μ,σ²)</h4>
-                    <div class="formula">
-                        f(x) = (1/(σ√(2π)))·exp(-(x-μ)²/(2σ²))<br>
-                        E(X) = μ<br>
-                        Var(X) = σ²<br>
-                        Règle 68-95-99.7 : ±1σ ≈ 68%, ±2σ ≈ 95%, ±3σ ≈ 99.7%<br>
-                        Standardisation : Z = (X-μ)/σ ~ N(0,1)
-                    </div>
-                </div>
-
-                <h3 style="color: var(--slate); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 10 - Loi Uniforme</h4>
-                        <span class="difficulty facile">Facile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Un bus arrive aléatoirement entre 8h00 et 8h20. Vous arrivez à 8h05. Quelle est la probabilité d'attendre moins de 5 minutes ?</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            X ~ U(0,20) où X est le temps d'arrivée en minutes après 8h00<br>
-                            Vous arrivez à t=5, vous attendez <5min si bus arrive entre 5 et 10<br>
-                            P(5≤X≤10) = (10-5)/(20-0) = 5/20 = 1/4<br><br>
-                            ✓ Probabilité = 25%
-                        </div>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 11 - Loi Exponentielle</h4>
-                        <span class="difficulty moyen">Moyen</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> La durée de vie d'un disque dur suit E(λ) avec durée moyenne 5 ans. Quelle probabilité de panne avant 1 an ? Quelle garantie donner pour que P(panne) < 0.01 ?</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            E(X) = 1/λ = 5 donc λ = 0.2<br>
-                            F(x) = 1 - e^(-λx)<br><br>
-                            P(X<1) = F(1) = 1 - e^(-0.2) ≈ 1 - 0.8187 = 0.1813<br>
-                            ✓ Probabilité panne < 1an : 18.13%<br><br>
-                            Pour garantie t : 1 - e^(-0.2t) < 0.01<br>
-                            e^(-0.2t) > 0.99 ⟹ -0.2t > ln(0.99)<br>
-                            t < -ln(0.99)/0.2 ≈ 0.05 ans ≈ 18 jours<br>
-                            ✓ Garantir maximum 18 jours
-                        </div>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 12 - Loi Normale</h4>
-                        <span class="difficulty moyen">Moyen</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Les notes suivent N(13, 3²). Calculer P(note > 20), P(note < 5), P(12 < note < 14). Quelle note pour le top 10% ?</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            X ~ N(13,9), Z = (X-13)/3 ~ N(0,1)<br><br>
-                            P(X>20) = P(Z>(20-13)/3) = P(Z>2.33) ≈ 0.01<br>
-                            ✓ 1% ont plus de 20<br><br>
-                            P(X<5) = P(Z<(5-13)/3) = P(Z<-2.67) ≈ 0.004<br>
-                            ✓ 0.4% ont moins de 5<br><br>
-                            P(12<X<14) = P(-0.33<Z<0.33) ≈ 2×0.1293 = 0.2586<br>
-                            ✓ 25.86% entre 12 et 14<br><br>
-                            Top 10% : P(X>x) = 0.10 ⟹ P(Z>(x-13)/3) = 0.10<br>
-                            (x-13)/3 = 1.28 ⟹ x ≈ 16.84<br>
-                            ✓ Note ≥ 16.84 pour top 10%
-                        </div>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 13 - Théorème de Tchebychev</h4>
-                        <span class="difficulty difficile">Difficile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Pour X~N(13,3²), comparer P(|X-13|>6) calculée exactement et avec l'inégalité de Tchebychev.</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            <strong>Calcul exact :</strong><br>
-                            P(|X-13|>6) = P(X<7 ou X>19)<br>
-                            = P(Z<-2) + P(Z>2) = 2×0.0228 = 0.0456<br>
-                            ✓ Exacte : 4.56%<br><br>
-                            <strong>Théorème de Tchebychev :</strong> P(|X-μ|≥kσ) ≤ 1/k²<br>
-                            Ici k = 6/3 = 2<br>
-                            P(|X-13|≥6) ≤ 1/4 = 0.25<br>
-                            ✓ Borne de Tchebychev : ≤25%<br><br>
-                            L'inégalité est large mais toujours valide !<br>
-                            Avantage : valable pour TOUTE distribution
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="telecom" class="page">
-            <a href="#" class="back-btn" data-page="home">← Retour</a>
-            
-            <div class="hero">
-                <h2>Télécommunications - Projet Campus Connecté</h2>
-                <p>Bilans de liaison, propagation radio et réseaux</p>
-            </div>
-
-            <div class="progress-container">
-                <p class="progress-label">Progression globale</p>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="telecom-progress"></div>
-                </div>
-                <p class="progress-text" id="telecom-percentage">0%</p>
-            </div>
-
-            <div class="topics-grid">
-                <div class="topic-card" data-td="archi">
-                    <div class="topic-header">
-                        <h3>Architecture Réseau</h3>
-                        <div class="checkbox" data-topic="archi"></div>
-                    </div>
-                    <ul>
-                        <li>Topologies (étoile, maillage)</li>
-                        <li>Hiérarchie à deux niveaux</li>
-                        <li>Choix filaire vs radio</li>
-                        <li>Dimensionnement réseau</li>
-                    </ul>
-                </div>
-
-                <div class="topic-card" data-td="bruit">
-                    <div class="topic-header">
-                        <h3>Bruit Thermique</h3>
-                        <div class="checkbox" data-topic="bruit"></div>
-                    </div>
-                    <ul>
-                        <li>Puissance du bruit P = kTB</li>
-                        <li>Constante de Boltzmann</li>
-                        <li>Calcul en dBm</li>
-                        <li>Impact sur SNR</li>
-                    </ul>
-                </div>
-
-                <div class="topic-card" data-td="bilan">
-                    <div class="topic-header">
-                        <h3>Bilan de Liaison</h3>
-                        <div class="checkbox" data-topic="bilan"></div>
-                    </div>
-                    <ul>
-                        <li>Modèle espace libre</li>
-                        <li>Indoor IEEE 802.11</li>
-                        <li>Outdoor Okumura-Hata</li>
-                        <li>Calcul de P_reçue</li>
-                    </ul>
-                </div>
-
-                <div class="topic-card" data-td="portee">
-                    <div class="topic-header">
-                        <h3>Portée Maximale</h3>
-                        <div class="checkbox" data-topic="portee"></div>
-                    </div>
-                    <ul>
-                        <li>Seuil de sensibilité</li>
-                        <li>Calcul de d_max</li>
-                        <li>Impact de la fréquence</li>
-                        <li>Indoor vs Outdoor</li>
-                    </ul>
-                </div>
-
-                <div class="topic-card" data-td="shannon">
-                    <div class="topic-header">
-                        <h3>Capacité de Shannon</h3>
-                        <div class="checkbox" data-topic="shannon"></div>
-                    </div>
-                    <ul>
-                        <li>Formule C = B·log₂(1+SINR)</li>
-                        <li>Efficacité spectrale η</li>
-                        <li>Calcul du SINR requis</li>
-                        <li>Applications pratiques</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section id="archi" class="page">
-            <a href="#" class="back-btn" data-page="telecom">← Retour aux Télécoms</a>
-            
-            <div class="td-detail">
-                <h2>Architecture Réseau - Projet Campus Connecté</h2>
-                
-                <div class="fiche-revision">
-                    <h3>📋 Architecture hiérarchique à deux niveaux</h3>
-                    
-                    <h4 style="color: var(--forest); margin-top: 1.5rem;">1. Niveau 1 : Objets → Passerelles</h4>
-                    <p><strong>Technologie :</strong> Bluetooth Low Energy (BLE)</p>
-                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
-                        <li>Portée : 3-10 m</li>
-                        <li>Débit : 100 Kbps à 2 Mbps</li>
-                        <li>Faible consommation</li>
-                        <li>Idéal pour capteurs environnementaux</li>
-                    </ul>
-                    
-                    <h4 style="color: var(--forest); margin-top: 1.5rem;">2. Niveau 2 : Passerelles → Serveur</h4>
-                    <p><strong>Technologie :</strong> WiFi IEEE 802.11</p>
-                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
-                        <li>Portée : 30-50 m (indoor)</li>
-                        <li>Débit : 250 Mbps à 1 Gbps</li>
-                        <li>Couverture étendue</li>
-                        <li>Connexion à internet</li>
-                    </ul>
-                    
-                    <h4 style="color: var(--forest); margin-top: 1.5rem;">3. Interconnexion des sites</h4>
-                    <p><strong>Technologie :</strong> Fibre optique</p>
-                    <ul style="margin-left: 2rem; margin-top: 0.5rem;">
-                        <li>Longue distance (> 50 km)</li>
-                        <li>Haut débit (1-100 Gbps)</li>
-                        <li>Faible atténuation (0.2 dB/km)</li>
-                        <li>Immunité aux interférences</li>
-                    </ul>
-                </div>
-
-                <h3 style="color: var(--slate); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 14 - Dimensionnement réseau</h4>
-                        <span class="difficulty difficile">Difficile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Pour un campus de 400 m² avec 35 capteurs Bluetooth, calculer le nombre de passerelles nécessaires si chaque passerelle peut supporter 10 capteurs simultanés avec un débit de 100 Kbps chacun.</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            <strong>Nombre de passerelles :</strong><br>
-                            Nombre de capteurs par passerelle = 10<br>
-                            Nombre total de capteurs = 35<br>
-                            Nombre de passerelles = ⌈35/10⌉ = 4 passerelles<br><br>
-                            <strong>Débit requis :</strong><br>
-                            Débit total par passerelle = 10 × 100 Kbps = 1 Mbps<br>
-                            Débit WiFi requis > 1 Mbps (OK avec WiFi standard)<br><br>
-                            ✓ Il faut 4 passerelles BLE minimum<br>
-                            ✓ Débit WiFi largement suffisant
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="bruit" class="page">
-            <a href="#" class="back-btn" data-page="telecom">← Retour aux Télécoms</a>
-            
-            <div class="td-detail">
-                <h2>Bruit Thermique</h2>
-                
-                <div class="fiche-revision">
-                    <h3>📋 Formule fondamentale</h3>
-                    
-                    <div class="formula">
-                        P_bruit = k·T·B<br><br>
-                        k = 1.38×10⁻²³ J/K (constante de Boltzmann)<br>
-                        T = température en Kelvin (typiquement 290K = 17°C)<br>
-                        B = bande passante en Hz<br><br>
-                        Conversion en dBm :<br>
-                        P_bruit(dBm) = 10·log₁₀(P_bruit(W) × 10³)
-                    </div>
-                </div>
-
-                <h3 style="color: var(--slate); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 15 - Calcul du bruit</h4>
-                        <span class="difficulty moyen">Moyen</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Calculer la puissance du bruit thermique pour une bande passante de 10 MHz à température ambiante (T=290K).</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            P_bruit(W) = k·T·B<br>
-                            P_bruit = 1.38×10⁻²³ × 290 × 10×10⁶<br>
-                            P_bruit ≈ 4.002×10⁻¹⁴ W<br><br>
-                            Conversion en dBm :<br>
-                            P_bruit(dBm) = 10·log₁₀(4.002×10⁻¹⁴ × 10³)<br>
-                            P_bruit(dBm) = 10·log₁₀(4.002×10⁻¹¹)<br>
-                            P_bruit(dBm) ≈ -103.98 dBm<br><br>
-                            ✓ Puissance du bruit : -104 dBm
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="bilan" class="page">
-            <a href="#" class="back-btn" data-page="telecom">← Retour aux Télécoms</a>
-            
-            <div class="td-detail">
-                <h2>Bilan de Liaison</h2>
-                
-                <div class="fiche-revision">
-                    <h3>📋 Modèles de propagation</h3>
-                    
-                    <h4 style="color: var(--forest); margin-top: 1.5rem;">1. Espace libre</h4>
-                    <div class="formula">
-                        A_EL(d,f) = 32.4 + 20·log₁₀(d_km) + 20·log₁₀(f_MHz)<br><br>
-                        Usage : ligne de vue directe, sans obstacles
-                    </div>
-                    
-                    <h4 style="color: var(--forest); margin-top: 1.5rem;">2. Indoor IEEE 802.11</h4>
-                    <div class="formula">
-                        A_i(f,d) = 15.5 + 55·log₁₀(d_m) à 2.4 GHz<br><br>
-                        Usage : environnements intérieurs avec murs et obstacles
-                    </div>
-                    
-                    <h4 style="color: var(--forest); margin-top: 1.5rem;">3. Outdoor Okumura-Hata</h4>
-                    <div class="formula">
-                        A_Hata(d) = 139 + 35·log₁₀(d_km) à 1.8 GHz<br><br>
-                        Usage : environnements urbains extérieurs
-                    </div>
-                    
-                    <div class="example">
-                        <h4>💡 Bilan complet</h4>
-                        <p><strong>P_reçue = P_émise + G_émetteur - Atténuation + G_récepteur</strong></p>
-                    </div>
-                </div>
-
-                <h3 style="color: var(--slate); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 16 - Bilan WiFi indoor</h4>
-                        <span class="difficulty moyen">Moyen</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Un point d'accès WiFi émet à 20 dBm avec une antenne de gain 3 dBi. Calculer la puissance reçue à 30 m en indoor à 2.4 GHz.</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            Atténuation indoor :<br>
-                            A = 15.5 + 55·log₁₀(30)<br>
-                            A = 15.5 + 55×1.477 = 96.74 dB<br><br>
-                            Bilan de liaison (avec G_r = 0 dBi) :<br>
-                            P_r = P_e + G_e - A + G_r<br>
-                            P_r = 20 + 3 - 96.74 + 0<br>
-                            P_r = -73.74 dBm<br><br>
-                            ✓ Puissance reçue : -73.74 dBm
-                        </div>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 17 - Comparaison modèles</h4>
-                        <span class="difficulty difficile">Difficile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Comparer l'atténuation à 100m pour les modèles espace libre (2.4 GHz) et indoor (2.4 GHz). Expliquer la différence.</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            <strong>Espace libre :</strong><br>
-                            A_EL = 32.4 + 20·log₁₀(0.1) + 20·log₁₀(2400)<br>
-                            A_EL = 32.4 - 20 + 67.6 = 80 dB<br><br>
-                            
-                            <strong>Indoor :</strong><br>
-                            A_indoor = 15.5 + 55·log₁₀(100)<br>
-                            A_indoor = 15.5 + 55×2 = 125.5 dB<br><br>
-                            
-                            <strong>Différence :</strong> 125.5 - 80 = 45.5 dB<br><br>
-                            ✓ L'atténuation indoor est 45.5 dB supérieure !<br>
-                            ✓ Raison : murs, obstacles, réflexions multiples<br>
-                            ✓ Le modèle indoor est beaucoup plus pessimiste (réaliste)
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="portee" class="page">
-            <a href="#" class="back-btn" data-page="telecom">← Retour aux Télécoms</a>
-            
-            <div class="td-detail">
-                <h2>Portée Maximale</h2>
-                
-                <div class="fiche-revision">
-                    <h3>📋 Calcul de la portée</h3>
-                    
-                    <div class="formula">
-                        Budget de liaison :<br>
-                        P_reçue_min = P_émise + G_émetteur - Atténuation + G_récepteur<br><br>
-                        À la portée maximale :<br>
-                        P_reçue = Seuil de sensibilité du récepteur<br><br>
-                        On résout pour trouver d_max
-                    </div>
-                </div>
-
-                <h3 style="color: var(--slate); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 18 - Portée WiFi</h4>
-                        <span class="difficulty moyen">Moyen</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Un émetteur WiFi (2.4 GHz) a une puissance de 23 dBm, gain antenne 5 dBi. Seuil de sensibilité du récepteur : -85 dBm. Calculer la portée max en indoor.</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            Budget de liaison :<br>
-                            -85 = 23 + 5 - A + 0<br>
-                            A = 113 dB<br><br>
-                            Modèle indoor : A = 15.5 + 55·log₁₀(d)<br>
-                            113 = 15.5 + 55·log₁₀(d)<br>
-                            55·log₁₀(d) = 97.5<br>
-                            log₁₀(d) = 1.773<br>
-                            d = 10^1.773 ≈ 59.3 m<br><br>
-                            ✓ Portée maximale : environ 59 mètres
-                        </div>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 19 - Impact de la fréquence</h4>
-                        <span class="difficulty difficile">Difficile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Comparer la portée en espace libre à 2.4 GHz et 5 GHz avec même puissance 20 dBm, gains 0 dBi, sensibilité -90 dBm.</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            Budget : -90 = 20 + 0 - A + 0 ⟹ A = 110 dB<br><br>
-                            
-                            <strong>À 2.4 GHz (2400 MHz) :</strong><br>
-                            110 = 32.4 + 20·log₁₀(d_km) + 20·log₁₀(2400)<br>
-                            110 = 32.4 + 20·log₁₀(d_km) + 67.6<br>
-                            20·log₁₀(d_km) = 10<br>
-                            d_km = 10^0.5 ≈ 3.16 km<br>
-                            ✓ Portée à 2.4 GHz : 3.16 km<br><br>
-                            
-                            <strong>À 5 GHz (5000 MHz) :</strong><br>
-                            110 = 32.4 + 20·log₁₀(d_km) + 20·log₁₀(5000)<br>
-                            110 = 32.4 + 20·log₁₀(d_km) + 74<br>
-                            20·log₁₀(d_km) = 3.6<br>
-                            d_km = 10^0.18 ≈ 1.51 km<br>
-                            ✓ Portée à 5 GHz : 1.51 km<br><br>
-                            
-                            <strong>Conclusion :</strong> 2.4 GHz a 2× plus de portée !<br>
-                            Les fréquences basses portent plus loin
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="shannon" class="page">
-            <a href="#" class="back-btn" data-page="telecom">← Retour aux Télécoms</a>
-            
-            <div class="td-detail">
-                <h2>Capacité de Shannon</h2>
-                
-                <div class="fiche-revision">
-                    <h3>📋 Théorème de Shannon-Hartley</h3>
-                    
-                    <div class="formula">
-                        C = B·log₂(1 + SINR)<br><br>
-                        C : capacité du canal (bit/s)<br>
-                        B : bande passante (Hz)<br>
-                        SINR : rapport signal sur interférence + bruit (linéaire)<br><br>
-                        Efficacité spectrale : η = C/B (bit/s/Hz)<br>
-                        η = log₂(1 + SINR)<br><br>
-                        Conversion dB : SINR(linéaire) = 10^(SINR(dB)/10)
-                    </div>
-                </div>
-
-                <h3 style="color: var(--slate); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 20 - Capacité théorique</h4>
-                        <span class="difficulty difficile">Difficile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Canal WiFi : bande 20 MHz, SINR = 20 dB. Calculer la capacité théorique. Combien de temps pour transférer un fichier de 100 Mo ?</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            SINR(dB) = 20 dB ⟹ SINR = 10^(20/10) = 100<br><br>
-                            Capacité de Shannon :<br>
-                            C = B·log₂(1 + SINR)<br>
-                            C = 20×10⁶ × log₂(101)<br>
-                            C = 20×10⁶ × 6.658 ≈ 133.16 Mbps<br><br>
-                            Fichier 100 Mo = 800 Mbits<br>
-                            Temps = 800 / 133.16 ≈ 6.0 secondes<br><br>
-                            ✓ Capacité : 133 Mbps<br>
-                            ✓ Temps : 6 secondes<br>
-                            (En pratique, overhead protocolaire réduit le débit)
-                        </div>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 21 - Efficacité spectrale</h4>
-                        <span class="difficulty difficile">Difficile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Un réseau 4G utilise 10 MHz de bande et atteint 30 Mbps. Calculer l'efficacité spectrale η. Quel SINR minimum est requis ?</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            Efficacité spectrale :<br>
-                            η = C/B = 30×10⁶ / 10×10⁶ = 3 bit/s/Hz<br><br>
-                            De C = B·log₂(1 + SINR) :<br>
-                            η = log₂(1 + SINR)<br>
-                            3 = log₂(1 + SINR)<br>
-                            1 + SINR = 2³ = 8<br>
-                            SINR = 7 (linéaire)<br>
-                            SINR(dB) = 10·log₁₀(7) ≈ 8.45 dB<br><br>
-                            ✓ Efficacité : 3 bit/s/Hz<br>
-                            ✓ SINR minimum : 8.45 dB
-                        </div>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 22 - Cas pratique Campus IoT</h4>
-                        <span class="difficulty difficile">Difficile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Campus 5000 m² sur 3 étages, 80 salles avec 3 capteurs chacun (T°, humidité, présence). Données : 100 bytes toutes les 5 min. Dimensionner l'architecture complète (BLE → passerelles → WiFi → serveur).</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            <strong>Niveau 1 : Capteurs → Passerelles BLE</strong><br>
-                            Total capteurs = 80 × 3 = 240 capteurs<br>
-                            Chaque passerelle : 20 capteurs max<br>
-                            Passerelles BLE = ⌈240/20⌉ = 12 passerelles<br>
-                            Répartition : 4 passerelles par étage<br><br>
-                            
-                            <strong>Débit par capteur :</strong><br>
-                            100 bytes / 5 min = 20 bytes/min = 0.33 bytes/s<br>
-                            = 2.67 bps par capteur<br>
-                            Par passerelle : 20 × 2.67 = 53.4 bps<br><br>
-                            
-                            <strong>Niveau 2 : Passerelles → AP WiFi</strong><br>
-                            Débit total : 12 × 53.4 bps = 641 bps ≈ 0.6 kbps<br>
-                            Avec overhead × 100 : 60 kbps requis<br>
-                            WiFi (54 Mbps) : largement suffisant !<br><br>
-                            
-                            <strong>Architecture recommandée :</strong><br>
-                            ✓ 12 passerelles BLE (4 par étage)<br>
-                            ✓ 3 AP WiFi (1 par étage) + 1 backup<br>
-                            ✓ 1 serveur local ou cloud<br>
-                            ✓ Backup 4G pour redondance<br><br>
-                            
-                            <strong>Bilan de liaison à vérifier :</strong><br>
-                            BLE : portée 10m OK pour salles<br>
-                            WiFi : portée 40m OK pour étages<br>
-                            Marge ≥ 10 dB recommandée
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="bureau" class="page">
-            <a href="#" class="back-btn" data-page="home">← Retour</a>
-            
-            <div class="hero">
-                <h2>Bureau d'Études - Notions Fondamentales</h2>
-                <p>Unités de télécom, propagation radio, capacité de Shannon, antennes</p>
-            </div>
-
-            <div class="td-detail">
-                <h2>Unités de Télécommunications</h2>
-                
-                <div class="fiche-revision">
-                    <h3>📋 Conversions d'unités</h3>
-                    
-                    <div class="formula">
-                        P(dBW) = 10·log₁₀(P(W))<br>
-                        P(dBm) = 10·log₁₀(P(mW)) = P(dBW) + 30<br>
-                        P_r(dBm) = P_e(dBm) - A(dB)<br><br>
-                        Formule inverse :<br>
-                        P(W) = 10^(P(dBW)/10)<br>
-                        P(mW) = 10^(P(dBm)/10)
-                    </div>
-                    
-                    <div class="example">
-                        <h4>💡 Exemples de conversion</h4>
-                        <p><strong>P = 1 mW</strong> → 0.001 W, 0 dBm, -30 dBW</p>
-                        <p><strong>P = 1 W</strong> → 1000 mW, 0 dBW, 30 dBm</p>
-                        <p><strong>P = 21 dBm</strong> → 125.89 mW, 0.12589 W</p>
-                        <p><strong>P = -80 dBm</strong> → 0.0000001 mW, 10⁻¹⁰ W</p>
-                    </div>
-                </div>
-
-                <h3 style="color: var(--slate); margin-top: 3rem; margin-bottom: 1.5rem;">📝 Exercices</h3>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 23 - Conversion d'unités</h4>
-                        <span class="difficulty facile">Facile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Convertir 27 dBm en Watts et en milliwatts.</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            P(mW) = 10^(27/10) = 10^2.7 ≈ 501.19 mW<br>
-                            P(W) = 501.19 / 1000 = 0.50119 W<br><br>
-                            ✓ 27 dBm = 501.19 mW = 0.501 W
-                        </div>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 24 - Calcul de puissance</h4>
-                        <span class="difficulty moyen">Moyen</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Un émetteur a une puissance de 2 W. Après une atténuation de 15 dB, quelle est la puissance reçue en dBm et en mW ?</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            P_émetteur = 2 W = 10·log₁₀(2000) ≈ 33.01 dBm<br>
-                            P_reçue = 33.01 - 15 = 18.01 dBm<br>
-                            P_reçue(mW) = 10^(18.01/10) ≈ 63.25 mW<br><br>
-                            ✓ Puissance reçue : 18.01 dBm = 63.25 mW
-                        </div>
-                    </div>
-                </div>
-
-                <div class="exercice">
-                    <div class="exercice-header">
-                        <h4>Exercice 25 - Bilan complet</h4>
-                        <span class="difficulty difficile">Difficile</span>
-                    </div>
-                    <p><strong>Énoncé :</strong> Système avec P_émetteur = 30 dBm, G_émetteur = 5 dBi, atténuation = 110 dB, G_récepteur = 2 dBi. Calculer P_reçue en dBm et en μW.</p>
-                    <button class="toggle-solution">🔓 Voir la solution</button>
-                    <div class="solution">
-                        <p><strong>Solution :</strong></p>
-                        <div class="formula">
-                            P_reçue = P_émetteur + G_émetteur - Atténuation + G_récepteur<br>
-                            P_reçue = 30 + 5 - 110 + 2 = -73 dBm<br><br>
-                            Conversion en μW :<br>
-                            P(μW) = 10^(P(dBm)/10) × 1000<br>
-                            P(μW) = 10^(-73/10) × 1000 = 10^(-7.3) × 1000<br>
-                            P(μW) = 5.01 × 10⁻⁸ × 1000 = 0.0501 μW<br><br>
-                            ✓ P_reçue = -73 dBm = 0.0501 μW
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <footer>
-        <p>📚 ISEP A1 - Projet Campus Connecté</p>
-        <p>🎯 Seydi - Révision Télécommunications & Probabilités</p>
-        <p>📅 Année 2024-2025</p>
-    </footer>
+    </main>
 
     <script>
-        // Navigation entre pages
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetPage = e.target.getAttribute('data-page');
+        /* ================================================= */
+        /* 🧠 SCRIPT.JS : La Liste des Étudiants et la Logique (Intégration) */
+        /* ================================================= */
+        
+        const studentsData = [
+            // Liste complète des étudiants de la photo, sans Moncef Ahmane
+            { name: "Alexandre ALVES", title: "Le Seigneur des Pauses Café", anecdote: "On dit qu'il peut repérer la machine à café vide à 200 mètres." },
+            { name: "Douae BOULOUALI", title: "La Doyenne des Raccourcis Clavier", anecdote: "Son bureau ressemble à un clavier géant, et elle connaît toutes les commandes secrètes." },
+            { name: "Sid-Ahmed BOUSLAH", title: "Le Décodeur de Blagues de Profs", anecdote: "Le seul qui comprend les références des années 80 dans les cours d'info." },
+            { name: "Leon JIANG", title: "Le Chuchoteur de Bugs", anecdote: "Murmure des mots doux à son code jusqu'à ce qu'il fonctionne." },
+            { name: "Altheli RODRIGUEZ", title: "L'Archéologue du Frigo Commun", anecdote: "Elle a déjà découvert des yaourts datant du paléolithique." },
+            { name: "Maxime BOGNON", title: "Le Maître de la Sieste en Amphi", anecdote: "Peut dormir debout pendant un cours, et se réveiller juste pour la question." },
+            { name: "Corentin BRAND", title: "Le Barde du Binaire", anecdote: "Composera une chanson en octal si on le lui demande." },
+            { name: "Maximilien CANONNE", title: "Le Spécialiste de la Reconnaissance Faciale", anecdote: "Saisit tous les cookies qui passent à moins de 5 mètres." },
+            { name: "Adel HENI", title: "Le Jedi du WiFi", anecdote: "Ses doigts détectent le point d'accès le plus faible et l'améliorent par la pensée." },
+            { name: "Kahina MEDJUKANE", title: "La Conteuse d'Histoires de Projets Foireux", anecdote: "Ses récits de projets qui ont mal tourné sont légendaires." },
+            { name: "Sully MORETON", title: "Le Navigator des Labyrinthes de l'ISEP", anecdote: "Peut trouver n'importe quelle salle, même celles qui n'existent pas encore." },
+            { name: "Aliénor ANTONA", title: "La Collectionneuse de Stylos Oubliés", anecdote: "Son sac à dos est un musée de stylos retrouvés après les cours." },
+            { name: "Nicolas CLEMENT", title: "Le Pro du Débuggage Nocturne", anecdote: "Travaille mieux quand tout le monde dort, et que le café est frais." },
+            { name: "Bryan DE FARIA", title: "Le Détective des Ports USB Libres", anecdote: "Ses yeux brillent quand il voit un port USB sans chargeur." },
+            { name: "Hani HOUMIMID", title: "L'Amateur de Mèmes Officiels", anecdote: "Il a un mème pour chaque situation à l'ISEP." },
+            { name: "Vithues KANDIAH", title: "L'Artisan du Câble Management", anecdote: "Ses câbles sont si bien rangés qu'ils ont leur propre petit écosystème." },
+            { name: "Hector LE BACHELIER", title: "L'Ingénieur du Papier", anecdote: "Peut construire une fusée avec une feuille A4 et un trombone." },
+            { name: "Quentin DABOVILLE", title: "Le Chasseur de Prises", anecdote: "Sa quête éternelle : trouver la prise électrique parfaite." },
+            { name: "Yassmina HARRISSI", title: "L'Experte en Restauration de Fichiers Supprimés", anecdote: "Peut récupérer n'importe quel fichier, même ceux que vous n'avez jamais créés." },
+            { name: "Allan LAHCENE", title: "Le Sommelier de la Cantine", anecdote: "Il peut deviner l'origine et l'année de chaque plat servi." },
+            { name: "Evan MASSE", title: "Le Gourou du PC Portable", anecdote: "Son ordinateur portable est tellement optimisé qu'il pourrait décoller." },
+            { name: "Seydina SY", title: "Le Maître des Présentations PowerPoint Épiques", anecdote: "Ses slides sont si beaux qu'on oublie le contenu." },
+            { name: "Ilay AL ABIAD", title: "Le Champion du Retard Optimisé", anecdote: "Arrive toujours à l'heure, à la seconde près, mais jamais avant." },
+            { name: "Ahmed ELHATTAB", title: "Le Jardinier Numérique", anecdote: "Ses dossiers sur l'ordinateur sont organisés comme un jardin zen." },
+            { name: "Thushyan KOHILAKUMAR", title: "L'Orfèvre du Code Propre", anecdote: "Son code est tellement propre qu'on pourrait manger dessus." },
+            { name: "Aurélie MAHAUT", title: "La Stratège des Post-it", anecdote: "Son écran est une œuvre d'art faite de pense-bêtes colorés." },
+            { name: "Gaspard PONS", title: "Le Philosophe du Bug", anecdote: "Chaque bug est pour lui une occasion de réflexion existentielle." },
+            { name: "Rafael RION", title: "L'Alchimiste du Matériel", anecdote: "Transforme le vieux matériel ISEP en or... ou du moins, le fait fonctionner." },
+            { name: "Faruk SAN", title: "Le Connaisseur de l'Open Source", anecdote: "Il a déjà testé toutes les distributions Linux existantes." }
+        ];
+
+        const studentGrid = document.getElementById('student-grid');
+
+        function generateCards() {
+            studentsData.forEach(student => {
+                const card = document.createElement('div');
+                card.classList.add('student-card');
                 
-                // Mettre à jour la navigation active
-                document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
-                e.target.classList.add('active');
+                // Utilise DiceBear API pour un avatar unique basé sur le nom
+                const avatarUrl = `https://api.dicebear.com/8.x/bottts/svg?seed=${encodeURIComponent(student.name)}`;
+                const avatar = document.createElement('img');
+                avatar.classList.add('student-avatar');
+                avatar.src = avatarUrl;
+                avatar.alt = `Avatar de ${student.name}`;
                 
-                // Afficher la page cible
-                document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-                document.getElementById(targetPage).classList.add('active');
+                const nameElement = document.createElement('h3');
+                nameElement.textContent = student.name;
+                
+                const titleElement = document.createElement('h4');
+                titleElement.textContent = student.title;
+                
+                const anecdoteElement = document.createElement('p');
+                anecdoteElement.textContent = student.anecdote;
+                
+                card.appendChild(avatar);
+                card.appendChild(nameElement);
+                card.appendChild(titleElement);
+                card.appendChild(anecdoteElement);
+                
+                studentGrid.appendChild(card);
             });
-        });
-
-        // Navigation via les cartes de sujet
-        document.querySelectorAll('.subject-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                const targetPage = card.getAttribute('data-page');
-                
-                // Mettre à jour la navigation
-                document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
-                document.querySelector(`[data-page="${targetPage}"]`).classList.add('active');
-                
-                // Afficher la page cible
-                document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-                document.getElementById(targetPage).classList.add('active');
-            });
-        });
-
-        // Navigation via les cartes de topics
-        document.querySelectorAll('.topic-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                const targetTD = card.getAttribute('data-td');
-                
-                // Afficher la page du TD
-                document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-                document.getElementById(targetTD).classList.add('active');
-            });
-        });
-
-        // Boutons retour
-        document.querySelectorAll('.back-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetPage = btn.getAttribute('data-page');
-                
-                // Mettre à jour la navigation
-                document.querySelectorAll('.nav-link').forEach(nav => nav.classList.remove('active'));
-                document.querySelector(`[data-page="${targetPage}"]`).classList.add('active');
-                
-                // Afficher la page cible
-                document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-                document.getElementById(targetPage).classList.add('active');
-            });
-        });
-
-        // Gestion des cases à cocher pour la progression
-        document.querySelectorAll('.checkbox').forEach(checkbox => {
-            checkbox.addEventListener('click', (e) => {
-                e.stopPropagation();
-                checkbox.classList.toggle('checked');
-                updateProgress();
-            });
-        });
-
-        // Fonction pour mettre à jour la progression
-        function updateProgress() {
-            // Progression Probabilités
-            const probaCheckboxes = document.querySelectorAll('#proba .checkbox');
-            const probaChecked = document.querySelectorAll('#proba .checkbox.checked').length;
-            const probaProgress = (probaChecked / probaCheckboxes.length) * 100;
-            
-            document.getElementById('proba-progress').style.width = probaProgress + '%';
-            document.getElementById('proba-percentage').textContent = Math.round(probaProgress) + '%';
-
-            // Progression Télécoms
-            const telecomCheckboxes = document.querySelectorAll('#telecom .checkbox');
-            const telecomChecked = document.querySelectorAll('#telecom .checkbox.checked').length;
-            const telecomProgress = (telecomChecked / telecomCheckboxes.length) * 100;
-            
-            document.getElementById('telecom-progress').style.width = telecomProgress + '%';
-            document.getElementById('telecom-percentage').textContent = Math.round(telecomProgress) + '%';
         }
 
-        // Gestion des solutions d'exercices
-        document.querySelectorAll('.toggle-solution').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const solution = e.target.nextElementSibling;
-                solution.classList.toggle('active');
-                
-                if (solution.classList.contains('active')) {
-                    e.target.textContent = '🔒 Cacher la solution';
-                } else {
-                    e.target.textContent = '🔓 Voir la solution';
-                }
-            });
-        });
-
-        // Initialiser la progression au chargement
-        updateProgress();
-
-        // Animation au chargement de la page
-        document.addEventListener('DOMContentLoaded', function() {
-            document.body.style.opacity = '0';
-            document.body.style.transition = 'opacity 0.5s ease-in';
-            
-            setTimeout(() => {
-                document.body.style.opacity = '1';
-            }, 100);
-        });
+        // Lancer la génération des cartes au chargement de la page
+        generateCards();
     </script>
 </body>
 </html>
