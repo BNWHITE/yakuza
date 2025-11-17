@@ -3,95 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ISEP Qui est Qui ? - Media Queries Demo</title>
+    <title>ISEP Cat Race : Jungle Edition</title>
     
     <style>
         /* ================================================= */
-        /* 🎨 STYLE.CSS : Le Problème et la Solution (Intégration) */
+        /* 🎨 STYLE.CSS : Design ISEP Jungle, Problème et Solution */
         /* ================================================= */
         
-        /* Styles généraux */
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap');
+
+        :root {
+            --jungle-green-dark: #2a523a;
+            --jungle-green-medium: #4c8a6b;
+            --jungle-green-light: #6eb790;
+            --jungle-glow: #aaffaa; /* Lumière verte inspirée de l'image */
+            --text-color-dark: #222;
+            --text-color-light: #fff;
+            --button-color: #f7b731; /* Un peu plus ISEP style, or */
+            --button-hover-color: #ff9900;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
-            background-color: #f4f4f4;
-            color: #333;
-            line-height: 1.6;
+            background: linear-gradient(to bottom, var(--jungle-green-dark), var(--jungle-green-medium));
+            color: var(--text-color-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden; /* Empêche le défilement horizontal global */
         }
 
         header {
-            background-color: #004a7c; /* Bleu ISEP */
-            color: white;
-            padding: 20px 0;
             text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+            padding: 20px 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
         }
 
         h1 {
-            font-size: 2.8em;
-            margin-bottom: 5px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 2.5em;
+            color: var(--jungle-glow);
+            text-shadow: 0 0 15px var(--jungle-glow), 0 0 5px var(--jungle-glow);
+            margin: 0;
         }
-
-        header p {
+        h2 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.5em;
+            color: var(--jungle-glow);
+            text-shadow: 0 0 10px var(--jungle-glow);
+            margin: 20px 0;
+        }
+        h3 {
+            font-family: 'Press Start 2P', cursive;
             font-size: 1.2em;
-            opacity: 0.9;
+            color: var(--jungle-glow);
+            text-shadow: 0 0 8px var(--jungle-glow);
+            margin: 15px 0;
+        }
+        p {
+            font-size: 1.1em;
         }
 
-        main {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 20px;
+        section {
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            margin: 20px;
+            width: 90%;
+            max-width: 1000px;
+            text-align: center;
         }
 
-        /* 💥 ZONE DU PROBLÈME : Grille non-responsive 💥 */
-        #student-grid {
+        /* 💥 ZONE DU PROBLÈME : Grille de sélection non-responsive 💥 */
+        #student-selector {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4 colonnes fixes = DÉBORDEMENT sur petit écran */
-            gap: 25px; 
-            padding: 20px 0;
+            grid-template-columns: repeat(5, 1fr); /* 5 colonnes = DÉBORDEMENT sur mobile */
+            gap: 20px;
+            margin-top: 30px;
+            padding: 10px;
         }
 
         .student-card {
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            padding: 20px;
-            text-align: center;
-            border: 1px solid #ddd;
+            background-color: var(--jungle-green-dark);
+            border: 2px solid var(--jungle-glow);
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+            color: var(--text-color-light);
+            position: relative;
+            overflow: hidden;
+        }
+        .student-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(170,255,170,0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .student-card:hover::before {
+            opacity: 1;
+        }
+
+        .student-card.selected {
+            border-color: var(--button-color);
+            box-shadow: 0 0 25px var(--jungle-glow);
+            transform: scale(1.05);
+            background-color: var(--jungle-green-medium);
         }
 
         .student-avatar {
-            /* Avatar générique */
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             object-fit: cover;
-            margin-bottom: 15px;
-            border: 3px solid #007bff;
-        }
-
-        .student-card h3 {
-            color: #004a7c;
-            margin-bottom: 8px;
-            font-size: 1.5em;
-        }
-
-        .student-card h4 {
-            font-weight: 600;
-            margin-bottom: 5px;
+            border: 2px solid var(--jungle-glow);
+            margin-bottom: 10px;
+            background-color: #333; /* Fond pour les avatars */
         }
 
         .student-card p {
-            font-size: 0.95em;
-            color: #555;
-            min-height: 60px; /* Pour aligner les cartes sur PC */
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.9em;
+            margin: 0;
+            font-weight: bold;
         }
+
+        .action-button {
+            background-color: var(--button-color);
+            color: var(--text-color-dark);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+        .action-button:hover {
+            background-color: var(--button-hover-color);
+            transform: translateY(-3px);
+        }
+        .action-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ========================================= */
+        /* ZONE DE COURSE (Inspiré de l'image de fond) */
+        /* ========================================= */
+        .race-track {
+            background: linear-gradient(to bottom, var(--jungle-green-medium), var(--jungle-green-light) 70%, var(--jungle-glow) 95%);
+            border: 5px solid var(--jungle-green-dark);
+            border-radius: 15px;
+            margin: 30px auto;
+            padding: 20px;
+            position: relative;
+            height: 250px;
+            max-width: 900px;
+            width: 90%;
+            overflow: hidden; /* Masque les chats qui sortent de la piste */
+            box-shadow: inset 0 0 20px rgba(0, 255, 0, 0.5), 0 0 30px rgba(0, 255, 0, 0.3);
+        }
+
+        .cat-lane {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 10px; /* Petit padding pour ne pas coller les bords */
+        }
+        .cat-lane:nth-child(1) { top: 20px; }
+        .cat-lane:nth-child(2) { bottom: 20px; }
+
+        .cat-lane img {
+            width: 100px;
+            height: auto;
+            border-radius: 50%;
+            background-color: var(--jungle-green-dark); /* Fond pour les chats */
+            padding: 5px;
+            border: 2px solid var(--jungle-glow);
+            position: relative; /* Pour le translate X */
+            transition: transform 0.1s linear; /* Animation douce pour la course */
+            z-index: 10;
+        }
+
+        .cat-lane .cat-name {
+            font-family: 'Press Start 2P', cursive;
+            margin-left: 15px;
+            font-size: 0.9em;
+            color: var(--text-color-dark);
+            background-color: var(--jungle-glow);
+            padding: 5px 10px;
+            border-radius: 5px;
+            white-space: nowrap; /* Empêche le nom de passer à la ligne */
+            z-index: 5;
+        }
+
+        #countdown {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 3em;
+            color: var(--jungle-glow);
+            text-shadow: 0 0 20px var(--jungle-glow);
+            margin-top: 20px;
+        }
+
+        #race-result {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.8em;
+            margin-top: 30px;
+            text-shadow: 0 0 15px var(--jungle-glow);
+        }
+        #race-result.win { color: var(--button-color); }
+        #race-result.lose { color: #f25f5c; /* Rouge pour la défaite */ }
 
         /* ================================================= */
         /* 🛠️ ZONE DE LA SOLUTION : Les Media Queries 🛠️ */
@@ -99,122 +238,279 @@
 
         /* 1. Écrans de taille moyenne (Tablettes) */
         @media (max-width: 992px) {
-            #student-grid {
-                grid-template-columns: repeat(2, 1fr); /* On passe à 2 colonnes */
-                gap: 20px;
+            h1 { font-size: 2em; }
+            h2 { font-size: 1.2em; }
+
+            #student-selector {
+                grid-template-columns: repeat(3, 1fr); /* 3 colonnes */
+                gap: 15px;
             }
+            .student-avatar {
+                width: 70px;
+                height: 70px;
+            }
+            .student-card p {
+                font-size: 0.8em;
+            }
+            .action-button {
+                font-size: 0.9em;
+                padding: 12px 25px;
+            }
+
+            .race-track {
+                height: 200px;
+                padding: 15px;
+            }
+            .cat-lane img {
+                width: 80px;
+            }
+            .cat-lane .cat-name {
+                font-size: 0.8em;
+                margin-left: 10px;
+            }
+            #countdown { font-size: 2.5em; }
+            #race-result { font-size: 1.5em; }
         }
 
         /* 2. Petits écrans (Smartphones) */
         @media (max-width: 600px) {
-            #student-grid {
-                grid-template-columns: 1fr; /* Une seule colonne, les cartes s'empilent parfaitement */
-                gap: 15px;
-            }
+            h1 { font-size: 1.5em; }
+            h2 { font-size: 1em; margin: 15px 0; }
+            h3 { font-size: 1em; }
 
-            .student-card p {
-                min-height: auto; /* Supprime la hauteur minimale sur mobile */
+            #student-selector {
+                grid-template-columns: 1fr; /* Une seule colonne, les cartes s'empilent */
+                gap: 10px;
+                padding: 5px;
             }
-
-            /* Ajustements mineurs de taille pour le mobile */
-            .header-content h1 {
-                font-size: 1.8em;
-            }
-            main {
-                padding: 0 10px;
+            .student-card {
+                padding: 10px;
             }
             .student-avatar {
-                width: 80px;
-                height: 80px;
+                width: 60px;
+                height: 60px;
             }
+            .student-card p {
+                font-size: 0.75em;
+            }
+            .action-button {
+                font-size: 0.8em;
+                padding: 10px 20px;
+            }
+
+            .race-track {
+                height: 150px; /* Piste encore plus petite sur mobile */
+                padding: 10px;
+            }
+            .cat-lane img {
+                width: 60px; /* Chats plus petits */
+            }
+            .cat-lane .cat-name {
+                font-size: 0.7em;
+                margin-left: 5px;
+                padding: 3px 6px;
+            }
+            #countdown { font-size: 2em; }
+            #race-result { font-size: 1.2em; }
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="header-content">
-            <h1>ISEP "Qui est Qui ?"</h1>
-            <p>Découvrez les légendes de votre promo !</p>
-        </div>
+        <h1>ISEP Cat Race</h1>
+        <h2>Jungle Edition</h2>
     </header>
 
     <main>
-        <div id="student-grid">
+        <section id="selection-screen">
+            <h2>Choisissez votre pilote de chat ISEP :</h2>
+            <div id="student-selector">
+                </div>
+            <button id="start-race-btn" class="action-button" style="display: none;">Lancer la Course !</button>
+        </section>
+
+        <section id="race-screen" style="display: none;">
+            <h2>Préparez-vous !</h2>
+            <h3 id="countdown">3</h3>
+            
+            <div class="race-track">
+                <div class="cat-lane">
+                    <img id="player-cat" src="https://api.dicebear.com/8.x/open-peeps/svg?seed=player&face=smile,cute&mood=happy" alt="Votre chat">
+                    <span id="player-name" class="cat-name">Joueur</span>
+                </div>
+                <div class="cat-lane">
+                    <img id="opponent-cat" src="https://api.dicebear.com/8.x/open-peeps/svg?seed=opponent&face=smile,cute&mood=happy" alt="Chat adverse">
+                    <span id="opponent-name" class="cat-name">Adversaire</span>
+                </div>
             </div>
+            <h3 id="race-result"></h3>
+            <button id="reset-race-btn" class="action-button" style="display: none;">Nouvelle Course</button>
+        </section>
     </main>
 
     <script>
         /* ================================================= */
-        /* 🧠 SCRIPT.JS : La Liste des Étudiants et la Logique (Intégration) */
+        /* 🧠 SCRIPT.JS : La Logique du Jeu (Intégration) */
         /* ================================================= */
         
-        const studentsData = [
+        const students = [
             // Liste complète des étudiants de la photo, sans Moncef Ahmane
-            { name: "Alexandre ALVES", title: "Le Seigneur des Pauses Café", anecdote: "On dit qu'il peut repérer la machine à café vide à 200 mètres." },
-            { name: "Douae BOULOUALI", title: "La Doyenne des Raccourcis Clavier", anecdote: "Son bureau ressemble à un clavier géant, et elle connaît toutes les commandes secrètes." },
-            { name: "Sid-Ahmed BOUSLAH", title: "Le Décodeur de Blagues de Profs", anecdote: "Le seul qui comprend les références des années 80 dans les cours d'info." },
-            { name: "Leon JIANG", title: "Le Chuchoteur de Bugs", anecdote: "Murmure des mots doux à son code jusqu'à ce qu'il fonctionne." },
-            { name: "Altheli RODRIGUEZ", title: "L'Archéologue du Frigo Commun", anecdote: "Elle a déjà découvert des yaourts datant du paléolithique." },
-            { name: "Maxime BOGNON", title: "Le Maître de la Sieste en Amphi", anecdote: "Peut dormir debout pendant un cours, et se réveiller juste pour la question." },
-            { name: "Corentin BRAND", title: "Le Barde du Binaire", anecdote: "Composera une chanson en octal si on le lui demande." },
-            { name: "Maximilien CANONNE", title: "Le Spécialiste de la Reconnaissance Faciale", anecdote: "Saisit tous les cookies qui passent à moins de 5 mètres." },
-            { name: "Adel HENI", title: "Le Jedi du WiFi", anecdote: "Ses doigts détectent le point d'accès le plus faible et l'améliorent par la pensée." },
-            { name: "Kahina MEDJUKANE", title: "La Conteuse d'Histoires de Projets Foireux", anecdote: "Ses récits de projets qui ont mal tourné sont légendaires." },
-            { name: "Sully MORETON", title: "Le Navigator des Labyrinthes de l'ISEP", anecdote: "Peut trouver n'importe quelle salle, même celles qui n'existent pas encore." },
-            { name: "Aliénor ANTONA", title: "La Collectionneuse de Stylos Oubliés", anecdote: "Son sac à dos est un musée de stylos retrouvés après les cours." },
-            { name: "Nicolas CLEMENT", title: "Le Pro du Débuggage Nocturne", anecdote: "Travaille mieux quand tout le monde dort, et que le café est frais." },
-            { name: "Bryan DE FARIA", title: "Le Détective des Ports USB Libres", anecdote: "Ses yeux brillent quand il voit un port USB sans chargeur." },
-            { name: "Hani HOUMIMID", title: "L'Amateur de Mèmes Officiels", anecdote: "Il a un mème pour chaque situation à l'ISEP." },
-            { name: "Vithues KANDIAH", title: "L'Artisan du Câble Management", anecdote: "Ses câbles sont si bien rangés qu'ils ont leur propre petit écosystème." },
-            { name: "Hector LE BACHELIER", title: "L'Ingénieur du Papier", anecdote: "Peut construire une fusée avec une feuille A4 et un trombone." },
-            { name: "Quentin DABOVILLE", title: "Le Chasseur de Prises", anecdote: "Sa quête éternelle : trouver la prise électrique parfaite." },
-            { name: "Yassmina HARRISSI", title: "L'Experte en Restauration de Fichiers Supprimés", anecdote: "Peut récupérer n'importe quel fichier, même ceux que vous n'avez jamais créés." },
-            { name: "Allan LAHCENE", title: "Le Sommelier de la Cantine", anecdote: "Il peut deviner l'origine et l'année de chaque plat servi." },
-            { name: "Evan MASSE", title: "Le Gourou du PC Portable", anecdote: "Son ordinateur portable est tellement optimisé qu'il pourrait décoller." },
-            { name: "Seydina SY", title: "Le Maître des Présentations PowerPoint Épiques", anecdote: "Ses slides sont si beaux qu'on oublie le contenu." },
-            { name: "Ilay AL ABIAD", title: "Le Champion du Retard Optimisé", anecdote: "Arrive toujours à l'heure, à la seconde près, mais jamais avant." },
-            { name: "Ahmed ELHATTAB", title: "Le Jardinier Numérique", anecdote: "Ses dossiers sur l'ordinateur sont organisés comme un jardin zen." },
-            { name: "Thushyan KOHILAKUMAR", title: "L'Orfèvre du Code Propre", anecdote: "Son code est tellement propre qu'on pourrait manger dessus." },
-            { name: "Aurélie MAHAUT", title: "La Stratège des Post-it", anecdote: "Son écran est une œuvre d'art faite de pense-bêtes colorés." },
-            { name: "Gaspard PONS", title: "Le Philosophe du Bug", anecdote: "Chaque bug est pour lui une occasion de réflexion existentielle." },
-            { name: "Rafael RION", title: "L'Alchimiste du Matériel", anecdote: "Transforme le vieux matériel ISEP en or... ou du moins, le fait fonctionner." },
-            { name: "Faruk SAN", title: "Le Connaisseur de l'Open Source", anecdote: "Il a déjà testé toutes les distributions Linux existantes." }
+            "Alexandre ALVES", "Douae BOULOUALI", "Sid-Ahmed BOUSLAH", "Leon JIANG", "Altheli RODRIGUEZ",
+            "Maxime BOGNON", "Corentin BRAND", "Maximilien CANONNE", "Adel HENI", "Kahina MEDJUKANE",
+            "Sully MORETON", "Aliénor ANTONA", "Nicolas CLEMENT", "Bryan DE FARIA", "Hani HOUMIMID",
+            "Vithues KANDIAH", "Hector LE BACHELIER", "Quentin DABOVILLE", "Yassmina HARRISSI",
+            "Allan LAHCENE", "Evan MASSE", "Seydina SY", "Ilay AL ABIAD", "Ahmed ELHATTAB",
+            "Thushyan KOHILAKUMAR", "Aurélie MAHAUT", "Gaspard PONS", "Rafael RION", "Faruk SAN"
         ];
 
-        const studentGrid = document.getElementById('student-grid');
+        const studentSelector = document.getElementById('student-selector');
+        const startRaceBtn = document.getElementById('start-race-btn');
+        const selectionScreen = document.getElementById('selection-screen');
+        const raceScreen = document.getElementById('race-screen');
+        const playerCat = document.getElementById('player-cat');
+        const playerName = document.getElementById('player-name');
+        const opponentCat = document.getElementById('opponent-cat');
+        const opponentName = document.getElementById('opponent-name');
+        const countdownElement = document.getElementById('countdown');
+        const raceResult = document.getElementById('race-result');
+        const resetRaceBtn = document.getElementById('reset-race-btn');
 
-        function generateCards() {
-            studentsData.forEach(student => {
+        let selectedStudent = null;
+        let opponentStudent = null;
+        let currentRaceInterval = null;
+
+        function initializeSelection() {
+            studentSelector.innerHTML = ''; // Nettoyer les cartes existantes
+            students.forEach(student => {
                 const card = document.createElement('div');
                 card.classList.add('student-card');
                 
-                // Utilise DiceBear API pour un avatar unique basé sur le nom
-                const avatarUrl = `https://api.dicebear.com/8.x/bottts/svg?seed=${encodeURIComponent(student.name)}`;
+                // Avatar générique inspiré de l'image (couleurs de la jungle)
+                const avatarUrl = `https://api.dicebear.com/8.x/open-peeps/svg?seed=${encodeURIComponent(student)}&face=smile,cute&hair=buzzcut,longHair&clothing=shirt,hoodie&skinColor=variant01,variant02,variant03,variant04,variant05&mood=happy`;
                 const avatar = document.createElement('img');
                 avatar.classList.add('student-avatar');
                 avatar.src = avatarUrl;
-                avatar.alt = `Avatar de ${student.name}`;
+                avatar.alt = `Avatar de ${student}`;
                 
-                const nameElement = document.createElement('h3');
-                nameElement.textContent = student.name;
-                
-                const titleElement = document.createElement('h4');
-                titleElement.textContent = student.title;
-                
-                const anecdoteElement = document.createElement('p');
-                anecdoteElement.textContent = student.anecdote;
+                const nameElement = document.createElement('p');
+                nameElement.textContent = student;
                 
                 card.appendChild(avatar);
                 card.appendChild(nameElement);
-                card.appendChild(titleElement);
-                card.appendChild(anecdoteElement);
                 
-                studentGrid.appendChild(card);
+                card.addEventListener('click', () => selectStudent(student, card));
+                studentSelector.appendChild(card);
             });
+
+            startRaceBtn.style.display = 'none';
+            raceScreen.style.display = 'none';
+            selectionScreen.style.display = 'block';
+            resetRaceBtn.style.display = 'none';
+            raceResult.textContent = '';
+            
+            // Réinitialiser les positions des chats
+            playerCat.style.transform = `translateX(0px)`;
+            opponentCat.style.transform = `translateX(0px)`;
+            
+            // Réinitialiser les avatars des chats de course
+            playerCat.src = `https://api.dicebear.com/8.x/open-peeps/svg?seed=player&face=smile,cute&mood=happy`;
+            opponentCat.src = `https://api.dicebear.com/8.x/open-peeps/svg?seed=opponent&face=smile,cute&mood=happy`;
         }
 
-        // Lancer la génération des cartes au chargement de la page
-        generateCards();
+        function selectStudent(student, card) {
+            Array.from(studentSelector.children).forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            selectedStudent = student;
+            startRaceBtn.style.display = 'block';
+        }
+
+        function generateOpponent() {
+            let randomOpponent;
+            do {
+                randomOpponent = students[Math.floor(Math.random() * students.length)];
+            } while (randomOpponent === selectedStudent);
+            return randomOpponent;
+        }
+
+        startRaceBtn.addEventListener('click', () => {
+            if (!selectedStudent) {
+                alert("Veuillez choisir votre pilote de chat !");
+                return;
+            }
+
+            opponentStudent = generateOpponent();
+
+            playerName.textContent = selectedStudent;
+            opponentName.textContent = opponentStudent;
+            
+            // Mettre à jour les avatars des chats de course avec les noms choisis
+            playerCat.src = `https://api.dicebear.com/8.x/open-peeps/svg?seed=${encodeURIComponent(selectedStudent)}&face=smile,cute&mood=happy`;
+            opponentCat.src = `https://api.dicebear.com/8.x/open-peeps/svg?seed=${encodeURIComponent(opponentStudent)}&face=smile,cute&mood=happy`;
+
+            selectionScreen.style.display = 'none';
+            raceScreen.style.display = 'block';
+            
+            startCountdown();
+        });
+
+        function startCountdown() {
+            let count = 3;
+            countdownElement.textContent = count;
+            countdownElement.style.display = 'block';
+            raceResult.textContent = '';
+            resetRaceBtn.style.display = 'none';
+
+            const countdownInterval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    countdownElement.textContent = count;
+                } else if (count === 0) {
+                    countdownElement.textContent = "GO!";
+                } else {
+                    clearInterval(countdownInterval);
+                    countdownElement.style.display = 'none';
+                    startRace();
+                }
+            }, 1000);
+        }
+
+        function startRace() {
+            const trackWidth = document.querySelector('.race-track').offsetWidth - playerCat.offsetWidth - 20; // -20 pour le padding
+            let playerPosition = 0;
+            let opponentPosition = 0;
+            const speedMultiplier = 15; // Pour des pas plus grands par intervalle
+
+            currentRaceInterval = setInterval(() => {
+                playerPosition += Math.random() * speedMultiplier; 
+                opponentPosition += Math.random() * speedMultiplier; 
+
+                playerCat.style.transform = `translateX(${playerPosition}px)`;
+                opponentCat.style.transform = `translateX(${opponentPosition}px)`;
+
+                if (playerPosition >= trackWidth || opponentPosition >= trackWidth) {
+                    clearInterval(currentRaceInterval);
+                    declareWinner(playerPosition, opponentPosition);
+                }
+            }, 70); // Plus lent pour une meilleure visibilité de l'animation
+        }
+
+        function declareWinner(playerPos, opponentPos) {
+            if (playerPos > opponentPos) {
+                raceResult.textContent = `🏆 ${selectedStudent} a gagné la course ! Félicitations !`;
+                raceResult.classList.remove('lose');
+                raceResult.classList.add('win');
+            } else {
+                raceResult.textContent = `😭 ${opponentStudent} a gagné ! Mieux la prochaine fois...`;
+                raceResult.classList.remove('win');
+                raceResult.classList.add('lose');
+            }
+            resetRaceBtn.style.display = 'block';
+        }
+
+        resetRaceBtn.addEventListener('click', initializeSelection);
+
+        // Initialiser le jeu au chargement
+        initializeSelection();
     </script>
 </body>
 </html>
