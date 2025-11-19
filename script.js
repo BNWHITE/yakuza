@@ -1,6 +1,6 @@
 /* ================================================= */
 /* 🧠 JAVASCRIPT DETAILLÉ : Logique du Jeu et Supabase */
-/* (Style "FatNinja", Course Rapide, Chat Temps Réel) */
+/* (Nom du jeu : YAKUZA. Intégration du Chat) */
 /* ================================================= */
 
 // 1. DÉCLARATION DES CLÉS (Clé Publique - ANONYMOUS)
@@ -9,7 +9,6 @@ const SUPABASE_ANON_KEY = 'sb_publishable_wAZG8NaYrZux3loetrNbmg_6QOuyBz5';
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     auth: {
-        // Redirige l'utilisateur vers la page actuelle après confirmation d'email
         redirectTo: window.location.origin, 
     }
 });
@@ -86,7 +85,6 @@ const accentLime = getComputedStyle(document.documentElement).getPropertyValue('
 // ------------------------------------
 
 async function loadProfileData(userId) {
-    // Charge le score et le nom d'utilisateur
     const { data } = await supabaseClient
         .from('profiles')
         .select('kebab_score, username')
@@ -108,7 +106,6 @@ async function checkAuthSession() {
             kebabScore = profileData.kebab_score;
             currentUsername = profileData.username;
         } else {
-            // Cas de fallback si le trigger SQL a échoué
             kebabScore = 5;
             currentUsername = currentUser.email.split('@')[0];
         }
@@ -124,7 +121,6 @@ async function checkAuthSession() {
         setupRealtimeChat(); 
         elements.authMessage.textContent = '';
     } else {
-        // Déconnexion ou non connecté
         if(chatChannel) supabaseClient.removeChannel(chatChannel);
         currentUser = null;
         kebabScore = 0;
@@ -307,14 +303,15 @@ function generateStats(bot) {
     }
 
     if (Object.keys(bot.stats).length === 0) {
-        // Tous les bots démarrent avec des stats équitables
         bot.stats.vitesse = DEFAULT_STATS.vitesse + Math.floor(Math.random() * 5); 
         bot.stats.codage = DEFAULT_STATS.codage + Math.floor(Math.random() * 5);
         bot.stats.chance = DEFAULT_STATS.chance + Math.floor(Math.random() * 5);
     }
 }
 
+// Fonction renderStats corrigée et vérifiée
 function renderStats(card, bot) {
+    // Utilise les classes CSS .stats-card, .stat-bar-container, .stat-fill pour l'affichage
     const statsHTML = `
         <div class="stats-card">
             <div class="stat-bar-container"><label>Vitesse :</label><div class="stat-bar"><div class="stat-fill" data-stat="vitesse" style="width: ${bot.stats.vitesse}%;"></div></div></div>
@@ -368,7 +365,6 @@ function initializeSelection() {
             card.classList.add('chabchoub-card');
         }
         
-        // Style "FatNinja" pour les avatars
         let avatarUrl;
         const styleParams = 'scale=110&size=100&eyes=sides,round&mouth=smile,pucker&sides=square,round&top=antenna,cone&face=square,round&color=101216,aaff00,f0f0f0,ffb300';
         if (bot.name === "Mme CHABCHOUB") {
@@ -392,7 +388,8 @@ function initializeSelection() {
         card.appendChild(nameElement);
         card.appendChild(titleElement);
         
-        renderStats(card, bot);
+        // C'est ici que les stats sont rendues (maintenant corrigées dans le CSS)
+        renderStats(card, bot); 
         
         card.addEventListener('click', () => selectBot(bot, card, avatarUrl));
         elements.selector.appendChild(card);
