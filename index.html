@@ -11,17 +11,22 @@
     
 </head>
 <body>
-    <header>
-        <button id="logout-btn" class="action-button" style="display: none;">Déconnexion</button>
-        <div id="kebab-score-display">0 K</div>
-        <h1>ISEP Code Quest</h1>
-        <h2>Jungle Edition (Supabase Beta)</h2>
+    <header class="ninja-header">
+        <div class="logo-text"># FATNINJA</div>
+        <nav class="desktop-nav">
+            <a href="#">Pages</a>
+            <a href="#">Collection</a>
+            <a href="#">About</a>
+            <a href="#">Blog</a>
+        </nav>
+        <button id="logout-btn" class="explore-btn" style="display: none;">Déconnexion</button>
+        <div id="kebab-score-display" class="score-display">0 K</div>
     </header>
 
     <main>
         <section id="auth-screen">
-            <h2>🔐 Accès au Terminal</h2>
-            <p style="color: var(--jungle-glow); margin-bottom: 25px;">Connectez-vous pour commencer la Quête ou créez un nouveau Bot-Explorateur !</p>
+            <h2 class="dark-title">🔐 ACCÈS TERMINAL</h2>
+            <p style="color: var(--accent-lime); margin-bottom: 25px;">Connectez-vous pour commencer la Quête ou créez un nouveau Bot-Explorateur !</p>
             
             <input type="email" id="auth-email" placeholder="Email (Identifiant Bot)" class="auth-input">
             <input type="password" id="auth-password" placeholder="Mot de Passe (Clé de Sécurité)" class="auth-input">
@@ -29,18 +34,19 @@
             <button id="signup-btn" class="action-button">S'inscrire</button>
             <button id="signin-btn" class="action-button">Se Connecter</button>
             
-            <p id="auth-message" style="margin-top: 20px; color: #f25f5c;"></p>
+            <p id="auth-message" style="margin-top: 20px;"></p>
         </section>
 
         <section id="selection-screen" style="display: none;">
-            <p id="user-welcome" style="font-family: 'Press Start 2P', cursive; color: var(--button-color); margin-bottom: 20px;">Bienvenue, Explorateur !</p>
-            <h2>Choisissez votre Bot-Explorateur :</h2>
+            <h1 class="maquette-title">UNMASK THE FUTURE OF BOTS</h1>
+            <h2 class="dark-subtitle">Choisissez votre Bot-Explorateur :</h2>
+            <p id="user-welcome" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--accent-orange); margin-bottom: 20px;">Bienvenue, Explorateur !</p>
             <p id="mq-status"></p>
 
-            <div id="student-selector">
+            <div id="student-selector" class="selector-carousel">
                 </div>
             
-            <button id="start-race-btn" class="action-button" style="display: none;">Lancer la Quête !</button>
+            <button id="start-race-btn" class="action-button explore-btn" style="display: none;">Lancer la Quête !</button>
             
             <div id="options-menu">
                 <h3>🛠️ Options de Course</h3>
@@ -56,7 +62,7 @@
         </section>
 
         <section id="race-screen" style="display: none;">
-            <h2>Sentier de la Connaissance Perdue</h2>
+            <h2>SENTIER DE LA CONNAISSANCE PERDUE</h2>
             <h3 id="countdown">3</h3>
             
             <div class="race-track">
@@ -82,6 +88,18 @@
             </div>
         </section>
     </main>
+    
+    <section id="chat-section" style="display: none;">
+        <h2 class="dark-subtitle">💬 Chat en Direct (Terminal Public)</h2>
+        
+        <div id="chat-messages" style="height: 300px; overflow-y: auto; background: #000; padding: 10px; border-radius: 8px; border: 1px solid var(--accent-lime); margin-bottom: 15px; text-align: left;">
+            </div>
+        
+        <div style="display: flex; gap: 10px;">
+            <input type="text" id="chat-input" placeholder="Tapez votre message ici..." class="auth-input" style="flex-grow: 1; margin: 0; border-color: var(--accent-lime);">
+            <button id="send-chat-btn" class="action-button explore-btn" style="padding: 10px 20px; margin: 0; font-size: 0.8em;">Envoyer</button>
+        </div>
+    </section>
 
     <audio id="defeat-audio" src="madame-la-directrice-degat-degat-le-p-breziani_orZPPW2u.mp3" preload="auto"></audio>
 
