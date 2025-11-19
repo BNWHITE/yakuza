@@ -1,29 +1,29 @@
 /* ================================================= */
 /* 🧠 JAVASCRIPT DETAILLÉ : Logique du Jeu et Supabase */
-/* (Style "FatNinja", Course Rapide, Stats Équitables) */
+/* (Style "FatNinja", Course Rapide, Chat Temps Réel) */
 /* ================================================= */
 
 // 1. DÉCLARATION DES CLÉS (Clé Publique - ANONYMOUS)
-// Cette clé est sûre pour le front-end. NE JAMAIS UTILISER LA CLÉ SECRÈTE DE SERVICE.
 const SUPABASE_URL = 'https://dxiefxcfnggezuiifeqf.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_wAZG8NaYrZux3loetrNbmg_6QOuyBz5';
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     auth: {
-        // ESSENTIEL : Redirige l'utilisateur vers la page actuelle après confirmation d'email
+        // Redirige l'utilisateur vers la page actuelle après confirmation d'email
         redirectTo: window.location.origin, 
     }
 });
 let currentUser = null; 
+let currentUsername = null; 
 
-// NOUVEAU : Stats de départ équitables pour la progression
+// Stats de départ équitables pour la progression
 const DEFAULT_STATS = {
     vitesse: 60,
     codage: 60,
     chance: 60
 };
 
-// Liste des bots PNJs (non-joueurs) pour la sélection et l'opposition
+// Liste des bots PNJs (non-joueurs)
 const students = [
     { name: "Alexandre ALVES", title: "Le Débogueur", stats: {} }, { name: "Douae BOULOUALI", title: "L'impératrice", stats: {} }, { name: "Sid-Ahmed BOUSLAH", title: "Chill Boy", stats: {} }, { name: "Leon JIANG", title: "FinoVox", stats: {} }, { name: "Alheli RODRIGUEZ", title: "L'intentionnée", stats: {} },
     { name: "Maxime BOGNON", title: "Maximilien", stats: {} }, { name: "Corentin BRAND", title: "Le favoris", stats: {} }, { name: "Maximilien CANONNE", title: "Luminosité Minimum", stats: {} }, { name: "Adel HENI", title: "Le plavonneur", stats: {} }, { name: "Kahina MEDJUKANE", title: "THE QUEEN ♕", stats: {} },
@@ -31,7 +31,6 @@ const students = [
     { name: "Vithues KANDIAH", title: "ECE Water", stats: {} }, { name: "Hector LE BACHELIER", title: "L'Ingénieur Papier", stats: {} }, { name: "Quentin DABOVILLE", title: "Le Bretons", stats: {} }, { name: "Yassmina HARRISSI", title: "La Libanaise🇱🇧", stats: {} }, { name: "Allan LAHCENE", title: " Le + Chill", stats: {} },
     { name: "Evan MASSE", title: "Hasfy", stats: {} }, { name: "Seydina SY", title: "Git init", stats: {} }, { name: "Ilay AL ABIAD", title: "Brother from an other mother", stats: {} }, { name: "Ahmed ELHATTAB", title: "English Boy", stats: {} }, { name: "Thushyan KOHILAKUMAR", title: "L'Orfèvre", stats: {} },
     { name: "Aurélie MAHAUT", title: "La Stratège", stats: {} }, { name: "Gaspard PONS", title: "Le Philosophe", stats: {} }, { name: "Rafael RION", title: "L'Alchimiste", stats: {} }, { name: "Faruk SAN", title: "Le connaisseur", stats: {} },
-    // Profil Professeur (Adversaire final)
     { name: "Mme CHABCHOUB", title: "La Guide du Code Sacré", stats: { vitesse: 100, codage: 100, chance: 100 } }
 ];
 
@@ -62,15 +61,22 @@ const elements = {
     speedBoost: document.getElementById('speed-boost-option'),
     luckCharm: document.getElementById('luck-charm-option'),
     kebabDisplay: document.getElementById('kebab-score-display'),
-    defeatAudio: document.getElementById('defeat-audio')
+    defeatAudio: document.getElementById('defeat-audio'),
+    
+    // Éléments du Chat
+    chatSection: document.getElementById('chat-section'),
+    chatMessages: document.getElementById('chat-messages'),
+    chatInput: document.getElementById('chat-input'),
+    sendChatBtn: document.getElementById('send-chat-btn')
 };
 
 let selectedBot = null;
 let opponentBot = null;
 let raceHistory = [];
 let kebabScore = 0; 
+let chatChannel = null; 
 
-// Récupère la valeur d'une variable CSS pour la couleur d'erreur
+// Récupération des couleurs CSS pour la lisibilité
 const errorColor = getComputedStyle(document.documentElement).getPropertyValue('--error-color').trim();
 const accentLime = getComputedStyle(document.documentElement).getPropertyValue('--accent-lime').trim();
 
@@ -79,48 +85,61 @@ const accentLime = getComputedStyle(document.documentElement).getPropertyValue('
 // LOGIQUE SUPABASE : AUTHENTIFICATION & PROFIL
 // ------------------------------------
 
-/** Charge le score Kebab du profil utilisateur. */
-async function loadKebabScore(userId) {
+async function loadProfileData(userId) {
+    // Charge le score et le nom d'utilisateur
     const { data } = await supabaseClient
         .from('profiles')
-        .select('kebab_score')
+        .select('kebab_score, username')
         .eq('id', userId)
         .single();
     
-    // Si le profil existe, retourne le score, sinon retourne le score de base (5 K)
-    return data ? data.kebab_score : 5; 
+    return data;
 }
 
-/** Vérifie la session utilisateur et bascule entre les écrans Auth et Sélection. */
 async function checkAuthSession() {
     elements.authMessage.textContent = 'Vérification de session...';
     const { data: { session } } = await supabaseClient.auth.getSession();
     
     if (session) {
         currentUser = session.user;
-        kebabScore = await loadKebabScore(currentUser.id);
+        const profileData = await loadProfileData(currentUser.id);
+        
+        if (profileData) {
+            kebabScore = profileData.kebab_score;
+            currentUsername = profileData.username;
+        } else {
+            // Cas de fallback si le trigger SQL a échoué
+            kebabScore = 5;
+            currentUsername = currentUser.email.split('@')[0];
+        }
         
         elements.authScreen.style.display = 'none';
         elements.logoutBtn.style.display = 'block';
         elements.historySection.style.display = 'block';
-        elements.selectionScreen.style.display = 'block'; // Affiche la sélection
-        elements.userWelcome.textContent = `Bienvenue, Explorateur ${currentUser.email.split('@')[0]} !`;
+        elements.selectionScreen.style.display = 'block';
+        elements.chatSection.style.display = 'block'; 
+        elements.userWelcome.textContent = `Bienvenue, Explorateur ${currentUsername} !`;
+        
         initializeSelection();
+        setupRealtimeChat(); 
         elements.authMessage.textContent = '';
     } else {
+        // Déconnexion ou non connecté
+        if(chatChannel) supabaseClient.removeChannel(chatChannel);
         currentUser = null;
         kebabScore = 0;
+        currentUsername = null;
         elements.authScreen.style.display = 'block';
         elements.logoutBtn.style.display = 'none';
         elements.selectionScreen.style.display = 'none';
         elements.raceScreen.style.display = 'none';
         elements.historySection.style.display = 'none';
+        elements.chatSection.style.display = 'none'; 
         elements.authMessage.textContent = '';
     }
     updateKebabScore(0);
 }
 
-/** Inscription d'un nouvel utilisateur. */
 async function signUp() {
     const email = elements.authEmail.value;
     const password = elements.authPassword.value;
@@ -137,7 +156,6 @@ async function signUp() {
     }
 }
 
-/** Connexion d'un utilisateur existant. */
 async function signIn() {
     const email = elements.authEmail.value;
     const password = elements.authPassword.value;
@@ -151,28 +169,18 @@ async function signIn() {
     } else {
         elements.authMessage.textContent = 'Connexion réussie !';
         elements.authMessage.style.color = accentLime;
-        // La suite est gérée par onAuthStateChange
     }
 }
 
-/** Déconnexion de l'utilisateur. */
 async function signOut() {
     elements.authMessage.textContent = 'Déconnexion en cours...';
-    const { error } = await supabaseClient.auth.signOut();
-    
-    if (error) {
-         elements.authMessage.textContent = `Erreur de déconnexion: ${error.message}`;
-         elements.authMessage.style.color = errorColor;
-    }
-    // La suite est gérée par onAuthStateChange
+    await supabaseClient.auth.signOut();
 }
 
-// Événements d'authentification
 elements.signupBtn.addEventListener('click', signUp);
 elements.signinBtn.addEventListener('click', signIn);
 elements.logoutBtn.addEventListener('click', signOut);
 
-// Gère les changements d'état (connexion, déconnexion, confirmation email)
 supabaseClient.auth.onAuthStateChange((event) => {
     if (event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'INITIAL_SESSION') {
         checkAuthSession();
@@ -181,10 +189,95 @@ supabaseClient.auth.onAuthStateChange((event) => {
 
 
 // ------------------------------------
+// LOGIQUE CHAT EN TEMPS RÉEL
+// ------------------------------------
+
+function displayMessage(message, isNew = false) {
+    const messageElement = document.createElement('p');
+    messageElement.style.margin = '5px 0';
+    messageElement.style.fontSize = '0.9em';
+    
+    if (isNew) {
+        messageElement.style.color = 'var(--accent-orange)';
+        setTimeout(() => messageElement.style.color = 'var(--text-color-light)', 2000);
+    } else {
+        messageElement.style.color = 'var(--text-color-light)';
+    }
+    
+    const time = new Date(message.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    const sender = message.username || 'Bot Inconnu';
+    
+    messageElement.innerHTML = `[<span style="color: var(--accent-lime);">${time}</span>] <strong>${sender}</strong>: ${message.content}`;
+    elements.chatMessages.appendChild(messageElement);
+    
+    elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+}
+
+async function loadMessages() {
+    elements.chatMessages.innerHTML = ''; 
+    const { data, error } = await supabaseClient
+        .from('messages')
+        .select('*')
+        .order('created_at', { ascending: true })
+        .limit(20);
+
+    if (error) {
+        elements.chatMessages.innerHTML = '<p style="color: red;">Erreur de chargement du chat.</p>';
+        return;
+    }
+    
+    data.forEach(displayMessage);
+}
+
+function setupRealtimeChat() {
+    if (chatChannel) {
+        supabaseClient.removeChannel(chatChannel); 
+    }
+    
+    loadMessages(); 
+
+    chatChannel = supabaseClient
+        .channel('public:messages')
+        .on('postgres_changes', 
+            { event: 'INSERT', schema: 'public', table: 'messages' }, 
+            (payload) => {
+                displayMessage(payload.new, true);
+            })
+        .subscribe();
+}
+
+async function sendMessage() {
+    const content = elements.chatInput.value.trim();
+    if (!content || !currentUser || !currentUsername) return;
+
+    elements.chatInput.disabled = true;
+    elements.sendChatBtn.disabled = true;
+
+    const { error } = await supabaseClient
+        .from('messages')
+        .insert({ user_id: currentUser.id, content: content, username: currentUsername });
+
+    elements.chatInput.disabled = false;
+    elements.sendChatBtn.disabled = false;
+    elements.chatInput.value = '';
+
+    if (error) {
+        console.error("Erreur d'envoi de message:", error);
+    }
+}
+
+elements.sendChatBtn.addEventListener('click', sendMessage);
+elements.chatInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        sendMessage();
+    }
+});
+
+
+// ------------------------------------
 // FONCTIONNALITÉS DU JEU
 // ------------------------------------
 
-/** Met à jour le score Kebab de l'utilisateur et le sauvegarde en DB. */
 async function updateKebabScore(amount) {
     kebabScore += amount;
     
@@ -201,7 +294,6 @@ async function updateKebabScore(amount) {
     elements.kebabDisplay.textContent = `${kebabScore} K`;
 }
 
-/** Joue le son de défaite. */
 function playDefeatSound() {
     if (opponentBot.name !== "Mme CHABCHOUB") {
         elements.defeatAudio.currentTime = 0;
@@ -209,23 +301,19 @@ function playDefeatSound() {
     }
 }
 
-/** Génère les stats des bots (avec équité au départ). */
 function generateStats(bot) {
-    // La prof garde ses 100/100/100
     if (bot.name === "Mme CHABCHOUB") {
         return;
     }
 
-    // Si le bot n'a pas encore de stats, il reçoit les stats de base + une légère variation
     if (Object.keys(bot.stats).length === 0) {
+        // Tous les bots démarrent avec des stats équitables
         bot.stats.vitesse = DEFAULT_STATS.vitesse + Math.floor(Math.random() * 5); 
         bot.stats.codage = DEFAULT_STATS.codage + Math.floor(Math.random() * 5);
         bot.stats.chance = DEFAULT_STATS.chance + Math.floor(Math.random() * 5);
     }
-    // NOTE : Si on utilisait la table 'avatars', les stats seraient chargées ici.
 }
 
-/** Affiche les barres de stats. */
 function renderStats(card, bot) {
     const statsHTML = `
         <div class="stats-card">
@@ -237,24 +325,18 @@ function renderStats(card, bot) {
     card.insertAdjacentHTML('beforeend', statsHTML);
 }
 
-/** Met à jour l'affichage Media Query. */
 function updateMQStatus() {
-    const mq = window.matchMedia("(max-width: 600px)");
-    if (mq.matches) {
-        elements.mqStatus.innerHTML = `⚠️ **MODE MOBILE ACTIVÉ** (Media Query: 1 colonne).`;
+    const mqMobile = window.matchMedia("(max-width: 992px)");
+    if (mqMobile.matches) {
+        elements.mqStatus.innerHTML = `⚙️ **MENU ROULETTE (Mobile) Activé**. Faites défiler pour voir tous les Bots !`;
         elements.mqStatus.style.color = 'var(--accent-orange)';
-    } else if (window.innerWidth <= 992) {
-         elements.mqStatus.innerHTML = `✅ **MODE TABLETTE ACTIVÉ** (Media Query: 2 colonnes).`;
-         elements.mqStatus.style.color = 'var(--accent-lime)';
-    }
-    else {
-        elements.mqStatus.innerHTML = `🖥️ **MODE PC** (Grille 4 colonnes).`;
+    } else {
+        elements.mqStatus.innerHTML = `🖥️ **MODE PC**. Grille 4 colonnes pour la sélection.`;
         elements.mqStatus.style.color = 'var(--text-color-light)';
     }
 }
 window.addEventListener('resize', updateMQStatus);
 
-/** Enregistre la course dans l'historique. */
 function logRace(winnerName, isPlayerWinner, mqUsed, kebabGain) {
     const resultClass = isPlayerWinner ? 'win' : 'lose';
     const mqText = mqUsed ? ' (Responsive Actif)' : '';
@@ -273,9 +355,8 @@ function logRace(winnerName, isPlayerWinner, mqUsed, kebabGain) {
     raceHistory.push(logEntry);
 }
 
-/** Initialise l'écran de sélection des bots. */
 function initializeSelection() {
-    if (!currentUser) return; // Ne fait rien si non connecté
+    if (!currentUser) return;
 
     elements.selector.innerHTML = '';
     students.forEach(bot => {
@@ -287,12 +368,11 @@ function initializeSelection() {
             card.classList.add('chabchoub-card');
         }
         
-        // Génération des avatars avec le nouveau style "FatNinja"
+        // Style "FatNinja" pour les avatars
         let avatarUrl;
-        const styleParams = 'scale=110&size=100&color=ffb300,aaff00,101216';
+        const styleParams = 'scale=110&size=100&eyes=sides,round&mouth=smile,pucker&sides=square,round&top=antenna,cone&face=square,round&color=101216,aaff00,f0f0f0,ffb300';
         if (bot.name === "Mme CHABCHOUB") {
-            // Couleurs spécifiques pour la prof (Rouge/Orange)
-            avatarUrl = `https://api.dicebear.com/8.x/bottts/svg?seed=Chabchoub&eyes=bulgy,round&mouth=smile,pucker&sides=square,round&top=antenna,cone&face=square,round&color=ff4545,ffb300,aaff00,101216&${styleParams}`;
+            avatarUrl = `https://api.dicebear.com/8.x/bottts/svg?seed=Chabchoub&color=ff4545,ffb300,aaff00,101216&${styleParams}`;
         } else {
             avatarUrl = `https://api.dicebear.com/8.x/bottts/svg?seed=${encodeURIComponent(bot.name)}&${styleParams}`;
         }
@@ -330,7 +410,6 @@ function initializeSelection() {
     updateMQStatus();
 }
 
-/** Sélectionne le bot joueur. */
 function selectBot(bot, card, avatarUrl) {
     Array.from(elements.selector.children).forEach(c => c.classList.remove('selected'));
     card.classList.add('selected');
@@ -339,7 +418,6 @@ function selectBot(bot, card, avatarUrl) {
     elements.startBtn.style.display = 'block';
 }
 
-/** Choisit un adversaire aléatoire. */
 function generateOpponent() {
     let randomOpponent;
     do {
@@ -358,10 +436,10 @@ elements.startBtn.addEventListener('click', () => {
     elements.playerName.textContent = selectedBot.name;
     elements.opponentName.textContent = opponentBot.name;
     
-    const styleParams = 'scale=110&size=100&color=ffb300,aaff00,101216';
+    const styleParams = 'scale=110&size=100&eyes=sides,round&mouth=smile,pucker&sides=square,round&top=antenna,cone&face=square,round&color=101216,aaff00,f0f0f0,ffb300';
     let opponentAvatarUrl;
     if (opponentBot.name === "Mme CHABCHOUB") {
-        opponentAvatarUrl = `https://api.dicebear.com/8.x/bottts/svg?seed=Chabchoub&eyes=bulgy,round&mouth=smile,pucker&sides=square,round&top=antenna,cone&face=square,round&color=ff4545,ffb300,aaff00,101216&${styleParams}`;
+        opponentAvatarUrl = `https://api.dicebear.com/8.x/bottts/svg?seed=Chabchoub&color=ff4545,ffb300,aaff00,101216&${styleParams}`;
     } else {
         opponentAvatarUrl = `https://api.dicebear.com/8.x/bottts/svg?seed=${encodeURIComponent(opponentBot.name)}&${styleParams}`;
     }
@@ -373,7 +451,6 @@ elements.startBtn.addEventListener('click', () => {
     startCountdown();
 });
 
-/** Démarre le compte à rebours avant la course. */
 function startCountdown() {
     let count = 3;
     elements.countdown.textContent = count;
@@ -399,13 +476,11 @@ function startCountdown() {
     }, 1000);
 }
 
-/** Lance la simulation de course (rendue plus rapide). */
 function startRace() {
     const trackWidth = document.querySelector('.race-track').offsetWidth - elements.playerCat.offsetWidth - 30;
     let playerPosition = 0;
     let opponentPosition = 0;
     
-    // VITESSE ACCÉLÉRÉE (multipliée par 3)
     const SPEED_MULTIPLIER = 3;
     let playerBaseSpeed = (selectedBot.stats.vitesse * (selectedBot.stats.codage / 100)) * SPEED_MULTIPLIER;
     let opponentBaseSpeed = (opponentBot.stats.vitesse * (opponentBot.stats.codage / 100)) * SPEED_MULTIPLIER;
@@ -415,7 +490,6 @@ function startRace() {
     }
 
     currentRaceInterval = setInterval(() => {
-        // La variance est ajustée pour coller aux courses rapides
         const playerVarianceRange = elements.luckCharm.checked ? (100 - selectedBot.stats.chance) / 20 : (100 - selectedBot.stats.chance) / 100;
         const opponentVarianceRange = elements.luckCharm.checked ? (100 - opponentBot.stats.chance) / 20 : (100 - opponentBot.stats.chance) / 100;
         
@@ -435,7 +509,6 @@ function startRace() {
     }, 70); 
 }
 
-/** Déclare le vainqueur, met à jour le score Kebab. */
 function declareWinner(playerPos, opponentPos) {
     const mqUsed = window.matchMedia("(max-width: 992px)").matches;
     let winnerName;
