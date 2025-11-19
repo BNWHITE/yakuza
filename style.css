@@ -271,10 +271,35 @@ section {
 #race-result.win { color: var(--accent-lime); text-shadow: 0 0 15px var(--accent-lime); }
 #race-result.lose { color: var(--error-color); text-shadow: 0 0 15px var(--error-color); }
 
-/* --------------------- MEDIA QUERIES (Ajustements mineurs pour la couleur) --------------------- */
 @media (max-width: 600px) {
-    /* ... (CSS mobile inchangé sauf couleurs) ... */
+    h1 { font-size: 1.8em; }
+    h2 { font-size: 1.2em; margin: 15px 0; }
+    h3 { font-size: 1.1em; }
+    section { padding: 20px; }
+    
+    #student-selector { grid-template-columns: 1fr; gap: 15px; }
+    .student-avatar { width: 70px; height: 70px; }
+    .stat-bar-container { font-size: 0.75em; }
+    
+    #kebab-score-display { font-size: 1em; top: 10px; right: 10px; }
+    #logout-btn { top: 10px; left: 10px; font-size: 0.7em; }
+
+    .race-track { height: 140px; padding: 10px; }
+    .cat-lane img { width: 60px; }
+    .cat-lane .cat-name { font-size: 0.7em; margin-left: 10px; padding: 5px 8px; }
+    #countdown { font-size: 2em; }
+    #race-result { font-size: 1.2em; }
+    .auth-input { width: 95%; padding: 12px; }
 }
-@media (max-width: 992px) {
-    /* ... (CSS tablette inchangé sauf couleurs) ... */
+/* 2. Écrans de taille moyenne (Tablettes) */
+ @media (max-width: 992px) {
+    h1 { font-size: 2.5em; }
+    h2 { font-size: 1.6em; }
+
+    #student-selector { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .student-avatar { width: 80px; height: 80px; }
+    
+    .race-track { height: 200px; }
+    .cat-lane img { width: 80px; }
+    .cat-lane .cat-name { font-size: 0.8em; margin-left: 12px; }
 }
