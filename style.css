@@ -1,22 +1,21 @@
 /* ================================================= */
 /* 🎨 CSS ENHANCED : Style "FatNinja" Dark/Orange/Lime */
+/* (Optimisé pour la lisibilité et le carrousel mobile) */
 /* ================================================= */
 
 /* --------------------- FONT IMPORT --------------------- */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&family=Montserrat:wght@400;700;900&display=swap');
 
-/* --------------------- VARIABLES GLOBALES MISES À JOUR --------------------- */
+/* --------------------- VARIABLES GLOBALES --------------------- */
 :root {
-    --bg-dark: #101216; /* Noir Charbon, Ambiance Web3 */
-    --accent-orange: #ffb300; /* Orange Vif (comme l'image) */
-    --accent-lime: #aaff00; /* Vert Lime pour les glows et succès */
-    --text-color-light: #f0f0f0; /* Blanc cassé pour la lisibilité */
+    --bg-dark: #101216; 
+    --accent-orange: #ffb300; 
+    --accent-lime: #aaff00; 
+    --text-color-light: #f0f0f0; 
     
-    --glow-shadow: 0 0 10px rgba(255, 179, 0, 0.5), 0 0 5px rgba(255, 179, 0, 0.8);
     --button-color: var(--accent-orange);
     --button-hover-color: #ff9900;
     --track-color: #1a1a1a;
-    --track-border: #333;
     --error-color: #ff4545;
 }
 
@@ -33,49 +32,77 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     overflow-x: hidden;
     padding-bottom: 50px;
     position: relative;
 }
 
-header {
-    text-align: center;
-    padding: 20px 0;
+/* --- HEADER MAQUETTE --- */
+.ninja-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
     width: 100%;
-    background-color: #1c1f25; 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.9);
-    margin-bottom: 30px;
-    position: relative;
+    background-color: transparent; 
+    box-shadow: none;
+    margin-bottom: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-h1, h2, h3, #countdown, #race-result {
+.logo-text {
     font-family: 'Press Start 2P', cursive;
     color: var(--accent-lime);
-    text-shadow: 0 0 5px var(--accent-lime);
+    font-size: 1.2em;
 }
-h1 { font-size: 3em; margin: 0; color: var(--accent-lime); }
-h2 { font-size: 1.8em; margin: 20px 0 10px; }
-h3 { font-size: 1.3em; margin-bottom: 15px; }
+
+.desktop-nav a {
+    color: var(--text-color-light);
+    text-decoration: none;
+    margin-left: 25px;
+    font-weight: 700;
+    transition: color 0.3s;
+}
+.desktop-nav a:hover {
+    color: var(--accent-orange);
+}
+
+/* --- TITRES MAQUETTE --- */
+.maquette-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 4em;
+    text-transform: uppercase;
+    color: var(--text-color-light);
+    text-shadow: none;
+    line-height: 1.1;
+    margin: 40px 0 10px;
+}
+.dark-subtitle, .dark-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    color: var(--accent-orange);
+    text-shadow: none;
+    font-size: 1.5em;
+    margin: 10px 0;
+}
+h2 { font-family: 'Press Start 2P', cursive; }
+h3 { font-family: 'Press Start 2P', cursive; color: var(--accent-lime); text-shadow: 0 0 5px var(--accent-lime); }
 
 /* Affichage Kebab Score */
-#kebab-score-display {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 1.2em;
-    padding: 8px 15px;
-    background-color: var(--accent-orange);
+.score-display {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
     color: var(--bg-dark);
+    background-color: var(--accent-lime);
+    padding: 8px 15px;
     border-radius: 5px;
-    font-family: 'Press Start 2P', cursive;
-    text-shadow: none;
-    box-shadow: 0 0 10px rgba(255, 179, 0, 0.5);
-    z-index: 10;
+    box-shadow: 0 0 10px rgba(170, 255, 0, 0.4);
 }
 
-/* Section Globale */
+/* Sections */
 section {
     background-color: #1c1f25;
     padding: 40px;
@@ -88,7 +115,7 @@ section {
     text-align: center;
 }
 
-/* Champ d'entrée pour l'Auth */
+/* Champ d'entrée pour l'Auth / Chat */
 .auth-input {
     width: 80%;
     max-width: 400px;
@@ -108,8 +135,8 @@ section {
     box-shadow: 0 0 10px var(--accent-orange);
 }
 
-/* --------------------- BOUTONS & CONTROLES --------------------- */
-.action-button, #logout-btn {
+/* Boutons */
+.action-button {
     background-color: var(--button-color);
     color: var(--bg-dark);
     border: none;
@@ -122,28 +149,41 @@ section {
     transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
 }
-.action-button:hover, #logout-btn:hover {
+.action-button:hover {
     background-color: var(--button-hover-color);
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8), 0 0 15px var(--button-color);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+}
+
+.explore-btn {
+    background-color: var(--accent-orange);
+    color: var(--bg-dark);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: all 0.2s;
+    box-shadow: 0 0 10px rgba(255, 179, 0, 0.5);
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    margin: 0;
+}
+.explore-btn:hover {
+    background-color: var(--button-hover-color);
+    transform: translateY(-1px);
 }
 
 #logout-btn {
     background-color: var(--error-color);
     color: var(--text-color-light);
-    position: absolute;
-    top: 15px;
-    left: 20px;
-    font-size: 0.8em;
-    padding: 10px 15px;
     margin: 0;
-    z-index: 10;
 }
 
-/* Style de la carte des Bots */
-#student-selector {
+/* --------------------- MENU ROULETTE (CAROUSEL) --------------------- */
+.selector-carousel {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, 1fr); /* 4 colonnes par défaut (PC) */
     gap: 25px;
     margin-top: 30px;
 }
@@ -171,29 +211,18 @@ section {
     background-color: #333842;
 }
 
-.student-avatar {
-    width: 100px;
-    height: 100px;
-    object-fit: contain;
-    border: 4px solid var(--accent-orange);
-    background-color: var(--bg-dark);
-    padding: 5px;
-    border-radius: 50%;
-    margin-bottom: 10px;
-}
-
-.student-card.chabchoub-card .student-avatar {
-    border-color: var(--error-color);
-}
-
 .student-card span.title {
-    display: block;
-    font-size: 0.9em;
-    color: var(--accent-lime);
-    text-shadow: 0 0 3px #000;
-    margin-top: 5px;
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
+    color: var(--accent-lime);
+}
+
+.student-avatar {
+    border: 4px solid var(--accent-orange);
+    background-color: var(--bg-dark);
+}
+.student-card.chabchoub-card .student-avatar {
+    border-color: var(--error-color);
 }
 
 /* ----- STATS CARD ----- */
@@ -202,104 +231,71 @@ section {
     padding: 10px;
     border-radius: 8px;
     margin-top: 15px;
-    border: 1px solid rgba(255, 179, 0, 0.1);
 }
 .stat-bar-container {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75em;
+    font-weight: 400;
     display: flex;
     align-items: center;
     margin-bottom: 7px;
-    font-size: 0.8em;
-}
-.stat-bar-container label {
-    width: 45%;
-    text-align: left;
-    padding-right: 5px;
-    color: var(--text-color-light);
 }
 .stat-bar {
-    flex-grow: 1;
     height: 10px;
     background-color: #444;
-    border-radius: 5px;
-    overflow: hidden;
-}
-.stat-fill {
-    height: 100%;
-    border-radius: 5px;
-    transition: width 0.5s;
 }
 .stat-fill[data-stat="codage"] { background-color: var(--accent-lime); }
 .stat-fill[data-stat="vitesse"] { background-color: #00bcd4; }
 .stat-fill[data-stat="chance"] { background-color: var(--accent-orange); }
 
-
-/* --------------------- ÉCRAN DE COURSE --------------------- */
-.race-track {
-    background-color: var(--track-color);
-    border: 5px solid var(--accent-lime);
-    border-radius: 10px;
-    margin: 30px auto;
-    padding: 20px;
-    position: relative;
-    height: 250px;
-    width: 95%;
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8), 0 0 15px rgba(170, 255, 0, 0.3);
-    overflow: hidden;
-}
-
-.race-track .finish-line {
-    right: 10px;
-    width: 8px;
-    background: repeating-linear-gradient(-45deg, var(--accent-orange), var(--accent-orange) 4px, var(--accent-lime) 4px, var(--accent-lime) 8px);
-    box-shadow: 0 0 10px var(--accent-orange);
-}
-
-.cat-lane img {
-    border: 3px solid var(--accent-lime);
-    filter: drop-shadow(0 0 3px var(--accent-lime));
-}
-
-.cat-lane .cat-name {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    color: var(--bg-dark);
-    background-color: var(--accent-lime);
-    box-shadow: 0 0 5px var(--accent-lime);
-}
-
-#countdown { background: rgba(0, 0, 0, 0.9); }
+/* --- ÉCRAN DE COURSE --- */
+#race-result { font-family: 'Press Start 2P', cursive; font-size: 1.5em; margin-top: 25px; }
 #race-result.win { color: var(--accent-lime); text-shadow: 0 0 15px var(--accent-lime); }
 #race-result.lose { color: var(--error-color); text-shadow: 0 0 15px var(--error-color); }
 
-@media (max-width: 600px) {
-    h1 { font-size: 1.8em; }
-    h2 { font-size: 1.2em; margin: 15px 0; }
-    h3 { font-size: 1.1em; }
-    section { padding: 20px; }
+/* --------------------- MEDIA QUERIES (Carrousel sur Mobile/Tablette) --------------------- */
+@media (max-width: 992px) {
+    .ninja-header {
+        padding: 15px 20px;
+        flex-wrap: wrap; 
+        justify-content: center;
+    }
+    .desktop-nav {
+        display: none; 
+    }
+    .maquette-title {
+        font-size: 2em;
+        margin: 20px 0 5px;
+    }
     
-    #student-selector { grid-template-columns: 1fr; gap: 15px; }
-    .student-avatar { width: 70px; height: 70px; }
-    .stat-bar-container { font-size: 0.75em; }
+    /* Menu Roulette */
+    .selector-carousel {
+        display: flex;
+        overflow-x: scroll; 
+        scroll-snap-type: x mandatory; 
+        -webkit-overflow-scrolling: touch; 
+        gap: 15px;
+        padding-bottom: 10px;
+    }
     
-    #kebab-score-display { font-size: 1em; top: 10px; right: 10px; }
-    #logout-btn { top: 10px; left: 10px; font-size: 0.7em; }
-
-    .race-track { height: 140px; padding: 10px; }
-    .cat-lane img { width: 60px; }
-    .cat-lane .cat-name { font-size: 0.7em; margin-left: 10px; padding: 5px 8px; }
-    #countdown { font-size: 2em; }
-    #race-result { font-size: 1.2em; }
-    .auth-input { width: 95%; padding: 12px; }
+    .student-card {
+        flex: 0 0 250px; 
+        scroll-snap-align: center;
+    }
+    
+    section { padding: 30px 15px; }
+    .score-display, #logout-btn { margin-left: 15px; margin-top: 10px;}
+    .action-button { font-size: 0.8em; }
 }
-/* 2. Écrans de taille moyenne (Tablettes) */
- @media (max-width: 992px) {
-    h1 { font-size: 2.5em; }
-    h2 { font-size: 1.6em; }
 
-    #student-selector { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-    .student-avatar { width: 80px; height: 80px; }
-    
-    .race-track { height: 200px; }
-    .cat-lane img { width: 80px; }
-    .cat-lane .cat-name { font-size: 0.8em; margin-left: 12px; }
+@media (max-width: 600px) {
+    .maquette-title {
+        font-size: 1.5em;
+    }
+    .dark-subtitle, .dark-title {
+        font-size: 1.2em;
+    }
+    .student-card {
+        flex: 0 0 200px; 
+    }
 }
