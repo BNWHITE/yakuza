@@ -1,29 +1,42 @@
 /* ================================================= */
 /* 🧠 JAVASCRIPT DETAILLÉ : Logique du Jeu et Supabase */
+/* (Style "FatNinja", Course Rapide, Stats Équitables) */
 /* ================================================= */
 
-// 1. DÉCLARATION DES CLÉS (Clé Publique)
-// C'est la seule clé que vous devez mettre dans le code front-end (JS)
+// 1. DÉCLARATION DES CLÉS (Clé Publique - ANONYMOUS)
+// Cette clé est sûre pour le front-end. NE JAMAIS UTILISER LA CLÉ SECRÈTE DE SERVICE.
 const SUPABASE_URL = 'https://dxiefxcfnggezuiifeqf.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_wAZG8NaYrZux3loetrNbmg_6QOuyBz5';
 
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: {
+        // ESSENTIEL : Redirige l'utilisateur vers la page actuelle après confirmation d'email
+        redirectTo: window.location.origin, 
+    }
+});
 let currentUser = null; 
 
-// Liste des bots PNJs (non-joueurs) pour la course
+// NOUVEAU : Stats de départ équitables pour la progression
+const DEFAULT_STATS = {
+    vitesse: 60,
+    codage: 60,
+    chance: 60
+};
+
+// Liste des bots PNJs (non-joueurs) pour la sélection et l'opposition
 const students = [
     { name: "Alexandre ALVES", title: "Le Débogueur", stats: {} }, { name: "Douae BOULOUALI", title: "L'impératrice", stats: {} }, { name: "Sid-Ahmed BOUSLAH", title: "Chill Boy", stats: {} }, { name: "Leon JIANG", title: "FinoVox", stats: {} }, { name: "Alheli RODRIGUEZ", title: "L'intentionnée", stats: {} },
-    { name: "Maxime BOGNON", title: "Maximilien", stats: {} }, { name: "Corentin BRAND", title: "Le favoris", stats: {} }, { name: "Maximilien CANONNE", title: "Luminosité Minimum", stats: {} }, { name: "Adel HENI", title: "Le plavonneur", stats: {} }, { name: "Kahina MEDJUKANE", title: "THE QUEEN ♕", stats: { vitesse: 100, codage: 100, chance: 100 } },
+    { name: "Maxime BOGNON", title: "Maximilien", stats: {} }, { name: "Corentin BRAND", title: "Le favoris", stats: {} }, { name: "Maximilien CANONNE", title: "Luminosité Minimum", stats: {} }, { name: "Adel HENI", title: "Le plavonneur", stats: {} }, { name: "Kahina MEDJUKANE", title: "THE QUEEN ♕", stats: {} },
     { name: "Sully MORETON", title: "Le stagiaire", stats: {} }, { name: "Aliénor ANTONA", title: "La gourmande🍔", stats: {} }, { name: "Nicolas CLEMENT", title: "Le délégué", stats: {} }, { name: "Bryan DE FARIA", title: "Le Chargeur", stats: {} }, { name: "Hani HOUMIMID", title: "Le turc 🇹🇷", stats: {} },
     { name: "Vithues KANDIAH", title: "ECE Water", stats: {} }, { name: "Hector LE BACHELIER", title: "L'Ingénieur Papier", stats: {} }, { name: "Quentin DABOVILLE", title: "Le Bretons", stats: {} }, { name: "Yassmina HARRISSI", title: "La Libanaise🇱🇧", stats: {} }, { name: "Allan LAHCENE", title: " Le + Chill", stats: {} },
     { name: "Evan MASSE", title: "Hasfy", stats: {} }, { name: "Seydina SY", title: "Git init", stats: {} }, { name: "Ilay AL ABIAD", title: "Brother from an other mother", stats: {} }, { name: "Ahmed ELHATTAB", title: "English Boy", stats: {} }, { name: "Thushyan KOHILAKUMAR", title: "L'Orfèvre", stats: {} },
     { name: "Aurélie MAHAUT", title: "La Stratège", stats: {} }, { name: "Gaspard PONS", title: "Le Philosophe", stats: {} }, { name: "Rafael RION", title: "L'Alchimiste", stats: {} }, { name: "Faruk SAN", title: "Le connaisseur", stats: {} },
-    // Profil Professeur
+    // Profil Professeur (Adversaire final)
     { name: "Mme CHABCHOUB", title: "La Guide du Code Sacré", stats: { vitesse: 100, codage: 100, chance: 100 } }
 ];
 
+// Récupération des éléments du DOM
 const elements = {
-    // Éléments d'Authentification
     authScreen: document.getElementById('auth-screen'),
     authEmail: document.getElementById('auth-email'),
     authPassword: document.getElementById('auth-password'),
@@ -32,7 +45,6 @@ const elements = {
     logoutBtn: document.getElementById('logout-btn'),
     authMessage: document.getElementById('auth-message'),
     userWelcome: document.getElementById('user-welcome'),
-    // Éléments du Jeu existants
     selector: document.getElementById('student-selector'),
     startBtn: document.getElementById('start-race-btn'),
     selectionScreen: document.getElementById('selection-screen'),
@@ -45,7 +57,7 @@ const elements = {
     raceResult: document.getElementById('race-result'),
     resetBtn: document.getElementById('reset-race-btn'),
     historyLog: document.getElementById('history-log'),
-    historySection: document.getElementById('history-section'), // Ajouté pour gestion visibilité
+    historySection: document.getElementById('history-section'),
     mqStatus: document.getElementById('mq-status'),
     speedBoost: document.getElementById('speed-boost-option'),
     luckCharm: document.getElementById('luck-charm-option'),
@@ -58,59 +70,43 @@ let opponentBot = null;
 let raceHistory = [];
 let kebabScore = 0; 
 
+// Récupère la valeur d'une variable CSS pour la couleur d'erreur
+const errorColor = getComputedStyle(document.documentElement).getPropertyValue('--error-color').trim();
+const accentLime = getComputedStyle(document.documentElement).getPropertyValue('--accent-lime').trim();
+
 
 // ------------------------------------
 // LOGIQUE SUPABASE : AUTHENTIFICATION & PROFIL
 // ------------------------------------
+
+/** Charge le score Kebab du profil utilisateur. */
 async function loadKebabScore(userId) {
-    // Tente de charger le score de l'utilisateur
-    const { data, error } = await supabaseClient
+    const { data } = await supabaseClient
         .from('profiles')
         .select('kebab_score')
         .eq('id', userId)
         .single();
     
-    if (error && error.code !== 'PGRST116') { // PGRST116 = pas de ligne trouvée
-        console.error("Erreur de chargement du score :", error);
-    }
-    
-    return data ? data.kebab_score : 0; // Défaut à 0 si le profil n'existe pas encore
+    // Si le profil existe, retourne le score, sinon retourne le score de base (5 K)
+    return data ? data.kebab_score : 5; 
 }
 
-async function createProfileIfMissing(userId, email) {
-    // Crée un profil initial après une nouvelle inscription ou si la ligne est manquante
-    const { data, error } = await supabaseClient
-        .from('profiles')
-        .insert({ id: userId, username: email.split('@')[0], kebab_score: 5 }) // Donne 5 K au départ
-        .select()
-        .single()
-        .then(response => {
-             // Si le profil existait (erreur de conflit), on le considère créé
-            if (response.error && response.error.code === '23505') { 
-                return { data: true, error: null };
-            }
-            return response;
-        });
-
-    if (error) {
-        console.error("Erreur de création de profil:", error);
-    }
-}
-
+/** Vérifie la session utilisateur et bascule entre les écrans Auth et Sélection. */
 async function checkAuthSession() {
     elements.authMessage.textContent = 'Vérification de session...';
     const { data: { session } } = await supabaseClient.auth.getSession();
     
     if (session) {
         currentUser = session.user;
-        await createProfileIfMissing(currentUser.id, currentUser.email);
         kebabScore = await loadKebabScore(currentUser.id);
         
         elements.authScreen.style.display = 'none';
         elements.logoutBtn.style.display = 'block';
         elements.historySection.style.display = 'block';
+        elements.selectionScreen.style.display = 'block'; // Affiche la sélection
         elements.userWelcome.textContent = `Bienvenue, Explorateur ${currentUser.email.split('@')[0]} !`;
         initializeSelection();
+        elements.authMessage.textContent = '';
     } else {
         currentUser = null;
         kebabScore = 0;
@@ -119,26 +115,29 @@ async function checkAuthSession() {
         elements.selectionScreen.style.display = 'none';
         elements.raceScreen.style.display = 'none';
         elements.historySection.style.display = 'none';
+        elements.authMessage.textContent = '';
     }
     updateKebabScore(0);
-    elements.authMessage.textContent = '';
 }
 
+/** Inscription d'un nouvel utilisateur. */
 async function signUp() {
     const email = elements.authEmail.value;
     const password = elements.authPassword.value;
     elements.authMessage.textContent = 'Inscription en cours...';
 
-    const { data, error } = await supabaseClient.auth.signUp({ email, password });
+    const { error } = await supabaseClient.auth.signUp({ email, password });
 
     if (error) {
         elements.authMessage.textContent = `Erreur d'inscription: ${error.message}`;
+        elements.authMessage.style.color = errorColor;
     } else {
-        elements.authMessage.textContent = `Inscription réussie ! Un lien de confirmation a été envoyé à ${data.user.email}.`;
-        // Un trigger Supabase (voir SQL) s'occupe de créer le profil une fois l'utilisateur confirmé.
+        elements.authMessage.textContent = `✅ Inscription réussie ! Un lien de confirmation a été envoyé à ${email}. Cliquez sur ce lien pour vous connecter automatiquement au site.`;
+        elements.authMessage.style.color = accentLime;
     }
 }
 
+/** Connexion d'un utilisateur existant. */
 async function signIn() {
     const email = elements.authEmail.value;
     const password = elements.authPassword.value;
@@ -148,45 +147,48 @@ async function signIn() {
 
     if (error) {
         elements.authMessage.textContent = `Erreur de connexion: ${error.message}`;
+        elements.authMessage.style.color = errorColor;
     } else {
         elements.authMessage.textContent = 'Connexion réussie !';
-        checkAuthSession();
+        elements.authMessage.style.color = accentLime;
+        // La suite est gérée par onAuthStateChange
     }
 }
 
+/** Déconnexion de l'utilisateur. */
 async function signOut() {
     elements.authMessage.textContent = 'Déconnexion en cours...';
     const { error } = await supabaseClient.auth.signOut();
     
     if (error) {
          elements.authMessage.textContent = `Erreur de déconnexion: ${error.message}`;
-    } else {
-        checkAuthSession();
-        elements.authEmail.value = '';
-        elements.authPassword.value = '';
-        elements.authMessage.textContent = 'Déconnecté. Au revoir !';
+         elements.authMessage.style.color = errorColor;
     }
+    // La suite est gérée par onAuthStateChange
 }
 
+// Événements d'authentification
 elements.signupBtn.addEventListener('click', signUp);
 elements.signinBtn.addEventListener('click', signIn);
 elements.logoutBtn.addEventListener('click', signOut);
 
+// Gère les changements d'état (connexion, déconnexion, confirmation email)
 supabaseClient.auth.onAuthStateChange((event) => {
-    if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') {
+    if (event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'INITIAL_SESSION') {
         checkAuthSession();
     }
 });
+
 
 // ------------------------------------
 // FONCTIONNALITÉS DU JEU
 // ------------------------------------
 
+/** Met à jour le score Kebab de l'utilisateur et le sauvegarde en DB. */
 async function updateKebabScore(amount) {
     kebabScore += amount;
     
     if (currentUser) {
-        // Envoi du nouveau score à Supabase
         const { error } = await supabaseClient
             .from('profiles')
             .update({ kebab_score: kebabScore })
@@ -199,6 +201,7 @@ async function updateKebabScore(amount) {
     elements.kebabDisplay.textContent = `${kebabScore} K`;
 }
 
+/** Joue le son de défaite. */
 function playDefeatSound() {
     if (opponentBot.name !== "Mme CHABCHOUB") {
         elements.defeatAudio.currentTime = 0;
@@ -206,16 +209,23 @@ function playDefeatSound() {
     }
 }
 
+/** Génère les stats des bots (avec équité au départ). */
 function generateStats(bot) {
+    // La prof garde ses 100/100/100
     if (bot.name === "Mme CHABCHOUB") {
-        // Stats fixes pour la prof
-    } else if (Object.keys(bot.stats).length === 0) {
-        bot.stats.vitesse = 40 + Math.floor(Math.random() * 40);
-        bot.stats.codage = 40 + Math.floor(Math.random() * 40);
-        bot.stats.chance = 50 + Math.floor(Math.random() * 50);
+        return;
     }
+
+    // Si le bot n'a pas encore de stats, il reçoit les stats de base + une légère variation
+    if (Object.keys(bot.stats).length === 0) {
+        bot.stats.vitesse = DEFAULT_STATS.vitesse + Math.floor(Math.random() * 5); 
+        bot.stats.codage = DEFAULT_STATS.codage + Math.floor(Math.random() * 5);
+        bot.stats.chance = DEFAULT_STATS.chance + Math.floor(Math.random() * 5);
+    }
+    // NOTE : Si on utilisait la table 'avatars', les stats seraient chargées ici.
 }
 
+/** Affiche les barres de stats. */
 function renderStats(card, bot) {
     const statsHTML = `
         <div class="stats-card">
@@ -227,24 +237,24 @@ function renderStats(card, bot) {
     card.insertAdjacentHTML('beforeend', statsHTML);
 }
 
-// ... (fonctions updateMQStatus, logRace, initializeSelection, selectBot, generateOpponent, startCountdown, startRace, declareWinner restent similaires)
-
+/** Met à jour l'affichage Media Query. */
 function updateMQStatus() {
     const mq = window.matchMedia("(max-width: 600px)");
     if (mq.matches) {
-        elements.mqStatus.innerHTML = `⚠️ **MODE MOBILE ACTIVÉ** (Media Query: 1 colonne). L'affichage a été réorganisé pour éviter le débordement.`;
-        elements.mqStatus.style.color = '#ffeb3b';
+        elements.mqStatus.innerHTML = `⚠️ **MODE MOBILE ACTIVÉ** (Media Query: 1 colonne).`;
+        elements.mqStatus.style.color = 'var(--accent-orange)';
     } else if (window.innerWidth <= 992) {
          elements.mqStatus.innerHTML = `✅ **MODE TABLETTE ACTIVÉ** (Media Query: 2 colonnes).`;
-         elements.mqStatus.style.color = '#aaffaa';
+         elements.mqStatus.style.color = 'var(--accent-lime)';
     }
     else {
-        elements.mqStatus.innerHTML = `🖥️ **MODE PC** (Grille 4 colonnes). Réduisez la fenêtre pour voir la magie des Media Queries !`;
-        elements.mqStatus.style.color = '#fff';
+        elements.mqStatus.innerHTML = `🖥️ **MODE PC** (Grille 4 colonnes).`;
+        elements.mqStatus.style.color = 'var(--text-color-light)';
     }
 }
 window.addEventListener('resize', updateMQStatus);
 
+/** Enregistre la course dans l'historique. */
 function logRace(winnerName, isPlayerWinner, mqUsed, kebabGain) {
     const resultClass = isPlayerWinner ? 'win' : 'lose';
     const mqText = mqUsed ? ' (Responsive Actif)' : '';
@@ -263,13 +273,10 @@ function logRace(winnerName, isPlayerWinner, mqUsed, kebabGain) {
     raceHistory.push(logEntry);
 }
 
+/** Initialise l'écran de sélection des bots. */
 function initializeSelection() {
-    if (!currentUser) {
-        elements.selectionScreen.style.display = 'none';
-        elements.authScreen.style.display = 'block';
-        return;
-    }
-    
+    if (!currentUser) return; // Ne fait rien si non connecté
+
     elements.selector.innerHTML = '';
     students.forEach(bot => {
         generateStats(bot);
@@ -280,11 +287,14 @@ function initializeSelection() {
             card.classList.add('chabchoub-card');
         }
         
+        // Génération des avatars avec le nouveau style "FatNinja"
         let avatarUrl;
+        const styleParams = 'scale=110&size=100&color=ffb300,aaff00,101216';
         if (bot.name === "Mme CHABCHOUB") {
-            avatarUrl = `https://api.dicebear.com/8.x/bottts/svg?seed=Chabchoub&scale=110&size=100&eyes=bulgy,round&mouth=smile,pucker&sides=square,round&top=antenna,cone&face=square,round&color=ff3333,00ff80,4CAF50,00bcd4`;
+            // Couleurs spécifiques pour la prof (Rouge/Orange)
+            avatarUrl = `https://api.dicebear.com/8.x/bottts/svg?seed=Chabchoub&eyes=bulgy,round&mouth=smile,pucker&sides=square,round&top=antenna,cone&face=square,round&color=ff4545,ffb300,aaff00,101216&${styleParams}`;
         } else {
-            avatarUrl = `https://api.dicebear.com/8.x/bottts/svg?seed=${encodeURIComponent(bot.name)}&scale=110&size=100`;
+            avatarUrl = `https://api.dicebear.com/8.x/bottts/svg?seed=${encodeURIComponent(bot.name)}&${styleParams}`;
         }
         
         const avatar = document.createElement('img');
@@ -320,6 +330,7 @@ function initializeSelection() {
     updateMQStatus();
 }
 
+/** Sélectionne le bot joueur. */
 function selectBot(bot, card, avatarUrl) {
     Array.from(elements.selector.children).forEach(c => c.classList.remove('selected'));
     card.classList.add('selected');
@@ -328,6 +339,7 @@ function selectBot(bot, card, avatarUrl) {
     elements.startBtn.style.display = 'block';
 }
 
+/** Choisit un adversaire aléatoire. */
 function generateOpponent() {
     let randomOpponent;
     do {
@@ -346,11 +358,12 @@ elements.startBtn.addEventListener('click', () => {
     elements.playerName.textContent = selectedBot.name;
     elements.opponentName.textContent = opponentBot.name;
     
+    const styleParams = 'scale=110&size=100&color=ffb300,aaff00,101216';
     let opponentAvatarUrl;
     if (opponentBot.name === "Mme CHABCHOUB") {
-        opponentAvatarUrl = `https://api.dicebear.com/8.x/bottts/svg?seed=Chabchoub&scale=110&size=100&eyes=bulgy,round&mouth=smile,pucker&sides=square,round&top=antenna,cone&face=square,round&color=ff3333,00ff80,4CAF50,00bcd4`;
+        opponentAvatarUrl = `https://api.dicebear.com/8.x/bottts/svg?seed=Chabchoub&eyes=bulgy,round&mouth=smile,pucker&sides=square,round&top=antenna,cone&face=square,round&color=ff4545,ffb300,aaff00,101216&${styleParams}`;
     } else {
-        opponentAvatarUrl = `https://api.dicebear.com/8.x/bottts/svg?seed=${encodeURIComponent(opponentBot.name)}&scale=110&size=100`;
+        opponentAvatarUrl = `https://api.dicebear.com/8.x/bottts/svg?seed=${encodeURIComponent(opponentBot.name)}&${styleParams}`;
     }
     elements.opponentCat.src = opponentAvatarUrl;
 
@@ -360,6 +373,7 @@ elements.startBtn.addEventListener('click', () => {
     startCountdown();
 });
 
+/** Démarre le compte à rebours avant la course. */
 function startCountdown() {
     let count = 3;
     elements.countdown.textContent = count;
@@ -385,21 +399,25 @@ function startCountdown() {
     }, 1000);
 }
 
+/** Lance la simulation de course (rendue plus rapide). */
 function startRace() {
     const trackWidth = document.querySelector('.race-track').offsetWidth - elements.playerCat.offsetWidth - 30;
     let playerPosition = 0;
     let opponentPosition = 0;
     
-    let playerBaseSpeed = selectedBot.stats.vitesse * (selectedBot.stats.codage / 100);
-    let opponentBaseSpeed = opponentBot.stats.vitesse * (opponentBot.stats.codage / 100);
+    // VITESSE ACCÉLÉRÉE (multipliée par 3)
+    const SPEED_MULTIPLIER = 3;
+    let playerBaseSpeed = (selectedBot.stats.vitesse * (selectedBot.stats.codage / 100)) * SPEED_MULTIPLIER;
+    let opponentBaseSpeed = (opponentBot.stats.vitesse * (opponentBot.stats.codage / 100)) * SPEED_MULTIPLIER;
     
     if (elements.speedBoost.checked) {
         playerBaseSpeed *= 1.1; 
     }
 
     currentRaceInterval = setInterval(() => {
-        const playerVarianceRange = elements.luckCharm.checked ? (100 - selectedBot.stats.chance) / 10 : (100 - selectedBot.stats.chance) / 50;
-        const opponentVarianceRange = elements.luckCharm.checked ? (100 - opponentBot.stats.chance) / 10 : (100 - opponentBot.stats.chance) / 50;
+        // La variance est ajustée pour coller aux courses rapides
+        const playerVarianceRange = elements.luckCharm.checked ? (100 - selectedBot.stats.chance) / 20 : (100 - selectedBot.stats.chance) / 100;
+        const opponentVarianceRange = elements.luckCharm.checked ? (100 - opponentBot.stats.chance) / 20 : (100 - opponentBot.stats.chance) / 100;
         
         const playerStep = (playerBaseSpeed / 100) + (Math.random() * playerVarianceRange / 10);
         const opponentStep = (opponentBaseSpeed / 100) + (Math.random() * opponentVarianceRange / 10);
@@ -417,7 +435,7 @@ function startRace() {
     }, 70); 
 }
 
-
+/** Déclare le vainqueur, met à jour le score Kebab. */
 function declareWinner(playerPos, opponentPos) {
     const mqUsed = window.matchMedia("(max-width: 992px)").matches;
     let winnerName;
