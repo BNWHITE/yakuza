@@ -1,6 +1,6 @@
 /* ================================================= */
 /* 🧠 JAVASCRIPT DETAILLÉ : Logique du Jeu et Supabase */
-/* (Nom du jeu : YAKUZA. Course 5-7 secondes avec animations) */
+/* (Nom du jeu : YAKUZA. Course 5-7 secondes fixée) */
 /* ================================================= */
 
 // 1. DÉCLARATION DES CLÉS (Clé Publique - ANONYMOUS)
@@ -12,20 +12,20 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
         redirectTo: window.location.origin, 
     }
 });
+
 let currentUser = null; 
 let currentUsername = null; 
+// Déclaration globale de l'intervalle pour pouvoir l'arrêter
+let currentRaceInterval; 
 
-// Stats de départ équitables pour la progression
 const DEFAULT_STATS = {
     vitesse: 60,
     codage: 60,
     chance: 60
 };
 
-// MULTIPLICATEUR DE VITESSE pour ajuster la durée de la course (5-7 secondes)
 const BASE_SPEED_FACTOR = 12; // Ajusté pour une course de 5-7s
 
-// Liste des bots PNJs (non-joueurs)
 const students = [
     { name: "Alexandre ALVES", title: "Le Débogueur", stats: {} }, { name: "Douae BOULOUALI", title: "L'impératrice", stats: {} }, { name: "Sid-Ahmed BOUSLAH", title: "Chill Boy", stats: {} }, { name: "Leon JIANG", title: "FinoVox", stats: {} }, { name: "Alheli RODRIGUEZ", title: "L'intentionnée", stats: {} },
     { name: "Maxime BOGNON", title: "Maximilien", stats: {} }, { name: "Corentin BRAND", title: "Le favoris", stats: {} }, { name: "Maximilien CANONNE", title: "Luminosité Minimum", stats: {} }, { name: "Adel HENI", title: "Le plavonneur", stats: {} }, { name: "Kahina MEDJUKANE", title: "THE QUEEN ♕", stats: {} },
@@ -36,7 +36,6 @@ const students = [
     { name: "Mme CHABCHOUB", title: "La Guide du Code Sacré", stats: { vitesse: 100, codage: 100, chance: 100 } }
 ];
 
-// Récupération des éléments du DOM
 const elements = {
     authScreen: document.getElementById('auth-screen'),
     authEmail: document.getElementById('auth-email'),
@@ -65,7 +64,6 @@ const elements = {
     kebabDisplay: document.getElementById('kebab-score-display'),
     defeatAudio: document.getElementById('defeat-audio'),
     
-    // Éléments du Chat
     chatSection: document.getElementById('chat-section'),
     chatMessages: document.getElementById('chat-messages'),
     chatInput: document.getElementById('chat-input'),
@@ -82,17 +80,13 @@ const errorColor = getComputedStyle(document.documentElement).getPropertyValue('
 const accentLime = getComputedStyle(document.documentElement).getPropertyValue('--accent-lime').trim();
 
 
-// ------------------------------------
-// LOGIQUE SUPABASE & AUTHENTIFICATION
-// ------------------------------------
-
+// --- Fonctions Auth/Chat (inchangées) ---
 async function loadProfileData(userId) {
     const { data } = await supabaseClient
         .from('profiles')
         .select('kebab_score, username')
         .eq('id', userId)
         .single();
-    
     return data;
 }
 
@@ -138,7 +132,6 @@ async function checkAuthSession() {
     updateKebabScore(0);
 }
 
-// Les fonctions signUp, signIn, signOut et l'écouteur onAuthStateChange restent les mêmes
 async function signUp() {
     const email = elements.authEmail.value;
     const password = elements.authPassword.value;
@@ -186,10 +179,6 @@ supabaseClient.auth.onAuthStateChange((event) => {
     }
 });
 
-
-// ------------------------------------
-// LOGIQUE CHAT EN TEMPS RÉEL
-// ------------------------------------
 
 function displayMessage(message, isNew = false) {
     const messageElement = document.createElement('p');
@@ -260,9 +249,7 @@ elements.chatInput.addEventListener('keypress', (e) => {
 });
 
 
-// ------------------------------------
-// LOGIQUE DE JEU & COURSE (5-7 secondes)
-// ------------------------------------
+// --- Fonctions de Jeu (fixées) ---
 
 async function updateKebabScore(amount) {
     kebabScore += amount;
@@ -285,7 +272,6 @@ function playDefeatSound() {
 
 function generateStats(bot) {
     if (bot.name === "Mme CHABCHOUB") return;
-
     if (Object.keys(bot.stats).length === 0) {
         bot.stats.vitesse = DEFAULT_STATS.vitesse + Math.floor(Math.random() * 5); 
         bot.stats.codage = DEFAULT_STATS.codage + Math.floor(Math.random() * 5);
@@ -315,22 +301,6 @@ function updateMQStatus() {
     }
 }
 window.addEventListener('resize', updateMQStatus);
-
-function logRace(winnerName, isPlayerWinner, mqUsed, kebabGain) {
-    const resultClass = isPlayerWinner ? 'win' : 'lose';
-    const mqText = mqUsed ? ' (Responsive Actif)' : '';
-    const gainText = isPlayerWinner ? ` (+${kebabGain} K)` : '';
-    
-    const logEntry = document.createElement('p');
-    logEntry.classList.add('history-item', resultClass);
-    if (mqUsed) logEntry.classList.add('mq-active');
-    
-    logEntry.innerHTML = `[${new Date().toLocaleTimeString()}] : La Quête a été gagnée par **${winnerName}**. ${gainText} ${mqText}`;
-    
-    if (raceHistory.length === 0) elements.historyLog.innerHTML = '';
-    elements.historyLog.prepend(logEntry);
-    raceHistory.push(logEntry);
-}
 
 function initializeSelection() {
     if (!currentUser) return;
@@ -378,6 +348,7 @@ function initializeSelection() {
     elements.resetBtn.style.display = 'none';
     elements.raceResult.textContent = '';
     
+    // Remise à zéro des positions
     elements.playerCat.style.transform = `translateX(0px)`;
     elements.opponentCat.style.transform = `translateX(0px)`;
     
@@ -451,11 +422,19 @@ function startCountdown() {
 }
 
 function startRace() {
+    // Calcul de la largeur de piste ajustée (ajusté pour la taille mobile)
     const trackWidth = document.querySelector('.race-track').offsetWidth - elements.playerCat.offsetWidth - 30;
+    
+    // Si la piste est trop petite, on évite les problèmes (sécurité)
+    if (trackWidth <= 0) {
+        console.error("Erreur: Largeur de piste insuffisante pour la course.");
+        declareWinner(1, 0); // Déclare le joueur vainqueur par défaut
+        return;
+    }
+
     let playerPosition = 0;
     let opponentPosition = 0;
     
-    // Multiplicateur pour atteindre 5-7 secondes (ajusté à 12)
     let playerBaseSpeed = (selectedBot.stats.vitesse * (selectedBot.stats.codage / 100)) * BASE_SPEED_FACTOR;
     let opponentBaseSpeed = (opponentBot.stats.vitesse * (opponentBot.stats.codage / 100)) * BASE_SPEED_FACTOR;
     
@@ -463,7 +442,6 @@ function startRace() {
         playerBaseSpeed *= 1.1; 
     }
     
-    // --- NOUVEAU : Ajout de l'animation de course ---
     elements.playerCat.classList.add('running');
     elements.opponentCat.classList.add('running');
 
@@ -478,12 +456,12 @@ function startRace() {
         playerPosition += playerStep; 
         opponentPosition += opponentStep; 
 
+        // Mise à jour de la position visuelle
         elements.playerCat.style.transform = `translateX(${Math.min(playerPosition, trackWidth)}px)`;
         elements.opponentCat.style.transform = `translateX(${Math.min(opponentPosition, trackWidth)}px)`;
 
         if (playerPosition >= trackWidth || opponentPosition >= trackWidth) {
             clearInterval(currentRaceInterval);
-            // --- NOUVEAU : Retrait de l'animation de course ---
             elements.playerCat.classList.remove('running');
             elements.opponentCat.classList.remove('running');
             declareWinner(playerPosition, opponentPosition);
