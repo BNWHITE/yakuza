@@ -3,6 +3,7 @@
     --dark-green: #2d6a4f;
     --gold: #ffd700;
     --danger: #e63946;
+    --mana: #4cc9f0;
     --glass: rgba(20, 30, 20, 0.65);
     --glass-border: rgba(255, 255, 255, 0.15);
     --text: #edf2f4;
@@ -11,7 +12,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
 
 body {
-    background: url('./images/bg.jpg') no-repeat center center fixed; /* Utilise image-general4.jpg */
+    background: url('./images/bg.jpg') no-repeat center center fixed;
     background-size: cover;
     color: var(--text);
     height: 100vh;
@@ -72,6 +73,22 @@ h1 { font-family: 'Cinzel', serif; font-size: 3rem; letter-spacing: 5px; text-sh
 .screen.active { display: flex; }
 .hidden { display: none !important; }
 
+/* --- WORLD MAP --- */
+.map-container {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;
+    padding: 20px 0; overflow-y: auto; height: 100%;
+}
+.zone-card {
+    background: rgba(255,255,255,0.05); border-radius: 15px; padding: 20px;
+    cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; border: 1px solid transparent;
+    text-align: center; position: relative;
+}
+.zone-card:hover { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.zone-card.locked { opacity: 0.5; cursor: not-allowed; }
+.zone-card.locked:hover { transform: none; border-color: transparent; box-shadow: none; }
+.zone-icon { font-size: 3rem; margin-bottom: 10px; }
+.zone-level { position: absolute; top: 10px; right: 10px; background: var(--dark-green); padding: 3px 8px; border-radius: 10px; font-size: 0.7rem; }
+
 /* --- SELECTION GRID --- */
 .grid-container {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;
@@ -89,7 +106,7 @@ h1 { font-family: 'Cinzel', serif; font-size: 3rem; letter-spacing: 5px; text-sh
     flex: 1; display: flex; justify-content: space-around; align-items: center;
     margin-bottom: 20px; position: relative;
 }
-.fighter { position: relative; width: 200px; text-align: center; transition: transform 0.2s; }
+.fighter { position: relative; width: 220px; text-align: center; transition: transform 0.2s; }
 .fighter-img { width: 180px; height: 180px; border-radius: 50%; object-fit: cover; border: 4px solid rgba(255,255,255,0.2); box-shadow: 0 0 30px rgba(0,0,0,0.5); }
 .fighter.player .fighter-img { border-color: var(--gold); }
 .fighter.enemy .fighter-img { border-color: var(--danger); }
@@ -99,14 +116,24 @@ h1 { font-family: 'Cinzel', serif; font-size: 3rem; letter-spacing: 5px; text-sh
 .attack-anim { transform: scale(1.2); }
 @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } 100% { transform: translateX(0); } }
 
-.health-bar-container { width: 100%; height: 10px; background: rgba(0,0,0,0.5); border-radius: 10px; margin-top: 10px; overflow: hidden; }
+.fighter-stats { margin-top: 10px; }
+.health-bar-container, .mana-bar-container { 
+    width: 100%; height: 8px; background: rgba(0,0,0,0.5); 
+    border-radius: 10px; margin-bottom: 5px; overflow: hidden; 
+}
 .health-fill { height: 100%; background: var(--primary); transition: width 0.5s ease; }
 .enemy-fill { background: var(--danger); }
+.mana-fill { height: 100%; background: var(--mana); transition: width 0.5s ease; }
+
+.enemy-type { 
+    font-size: 0.8rem; margin-top: 5px; padding: 2px 8px; 
+    border-radius: 10px; background: rgba(0,0,0,0.3); 
+}
 
 .vs-symbol { font-family: 'Cinzel'; font-size: 3rem; color: rgba(255,255,255,0.2); }
 
 /* --- SKILLS --- */
-.skills-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px; }
+.skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
 .skill-btn {
     background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(0,0,0,0.3));
     border: 1px solid var(--glass-border); color: white; padding: 15px; border-radius: 10px;
@@ -116,15 +143,26 @@ h1 { font-family: 'Cinzel', serif; font-size: 3rem; letter-spacing: 5px; text-sh
 .skill-btn.attack:hover { border-color: var(--danger); box-shadow: 0 0 15px var(--danger); }
 .skill-btn.heal:hover { border-color: var(--primary); box-shadow: 0 0 15px var(--primary); }
 .skill-btn.defend:hover { border-color: #4cc9f0; box-shadow: 0 0 15px #4cc9f0; }
+.skill-btn.special:hover { border-color: var(--gold); box-shadow: 0 0 15px var(--gold); }
 
 .skill-btn .icon { font-size: 1.5rem; margin-bottom: 5px; }
 .skill-btn .desc { font-size: 0.7rem; opacity: 0.7; }
+
+.skill-btn:disabled {
+    opacity: 0.5; cursor: not-allowed; transform: none;
+}
+.skill-btn:disabled:hover { 
+    background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(0,0,0,0.3));
+    border-color: var(--glass-border); box-shadow: none;
+}
 
 .action-btn {
     background: var(--gold); color: #1a1a1a; border: none; padding: 15px 30px;
     font-weight: bold; border-radius: 50px; cursor: pointer; transition: 0.3s; font-family: 'Cinzel';
 }
 .action-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--gold); }
+.action-btn.secondary { background: rgba(255,255,255,0.1); color: white; }
+.action-btn.secondary:hover { background: rgba(255,255,255,0.2); box-shadow: 0 0 20px rgba(255,255,255,0.3); }
 .full-width { width: 100%; }
 
 /* Flottant damage text */
@@ -134,3 +172,49 @@ h1 { font-family: 'Cinzel', serif; font-size: 3rem; letter-spacing: 5px; text-sh
     text-shadow: 0 0 5px black;
 }
 .floating-text.show { opacity: 1; top: -60px; }
+
+/* --- INVENTORY --- */
+.inventory-container {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+    padding: 20px 0; overflow-y: auto; height: 100%;
+}
+.inventory-section h3 { margin-bottom: 15px; color: var(--gold); border-bottom: 1px solid var(--glass-border); padding-bottom: 5px; }
+
+.equipment-slots { display: flex; flex-direction: column; gap: 10px; }
+.slot {
+    display: flex; align-items: center; gap: 15px; 
+    background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px;
+}
+.slot-icon { font-size: 2rem; }
+.slot-name { flex: 1; }
+.slot-item { font-size: 0.9rem; opacity: 0.8; }
+
+.skills-list, .items-grid {
+    display: grid; grid-template-columns: 1fr; gap: 10px;
+}
+.skill-item, .item-card {
+    background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px;
+}
+
+/* --- NAVIGATION --- */
+.bottom-nav {
+    display: flex; justify-content: center; gap: 20px;
+    padding: 15px; background: rgba(0,0,0,0.3); backdrop-filter: blur(10px);
+    border-top: 1px solid var(--glass-border);
+}
+.nav-btn {
+    background: transparent; border: 1px solid var(--glass-border); color: white;
+    padding: 10px 20px; border-radius: 50px; cursor: pointer; transition: 0.3s;
+}
+.nav-btn:hover { background: rgba(255,255,255,0.1); }
+
+/* --- PLAYER BADGE --- */
+.player-badge { display: flex; align-items: center; gap: 10px; }
+.mini-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold); }
+.level-badge { 
+    background: var(--gold); color: #1a1a1a; padding: 2px 8px; 
+    border-radius: 10px; font-size: 0.7rem; font-weight: bold;
+}
+
+.resources { display: flex; gap: 20px; }
+.res-item { display: flex; align-items: center; gap: 5px; }
