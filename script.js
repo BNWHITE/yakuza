@@ -1,147 +1,218 @@
-// --- CONFIGURATION ---
-const PLAYER_HERO = {
-    name: "KAHINA",
-    img: "./images/princess.avif",
-    stats: { power: 70, agility: 80, magic: 90 } // Stats pour la logique
-};
+/* =========================================
+   KAHINA: ASCENSION - GAME ENGINE V3
+   ========================================= */
 
-// Liste des "Esprits Rivaux" (Tes images PNJ)
-const ENEMIES = [
-    { id: 1, name: "L'OMBRE", title: "Assassin", img: "./images/5.jpg", speed: 75 },
-    { id: 2, name: "PYRO", title: "Mage Feu", img: "./images/12.jpg", speed: 65 },
-    { id: 3, name: "VIPER", title: "Empoisonneuse", img: "./images/8.jpg", speed: 55 },
-    { id: 4, name: "TITAN", title: "Guerrier Lourd", img: "./images/9.jpg", speed: 40 },
-    { id: 5, name: "NEON", title: "Vitesse Pure", img: "./images/7.jpg", speed: 95 },
-    { id: 6, name: "RONIN", title: "Sabreur", img: "./images/6.jpg", speed: 80 },
-    { id: 7, name: "JINX", title: "Chaotique", img: "./images/3.jpg", speed: 70 },
-    { id: 8, name: "SNIPER", title: "Oeil de Lynx", img: "./images/10.jpg", speed: 50 }
+// --- CONFIGURATION ---
+const PLAYER_STATS = { maxHp: 100, attack: 15, heal: 30 };
+let player = { name: "Gardienne", hp: 100, essence: 0, defenseMode: false };
+let currentEnemy = null;
+
+// Liste des ennemis (Tes images)
+const ENEMIES_DB = [
+    { name: "L'OMBRE", img: "./images/5.jpg", hp: 80, attack: 10, xp: 50 }, //
+    { name: "PYRO", img: "./images/12.jpg", hp: 100, attack: 15, xp: 80 }, //
+    { name: "TITAN", img: "./images/9.jpg", hp: 150, attack: 8, xp: 100 }, //
+    { name: "VIPER", img: "./images/8.jpg", hp: 90, attack: 12, xp: 60 },  //
+    { name: "SNIPER", img: "./images/10.jpg", hp: 70, attack: 20, xp: 70 }, //
+    { name: "RONIN", img: "./images/6.jpg", hp: 110, attack: 14, xp: 90 }  //
 ];
 
-let selectedEnemy = null;
-let playerEssence = 0;
-
 // --- DOM ELEMENTS ---
+const authScreen = document.getElementById('auth-screen');
+const gameContainer = document.getElementById('game-container');
+const playerNameInput = document.getElementById('player-name-input');
+const displayUsername = document.getElementById('display-username');
 const enemyGrid = document.getElementById('enemy-grid');
-const battleBtn = document.getElementById('battle-btn');
-const selectionScreen = document.getElementById('selection-screen');
 const battleScreen = document.getElementById('battle-screen');
-const enemyImgBattle = document.getElementById('enemy-img-battle');
-const battleLog = document.getElementById('battle-log');
-const playerBar = document.getElementById('player-progress');
-const enemyBar = document.getElementById('enemy-progress');
-const resetBtn = document.getElementById('reset-btn');
-const essenceDisplay = document.getElementById('essence-display');
+const selectionScreen = document.getElementById('selection-screen');
 
-// --- INITIALISATION ---
-function initGame() {
-    renderEnemies();
+// --- SYSTEME D'AUTHENTIFICATION (SIMULÉ) ---
+document.getElementById('login-btn').addEventListener('click', handleLogin);
+document.getElementById('register-btn').addEventListener('click', handleLogin); // Même action pour l'effet
+
+function handleLogin() {
+    const name = playerNameInput.value.trim() || "Gardienne";
+    player.name = name;
+    displayUsername.textContent = name.toUpperCase();
+
+    // Animation de succès
+    alert(`✨ Bienvenue, ${name}. La forêt a senti votre présence.`);
+    
+    // Transition
+    authScreen.style.opacity = '0';
+    setTimeout(() => {
+        authScreen.style.display = 'none';
+        gameContainer.classList.remove('hidden-opacity');
+        initLobby();
+    }, 800);
 }
 
-// --- RENDU DES CARTES ENNEMIS (GRID) ---
-function renderEnemies() {
+// --- LOBBY & SELECTION ---
+function initLobby() {
     enemyGrid.innerHTML = '';
-    ENEMIES.forEach(enemy => {
-        // Création de la carte
+    ENEMIES_DB.forEach((enemy, index) => {
         const card = document.createElement('div');
         card.classList.add('enemy-card');
-        
-        // Structure HTML de la carte
         card.innerHTML = `
-            <div class="enemy-img-container">
-                <img src="${enemy.img}" alt="${enemy.name}">
-            </div>
-            <div class="enemy-info">
-                <div class="enemy-name">${enemy.name}</div>
-                <div class="enemy-title">${enemy.title}</div>
-            </div>
+            <img src="${enemy.img}">
+            <div style="margin-top:10px; font-weight:bold;">${enemy.name}</div>
+            <div style="font-size:0.8em; opacity:0.7;">PV: ${enemy.hp}</div>
         `;
-
-        // Event Listener
-        card.addEventListener('click', () => selectEnemy(enemy, card));
+        card.addEventListener('click', () => startBattle(index));
         enemyGrid.appendChild(card);
     });
 }
 
-function selectEnemy(enemy, cardElement) {
-    // Gestion visuelle de la sélection
-    document.querySelectorAll('.enemy-card').forEach(c => c.classList.remove('selected'));
-    cardElement.classList.add('selected');
+// --- MOTEUR DE COMBAT ---
+function startBattle(enemyIndex) {
+    // Clonage de l'ennemi pour ne pas modifier la DB originale
+    currentEnemy = { ...ENEMIES_DB[enemyIndex], maxHp: ENEMIES_DB[enemyIndex].hp };
+    player.hp = PLAYER_STATS.maxHp;
+    player.defenseMode = false;
 
-    selectedEnemy = enemy;
-    
-    // Afficher le bouton de combat avec animation
-    battleBtn.classList.remove('hidden');
-    battleBtn.textContent = `AFFRONTER ${enemy.name}`;
-}
-
-// --- SYSTEME DE COMBAT ---
-battleBtn.addEventListener('click', startBattle);
-resetBtn.addEventListener('click', resetGame);
-
-function startBattle() {
-    if(!selectedEnemy) return;
-
-    // Transition d'écran
-    selectionScreen.classList.add('hidden');
+    // UI Setup
+    selectionScreen.classList.remove('active');
+    battleScreen.classList.add('active'); // Utilise flex grâce au CSS .active
     battleScreen.classList.remove('hidden');
-
-    // Setup Combat
-    enemyImgBattle.src = selectedEnemy.img;
-    playerBar.style.width = '0%';
-    enemyBar.style.width = '0%';
-    battleLog.textContent = "LE RITUEL COMMENCE...";
-    battleLog.style.color = "white";
-    resetBtn.classList.add('hidden');
-
-    // Logique de course (Simulation)
-    let playerProgress = 0;
-    let enemyProgress = 0;
     
-    // Calcul vitesse basée sur les stats (Facteur aléatoire pour le réalisme)
-    // Kahina a 80 Agilité.
-    const playerSpeedBase = 0.8 + (Math.random() * 0.4); 
-    const enemySpeedBase = (selectedEnemy.speed / 100) + (Math.random() * 0.3);
-
-    const raceInterval = setInterval(() => {
-        // Avancement
-        playerProgress += playerSpeedBase;
-        enemyProgress += enemySpeedBase;
-
-        // Mise à jour visuelle
-        playerBar.style.width = `${Math.min(playerProgress, 100)}%`;
-        enemyBar.style.width = `${Math.min(enemyProgress, 100)}%`;
-
-        // Vérification Victoire
-        if (playerProgress >= 100 || enemyProgress >= 100) {
-            clearInterval(raceInterval);
-            endBattle(playerProgress >= 100);
-        }
-
-    }, 20); // 50fps update
+    document.getElementById('battle-enemy-img').src = currentEnemy.img;
+    document.getElementById('leave-battle-btn').classList.add('hidden');
+    document.querySelector('.battle-controls').style.pointerEvents = 'auto';
+    
+    updateHealthBars();
+    logBattle(`Un ${currentEnemy.name} corrompu apparaît !`);
 }
 
-function endBattle(playerWon) {
-    resetBtn.classList.remove('hidden');
+function updateHealthBars() {
+    const playerPct = (player.hp / PLAYER_STATS.maxHp) * 100;
+    const enemyPct = (currentEnemy.hp / currentEnemy.maxHp) * 100;
     
-    if (playerWon) {
-        battleLog.textContent = `VICTOIRE ! ${selectedEnemy.name} A ÉTÉ PURIFIÉ.`;
-        battleLog.style.color = "#ffd700"; // Or
-        battleLog.style.textShadow = "0 0 10px #ffd700";
+    document.getElementById('player-hp-bar').style.width = `${Math.max(0, playerPct)}%`;
+    document.getElementById('enemy-hp-bar').style.width = `${Math.max(0, enemyPct)}%`;
+    document.getElementById('hp-display').textContent = Math.max(0, player.hp);
+}
+
+// --- ACTIONS DU JOUEUR ---
+document.getElementById('btn-attack').addEventListener('click', () => playerTurn('attack'));
+document.getElementById('btn-heal').addEventListener('click', () => playerTurn('heal'));
+document.getElementById('btn-defend').addEventListener('click', () => playerTurn('defend'));
+
+function playerTurn(action) {
+    if (player.hp <= 0 || currentEnemy.hp <= 0) return;
+
+    let logMsg = "";
+    player.defenseMode = false; // Reset defense
+    document.getElementById('player-shield').classList.add('hidden');
+
+    if (action === 'attack') {
+        // Dégâts entre 10 et 20 + Crit chance
+        let dmg = Math.floor(Math.random() * 10) + PLAYER_STATS.attack;
+        if(Math.random() > 0.8) { dmg *= 2; logMsg += "CRITIQUE ! "; } // 20% Crit
         
-        playerEssence += 100;
-        essenceDisplay.textContent = playerEssence;
-        triggerConfetti(); // Fonction bonus si tu veux l'ajouter plus tard
+        currentEnemy.hp -= dmg;
+        showFloatingText('enemy', `-${dmg}`);
+        animateFighter('player', 'attack');
+        animateFighter('enemy', 'hit');
+        logMsg += `Vous infligez ${dmg} dégâts à ${currentEnemy.name}.`;
+    
+    } else if (action === 'heal') {
+        const healAmount = PLAYER_STATS.heal;
+        player.hp = Math.min(player.hp + healAmount, PLAYER_STATS.maxHp);
+        showFloatingText('player', `+${healAmount}`, '#52b788');
+        logMsg = "La nature restaure vos forces.";
+
+    } else if (action === 'defend') {
+        player.defenseMode = true;
+        document.getElementById('player-shield').classList.remove('hidden');
+        logMsg = "Vous renforcez votre écorce spirituelle.";
+    }
+
+    logBattle(logMsg);
+    updateHealthBars();
+
+    if (currentEnemy.hp <= 0) {
+        endBattle(true);
     } else {
-        battleLog.textContent = "ÉCHEC DU RITUEL... RETRAITE.";
-        battleLog.style.color = "#ff4d4d"; // Rouge
+        // Tour de l'ennemi après 1 seconde
+        document.querySelector('.skills-grid').style.opacity = '0.5';
+        document.querySelector('.skills-grid').style.pointerEvents = 'none';
+        setTimeout(enemyTurn, 1200);
     }
 }
 
-function resetGame() {
-    battleScreen.classList.add('hidden');
-    selectionScreen.classList.remove('hidden');
-    // On garde la sélection ou on reset ? Ici on garde pour rejouer vite.
+function enemyTurn() {
+    if (currentEnemy.hp <= 0) return;
+
+    let dmg = Math.floor(Math.random() * 5) + currentEnemy.attack;
+    
+    // Si joueur défend, dégâts réduits de 50%
+    if (player.defenseMode) {
+        dmg = Math.floor(dmg / 2);
+    }
+
+    player.hp -= dmg;
+    showFloatingText('player', `-${dmg}`, '#e63946');
+    animateFighter('enemy', 'attack');
+    animateFighter('player', 'hit');
+    
+    logBattle(`${currentEnemy.name} attaque et inflige ${dmg} dégâts !`);
+    updateHealthBars();
+
+    // Réactiver les boutons
+    document.querySelector('.skills-grid').style.opacity = '1';
+    document.querySelector('.skills-grid').style.pointerEvents = 'auto';
+
+    if (player.hp <= 0) {
+        endBattle(false);
+    }
 }
 
-// Lancement
-initGame();
+// --- UTILITAIRES ---
+function logBattle(msg) {
+    const log = document.getElementById('battle-log');
+    log.textContent = msg;
+    log.style.animation = 'none';
+    log.offsetHeight; /* trigger reflow */
+    log.style.animation = 'shake 0.2s';
+}
+
+function showFloatingText(target, text, color = 'white') {
+    const el = document.getElementById(`${target}-damage`);
+    el.textContent = text;
+    el.style.color = color;
+    el.classList.remove('show');
+    void el.offsetWidth; // Reset animation
+    el.classList.add('show');
+}
+
+function animateFighter(who, type) {
+    const el = document.querySelector(`.fighter.${who} .fighter-img`);
+    if (type === 'attack') {
+        el.classList.add('attack-anim');
+        setTimeout(() => el.classList.remove('attack-anim'), 200);
+    } else {
+        el.classList.add('hit-anim');
+        setTimeout(() => el.classList.remove('hit-anim'), 500);
+    }
+}
+
+function endBattle(victory) {
+    const btn = document.getElementById('leave-battle-btn');
+    btn.classList.remove('hidden');
+    document.querySelector('.skills-grid').style.pointerEvents = 'none';
+
+    if (victory) {
+        logBattle(`VICTOIRE ! Vous gagnez ${currentEnemy.xp} Essence.`);
+        logBattle.style.color = "#ffd700";
+        player.essence += currentEnemy.xp;
+        document.getElementById('essence-display').textContent = player.essence;
+    } else {
+        logBattle("DÉFAITE... L'esprit vous a submergé.");
+    }
+
+    btn.onclick = () => {
+        battleScreen.classList.remove('active');
+        battleScreen.classList.add('hidden');
+        selectionScreen.classList.add('active');
+    };
+}
