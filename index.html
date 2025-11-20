@@ -2,205 +2,308 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KAHINA: L'HÉRITAGE DES ANCIENS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>KAHINA: SAUVEZ LA REINE</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="leaves-container">
-        <div class="leaf"></div><div class="leaf"></div><div class="leaf"></div>
-        <div class="leaf"></div><div class="leaf"></div><div class="leaf"></div>
-    </div>
+    <!-- EFFETS VISUELS DYNAMIQUES -->
+    <div class="leaves-container" id="leaves-container"></div>
+    <div class="combat-effects" id="combat-effects"></div>
+    <div class="screen-transition" id="screen-transition"></div>
 
-    <section id="auth-screen" class="auth-overlay">
-        <div class="glass-panel auth-card">
-            <div class="logo-area">
-                <h1>KAHINA</h1>
-                <span class="subtitle">L'HÉRITAGE DES ANCIENS</span>
+    <!-- ÉCRAN D'ACCUEIL -->
+    <section id="auth-screen" class="screen active">
+        <div class="background-overlay"></div>
+        <div class="content-center">
+            <div class="logo-container">
+                <h1 class="main-title">KAHINA</h1>
+                <p class="subtitle">SAUVEZ LA REINE</p>
+                <div class="title-ornament">⚔️👑🌿</div>
             </div>
             
-            <div class="auth-form">
-                <div class="input-group">
-                    <input type="text" id="player-name-input" placeholder="NOM DE L'ESPRIT" autocomplete="off">
-                    <span class="input-highlight"></span>
+            <div class="auth-card glass-panel">
+                <div class="input-container">
+                    <input type="text" id="player-name-input" placeholder="VOTRE NOM" maxlength="12">
+                    <div class="input-underline"></div>
                 </div>
                 
-                <div class="auth-actions">
-                    <button id="login-btn" class="action-btn gold full-width">ENTRER DANS LA FORÊT</button>
-                    <button id="register-btn" class="action-btn secondary full-width">INSCRIRE SON ÂME</button>
+                <div class="button-group">
+                    <button id="start-btn" class="action-btn primary pulse">
+                        <span class="btn-icon">⚡</span>
+                        COMMENCER L'AVENTURE
+                    </button>
+                    <button id="continue-btn" class="action-btn secondary">
+                        <span class="btn-icon">🎮</span>
+                        CONTINUER
+                    </button>
                 </div>
             </div>
-            <p class="version">v4.0 - Héritage Engine</p>
+
+            <div class="quick-stats">
+                <div class="stat-item">
+                    <span class="stat-icon">🔥</span>
+                    <span class="stat-value" id="quick-essence">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">⭐</span>
+                    <span class="stat-value" id="quick-level">1</span>
+                </div>
+            </div>
         </div>
     </section>
 
-    <main id="game-container" class="main-container hidden-opacity">
-        
-        <header class="glass-header">
-            <div class="player-badge">
-                <img src="./images/princess.avif" alt="Kahina" class="mini-avatar">
-                <span id="display-username">GARDIENNE</span>
-                <span id="player-level" class="level-badge">Niv. 1</span>
-            </div>
-            <div class="resources">
-                <div class="res-item"><span class="icon">✨</span> <span id="essence-display">0</span> ESSENCE</div>
-                <div class="res-item"><span class="icon">❤️</span> <span id="hp-display">100</span>/<span id="max-hp-display">100</span> PV</div>
-                <div class="res-item"><span class="icon">⚡</span> <span id="mana-display">50</span>/<span id="max-mana-display">50</span> MANA</div>
-            </div>
-        </header>
-
-        <div class="content-wrapper">
-            
-            <section id="world-map" class="screen active">
-                <h2 class="screen-title">LA FORÊT DES ANCIENS</h2>
-                <p class="instruction">Choisissez une zone à explorer</p>
-                <div class="map-container">
-                    <div class="zone-card" data-zone="sanctuary">
-                        <div class="zone-icon">🌿</div>
-                        <h3>Sanctuaire Central</h3>
-                        <p>Zone de départ - Ennemis faciles</p>
-                        <div class="zone-level">Niv. 1-5</div>
-                    </div>
-                    <div class="zone-card locked" data-zone="ruins">
-                        <div class="zone-icon">🏛️</div>
-                        <h3>Ruines Antiques</h3>
-                        <p>Débloquer au niveau 5</p>
-                        <div class="zone-level">Niv. 5-10</div>
-                    </div>
-                    <div class="zone-card locked" data-zone="abyss">
-                        <div class="zone-icon">🌋</div>
-                        <h3>Abysse Corrompu</h3>
-                        <p>Débloquer au niveau 10</p>
-                        <div class="zone-level">Niv. 10-15</div>
-                    </div>
-                    <div class="zone-card locked" data-zone="citadel">
-                        <div class="zone-icon">🏰</div>
-                        <h3>Citadelle des Anciens</h3>
-                        <p>Débloquer au niveau 15</p>
-                        <div class="zone-level">Niv. 15-20</div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="selection-screen" class="screen">
-                <h2 class="screen-title" id="zone-title">SANCTUAIRE CENTRAL</h2>
-                <p class="instruction">Choisissez un esprit corrompu à libérer</p>
-                <div id="enemy-grid" class="grid-container"></div>
-                <button id="back-to-map" class="action-btn secondary">RETOUR À LA CARTE</button>
-            </section>
-
-            <section id="battle-screen" class="screen hidden">
-                
-                <div class="battle-arena">
-                    <div class="fighter player">
-                        <div class="aura"></div>
-                        <img src="./images/princess.avif" alt="Kahina" class="fighter-img">
-                        <div class="fighter-stats">
-                            <div class="health-bar-container">
-                                <div id="player-hp-bar" class="health-fill" style="width: 100%"></div>
-                            </div>
-                            <div class="mana-bar-container">
-                                <div id="player-mana-bar" class="mana-fill" style="width: 100%"></div>
-                            </div>
-                        </div>
-                        <div id="player-shield" class="shield-effect hidden">🛡️</div>
-                        <div id="player-damage" class="floating-text"></div>
-                    </div>
-
-                    <div class="vs-symbol">VS</div>
-
-                    <div class="fighter enemy">
-                        <div class="aura red"></div>
-                        <img id="battle-enemy-img" src="" alt="Enemy" class="fighter-img">
-                        <div class="fighter-stats">
-                            <div class="health-bar-container">
-                                <div id="enemy-hp-bar" class="health-fill enemy-fill" style="width: 100%"></div>
-                            </div>
-                            <div class="enemy-type" id="enemy-type"></div>
-                        </div>
-                        <div id="enemy-damage" class="floating-text"></div>
-                    </div>
-                </div>
-
-                <div class="battle-controls glass-panel">
-                    <div id="battle-log" class="battle-log">Le combat commence...</div>
-                    
-                    <div class="skills-grid">
-                        <button id="btn-attack" class="skill-btn attack">
-                            <span class="icon">⚔️</span>
-                            <span>FRAPPE SPIRITUELLE</span>
-                            <span class="desc">15 dégâts - 0 mana</span>
-                        </button>
-                        <button id="btn-heal" class="skill-btn heal">
-                            <span class="icon">🌿</span>
-                            <span>RENAISSANCE</span>
-                            <span class="desc">Soigne 30 PV - 10 mana</span>
-                        </button>
-                        <button id="btn-defend" class="skill-btn defend">
-                            <span class="icon">🛡️</span>
-                            <span>ÉCORCE DE FER</span>
-                            <span class="desc">-50% Dégâts - 5 mana</span>
-                        </button>
-                        <button id="btn-special" class="skill-btn special">
-                            <span class="icon">🔥</span>
-                            <span>FURIE DES ANCIENS</span>
-                            <span class="desc">25 dégâts - 20 mana</span>
-                        </button>
-                    </div>
-                </div>
-                
-                <button id="leave-battle-btn" class="action-btn secondary hidden" style="margin-top: 20px;">RETOUR</button>
-            </section>
-
-            <section id="inventory-screen" class="screen">
-                <h2 class="screen-title">INVENTAIRE</h2>
-                <div class="inventory-container">
-                    <div class="inventory-section">
-                        <h3>Équipement</h3>
-                        <div class="equipment-slots">
-                            <div class="slot" data-slot="weapon">
-                                <div class="slot-icon">⚔️</div>
-                                <div class="slot-name">Arme</div>
-                                <div class="slot-item" id="weapon-slot">Vide</div>
-                            </div>
-                            <div class="slot" data-slot="armor">
-                                <div class="slot-icon">🛡️</div>
-                                <div class="slot-name">Armure</div>
-                                <div class="slot-item" id="armor-slot">Vide</div>
-                            </div>
-                            <div class="slot" data-slot="accessory">
-                                <div class="slot-icon">💍</div>
-                                <div class="slot-name">Accessoire</div>
-                                <div class="slot-item" id="accessory-slot">Vide</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="inventory-section">
-                        <h3>Compétences</h3>
-                        <div class="skills-list" id="skills-list">
-                            <!-- Compétences débloquées apparaîtront ici -->
-                        </div>
-                    </div>
-                    <div class="inventory-section">
-                        <h3>Objets</h3>
-                        <div class="items-grid" id="items-grid">
-                            <!-- Objets collectés apparaîtront ici -->
-                        </div>
-                    </div>
-                </div>
-                <button id="back-from-inventory" class="action-btn secondary">RETOUR À LA CARTE</button>
-            </section>
-
+    <!-- ÉCRAN DE LA CARTE MONDE -->
+    <section id="world-map" class="screen">
+        <div class="screen-header">
+            <button class="nav-btn back-btn" data-target="auth-screen">
+                <span class="btn-icon">←</span>
+                RETOUR
+            </button>
+            <h2 class="screen-title">TERRES DE KAHINA</h2>
+            <button class="nav-btn menu-btn" id="menu-toggle">
+                <span class="btn-icon">☰</span>
+            </button>
         </div>
 
-        <nav class="bottom-nav">
-            <button class="nav-btn" data-screen="world-map">🌍 CARTE</button>
-            <button class="nav-btn" data-screen="inventory-screen">🎒 INVENTAIRE</button>
-            <button class="nav-btn" id="stats-btn">📊 STATS</button>
-        </nav>
-    </main>
+        <div class="map-container">
+            <div class="zone active-zone" data-zone="vallee" style="top: 60%; left: 30%;">
+                <div class="zone-marker pulse"></div>
+                <div class="zone-info">
+                    <h3>Vallée des Larmes</h3>
+                    <p>Niveau 1-5</p>
+                </div>
+            </div>
+            
+            <div class="zone locked-zone" data-zone="foret" style="top: 40%; left: 60%;">
+                <div class="zone-marker"></div>
+                <div class="zone-info">
+                    <h3>Forêt Hurlante</h3>
+                    <p>Niveau 5+</p>
+                </div>
+            </div>
+            
+            <div class="zone locked-zone" data-zone="montagnes" style="top: 20%; left: 40%;">
+                <div class="zone-marker"></div>
+                <div class="zone-info">
+                    <h3>Montagnes Maudites</h3>
+                    <p>Niveau 10+</p>
+                </div>
+            </div>
+
+            <div class="player-avatar">
+                <img src="./images/princess.avif" alt="Kahina">
+                <div class="avatar-glow"></div>
+            </div>
+        </div>
+
+        <div class="action-bar">
+            <button class="action-btn large" id="explore-btn">
+                <span class="btn-icon">🗺️</span>
+                EXPLORER
+            </button>
+        </div>
+    </section>
+
+    <!-- ÉCRAN DE SÉLECTION D'ENNEMIS -->
+    <section id="enemy-select" class="screen">
+        <div class="screen-header">
+            <button class="nav-btn back-btn" data-target="world-map">
+                <span class="btn-icon">←</span>
+                RETOUR
+            </button>
+            <h2 class="screen-title" id="zone-name">VALLÉE DES LARMES</h2>
+            <div class="header-stats">
+                <span class="hp-display">❤️ <span id="current-hp">100</span>/100</span>
+            </div>
+        </div>
+
+        <div class="enemy-grid">
+            <div class="enemy-card" data-enemy="gobelin">
+                <div class="enemy-image">
+                    <img src="./images/5.jpg" alt="Gobelin">
+                    <div class="enemy-level">Niv. 2</div>
+                </div>
+                <div class="enemy-info">
+                    <h3>Gobelin Corrompu</h3>
+                    <div class="enemy-stats">
+                        <span class="stat">❤️ 80</span>
+                        <span class="stat">⚔️ 12</span>
+                    </div>
+                </div>
+                <div class="select-overlay">
+                    <button class="action-btn small combat-btn" data-enemy="gobelin">
+                        COMBATTRE
+                    </button>
+                </div>
+            </div>
+
+            <div class="enemy-card" data-enemy="orc">
+                <div class="enemy-image">
+                    <img src="./images/9.jpg" alt="Orc">
+                    <div class="enemy-level">Niv. 3</div>
+                </div>
+                <div class="enemy-info">
+                    <h3>Orc Brute</h3>
+                    <div class="enemy-stats">
+                        <span class="stat">❤️ 120</span>
+                        <span class="stat">⚔️ 15</span>
+                    </div>
+                </div>
+                <div class="select-overlay">
+                    <button class="action-btn small combat-btn" data-enemy="orc">
+                        COMBATTRE
+                    </button>
+                </div>
+            </div>
+
+            <div class="enemy-card" data-enemy="mage">
+                <div class="enemy-image">
+                    <img src="./images/12.jpg" alt="Mage">
+                    <div class="enemy-level">Niv. 4</div>
+                </div>
+                <div class="enemy-info">
+                    <h3>Mage Noir</h3>
+                    <div class="enemy-stats">
+                        <span class="stat">❤️ 70</span>
+                        <span class="stat">🔮 25</span>
+                    </div>
+                </div>
+                <div class="select-overlay">
+                    <button class="action-btn small combat-btn" data-enemy="mage">
+                        COMBATTRE
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ÉCRAN DE COMBAT -->
+    <section id="combat-screen" class="screen">
+        <div class="combat-background"></div>
+        
+        <!-- Joueur -->
+        <div class="combatant player-combatant">
+            <div class="character-model">
+                <img src="./images/princess.avif" alt="Kahina" class="character-img">
+                <div class="health-bar">
+                    <div class="health-fill" id="player-health" style="width: 100%"></div>
+                    <div class="health-text">❤️ <span id="player-hp">100</span>/100</div>
+                </div>
+                <div class="mana-bar">
+                    <div class="mana-fill" id="player-mana" style="width: 100%"></div>
+                    <div class="mana-text">🔮 <span id="player-mp">50</span>/50</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ennemi -->
+        <div class="combatant enemy-combatant">
+            <div class="character-model">
+                <img id="enemy-img" src="" alt="Ennemi" class="character-img">
+                <div class="health-bar">
+                    <div class="health-fill enemy-health" id="enemy-health" style="width: 100%"></div>
+                    <div class="health-text">❤️ <span id="enemy-hp">100</span>/100</div>
+                </div>
+                <div class="enemy-name" id="enemy-name">Ennemi</div>
+            </div>
+        </div>
+
+        <!-- Zone de combat -->
+        <div class="combat-arena">
+            <div class="projectile-container" id="projectile-container"></div>
+            <div class="effect-overlay" id="effect-overlay"></div>
+        </div>
+
+        <!-- Interface de combat -->
+        <div class="combat-interface">
+            <div class="combat-log" id="combat-log">
+                <div class="log-entry">Le combat commence!</div>
+            </div>
+
+            <div class="skills-grid">
+                <button class="skill-btn attack-skill" data-skill="attack">
+                    <span class="skill-icon">⚔️</span>
+                    <span class="skill-name">Attaque</span>
+                    <span class="skill-cost">0 mana</span>
+                </button>
+                
+                <button class="skill-btn magic-skill" data-skill="fireball">
+                    <span class="skill-icon">🔥</span>
+                    <span class="skill-name">Boule de Feu</span>
+                    <span class="skill-cost">15 mana</span>
+                </button>
+                
+                <button class="skill-btn heal-skill" data-skill="heal">
+                    <span class="skill-icon">💚</span>
+                    <span class="skill-name">Soin</span>
+                    <span class="skill-cost">20 mana</span>
+                </button>
+                
+                <button class="skill-btn special-skill" data-skill="lightning">
+                    <span class="skill-icon">⚡</span>
+                    <span class="skill-name">Foudre</span>
+                    <span class="skill-cost">30 mana</span>
+                </button>
+            </div>
+
+            <div class="combat-actions">
+                <button class="action-btn secondary" id="flee-btn">
+                    <span class="btn-icon">🏃</span>
+                    FUIR
+                </button>
+                <button class="action-btn secondary" id="inventory-btn">
+                    <span class="btn-icon">🎒</span>
+                    INVENTAIRE
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- MENU LATÉRAL -->
+    <div class="side-menu" id="side-menu">
+        <div class="menu-header">
+            <h3>MENU</h3>
+            <button class="close-menu" id="close-menu">×</button>
+        </div>
+        
+        <div class="menu-content">
+            <div class="player-profile">
+                <img src="./images/princess.avif" alt="Kahina" class="profile-img">
+                <div class="profile-info">
+                    <h4 id="menu-player-name">GARDIENNE</h4>
+                    <div class="profile-stats">
+                        <span>Niveau <span id="menu-level">1</span></span>
+                        <span>✨ <span id="menu-essence">0</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="menu-nav">
+                <button class="menu-item" data-screen="inventory">
+                    <span class="menu-icon">🎒</span>
+                    Inventaire
+                </button>
+                <button class="menu-item" data-screen="skills">
+                    <span class="menu-icon">⚡</span>
+                    Compétences
+                </button>
+                <button class="menu-item" data-screen="quests">
+                    <span class="menu-icon">📜</span>
+                    Quêtes
+                </button>
+                <button class="menu-item" data-screen="settings">
+                    <span class="menu-icon">⚙️</span>
+                    Paramètres
+                </button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- OVERLAY DE MENU -->
+    <div class="menu-overlay" id="menu-overlay"></div>
 
     <script src="script.js"></script>
 </body>
