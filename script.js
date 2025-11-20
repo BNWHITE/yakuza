@@ -1,6 +1,6 @@
 /* ================================================= */
 /* 🧠 JAVASCRIPT DETAILLÉ : Logique du Jeu et Supabase */
-/* (Nom du jeu : YAKUZA. Intégration du Chat) */
+/* (Nom du jeu : YAKUZA. Course 5-7 secondes avec animations) */
 /* ================================================= */
 
 // 1. DÉCLARATION DES CLÉS (Clé Publique - ANONYMOUS)
@@ -21,6 +21,9 @@ const DEFAULT_STATS = {
     codage: 60,
     chance: 60
 };
+
+// MULTIPLICATEUR DE VITESSE pour ajuster la durée de la course (5-7 secondes)
+const BASE_SPEED_FACTOR = 12; // Ajusté pour une course de 5-7s
 
 // Liste des bots PNJs (non-joueurs)
 const students = [
@@ -75,13 +78,12 @@ let raceHistory = [];
 let kebabScore = 0; 
 let chatChannel = null; 
 
-// Récupération des couleurs CSS pour la lisibilité
 const errorColor = getComputedStyle(document.documentElement).getPropertyValue('--error-color').trim();
 const accentLime = getComputedStyle(document.documentElement).getPropertyValue('--accent-lime').trim();
 
 
 // ------------------------------------
-// LOGIQUE SUPABASE : AUTHENTIFICATION & PROFIL
+// LOGIQUE SUPABASE & AUTHENTIFICATION
 // ------------------------------------
 
 async function loadProfileData(userId) {
@@ -136,6 +138,7 @@ async function checkAuthSession() {
     updateKebabScore(0);
 }
 
+// Les fonctions signUp, signIn, signOut et l'écouteur onAuthStateChange restent les mêmes
 async function signUp() {
     const email = elements.authEmail.value;
     const password = elements.authPassword.value;
@@ -211,24 +214,17 @@ function displayMessage(message, isNew = false) {
 
 async function loadMessages() {
     elements.chatMessages.innerHTML = ''; 
-    const { data, error } = await supabaseClient
+    const { data } = await supabaseClient
         .from('messages')
         .select('*')
         .order('created_at', { ascending: true })
         .limit(20);
 
-    if (error) {
-        elements.chatMessages.innerHTML = '<p style="color: red;">Erreur de chargement du chat.</p>';
-        return;
-    }
-    
-    data.forEach(displayMessage);
+    if (data) data.forEach(displayMessage);
 }
 
 function setupRealtimeChat() {
-    if (chatChannel) {
-        supabaseClient.removeChannel(chatChannel); 
-    }
+    if (chatChannel) supabaseClient.removeChannel(chatChannel); 
     
     loadMessages(); 
 
@@ -249,43 +245,33 @@ async function sendMessage() {
     elements.chatInput.disabled = true;
     elements.sendChatBtn.disabled = true;
 
-    const { error } = await supabaseClient
+    await supabaseClient
         .from('messages')
         .insert({ user_id: currentUser.id, content: content, username: currentUsername });
 
     elements.chatInput.disabled = false;
     elements.sendChatBtn.disabled = false;
     elements.chatInput.value = '';
-
-    if (error) {
-        console.error("Erreur d'envoi de message:", error);
-    }
 }
 
 elements.sendChatBtn.addEventListener('click', sendMessage);
 elements.chatInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        sendMessage();
-    }
+    if (e.key === 'Enter') sendMessage();
 });
 
 
 // ------------------------------------
-// FONCTIONNALITÉS DU JEU
+// LOGIQUE DE JEU & COURSE (5-7 secondes)
 // ------------------------------------
 
 async function updateKebabScore(amount) {
     kebabScore += amount;
     
     if (currentUser) {
-        const { error } = await supabaseClient
+        await supabaseClient
             .from('profiles')
             .update({ kebab_score: kebabScore })
             .eq('id', currentUser.id);
-
-        if (error) {
-            console.error("Erreur de sauvegarde du score:", error);
-        }
     }
     elements.kebabDisplay.textContent = `${kebabScore} K`;
 }
@@ -298,9 +284,7 @@ function playDefeatSound() {
 }
 
 function generateStats(bot) {
-    if (bot.name === "Mme CHABCHOUB") {
-        return;
-    }
+    if (bot.name === "Mme CHABCHOUB") return;
 
     if (Object.keys(bot.stats).length === 0) {
         bot.stats.vitesse = DEFAULT_STATS.vitesse + Math.floor(Math.random() * 5); 
@@ -309,9 +293,7 @@ function generateStats(bot) {
     }
 }
 
-// Fonction renderStats corrigée et vérifiée
 function renderStats(card, bot) {
-    // Utilise les classes CSS .stats-card, .stat-bar-container, .stat-fill pour l'affichage
     const statsHTML = `
         <div class="stats-card">
             <div class="stat-bar-container"><label>Vitesse :</label><div class="stat-bar"><div class="stat-fill" data-stat="vitesse" style="width: ${bot.stats.vitesse}%;"></div></div></div>
@@ -345,9 +327,7 @@ function logRace(winnerName, isPlayerWinner, mqUsed, kebabGain) {
     
     logEntry.innerHTML = `[${new Date().toLocaleTimeString()}] : La Quête a été gagnée par **${winnerName}**. ${gainText} ${mqText}`;
     
-    if (raceHistory.length === 0) {
-         elements.historyLog.innerHTML = '';
-    }
+    if (raceHistory.length === 0) elements.historyLog.innerHTML = '';
     elements.historyLog.prepend(logEntry);
     raceHistory.push(logEntry);
 }
@@ -361,9 +341,7 @@ function initializeSelection() {
         
         const card = document.createElement('div');
         card.classList.add('student-card');
-        if (bot.name === "Mme CHABCHOUB") {
-            card.classList.add('chabchoub-card');
-        }
+        if (bot.name === "Mme CHABCHOUB") card.classList.add('chabchoub-card');
         
         let avatarUrl;
         const styleParams = 'scale=110&size=100&eyes=sides,round&mouth=smile,pucker&sides=square,round&top=antenna,cone&face=square,round&color=101216,aaff00,f0f0f0,ffb300';
@@ -388,7 +366,6 @@ function initializeSelection() {
         card.appendChild(nameElement);
         card.appendChild(titleElement);
         
-        // C'est ici que les stats sont rendues (maintenant corrigées dans le CSS)
         renderStats(card, bot); 
         
         card.addEventListener('click', () => selectBot(bot, card, avatarUrl));
@@ -478,13 +455,18 @@ function startRace() {
     let playerPosition = 0;
     let opponentPosition = 0;
     
-    const SPEED_MULTIPLIER = 3;
-    let playerBaseSpeed = (selectedBot.stats.vitesse * (selectedBot.stats.codage / 100)) * SPEED_MULTIPLIER;
-    let opponentBaseSpeed = (opponentBot.stats.vitesse * (opponentBot.stats.codage / 100)) * SPEED_MULTIPLIER;
+    // Multiplicateur pour atteindre 5-7 secondes (ajusté à 12)
+    let playerBaseSpeed = (selectedBot.stats.vitesse * (selectedBot.stats.codage / 100)) * BASE_SPEED_FACTOR;
+    let opponentBaseSpeed = (opponentBot.stats.vitesse * (opponentBot.stats.codage / 100)) * BASE_SPEED_FACTOR;
     
     if (elements.speedBoost.checked) {
         playerBaseSpeed *= 1.1; 
     }
+    
+    // --- NOUVEAU : Ajout de l'animation de course ---
+    elements.playerCat.classList.add('running');
+    elements.opponentCat.classList.add('running');
+
 
     currentRaceInterval = setInterval(() => {
         const playerVarianceRange = elements.luckCharm.checked ? (100 - selectedBot.stats.chance) / 20 : (100 - selectedBot.stats.chance) / 100;
@@ -501,6 +483,9 @@ function startRace() {
 
         if (playerPosition >= trackWidth || opponentPosition >= trackWidth) {
             clearInterval(currentRaceInterval);
+            // --- NOUVEAU : Retrait de l'animation de course ---
+            elements.playerCat.classList.remove('running');
+            elements.opponentCat.classList.remove('running');
             declareWinner(playerPosition, opponentPosition);
         }
     }, 70); 
