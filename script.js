@@ -1,41 +1,46 @@
 /* ================================================= */
-/* 🧠 JAVASCRIPT FINAL : YAKUZA - DIGITAL HEIST */
-/* (Course Fixée, Mobile Optimal, Progression, Chat) */
+/* 🧠 JAVASCRIPT FINAL : YAKUZA - DIGITAL HEIST (V2) */
+/* (Course Fixée, Inventaire, Progression, Chat) */
 /* ================================================= */
 
-// 1. DÉCLARATION DES CLÉS (Clé Publique - ANONYMOUS)
+// 1. DÉCLARATION DES CLÉS (Clé Publique)
 const SUPABASE_URL = 'https://dxiefxcfnggezuiifeqf.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_wAZG8NaYrZux3loetrNbmg_6QOuyBz5';
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    auth: {
-        redirectTo: window.location.origin, 
-    }
+    auth: { redirectTo: window.location.origin }
 });
 
 let currentUser = null; 
 let currentUsername = null; 
-let currentRaceInterval;
-let playerCurrentStats = { vitesse: 10, codage: 10, chance: 10 }; // Initialisation basse pour progression!
+let currentRaceInterval; 
 
-const DEFAULT_STATS = { vitesse: 10, codage: 10, chance: 10 }; // Stats minimales pour la progression
-const BASE_SPEED_FACTOR = 15; // Ajusté pour une course de 5-7s
-const MAX_BASE_STAT = 100;
+const BASE_STATS = { vitesse: 10, codage: 10, chance: 10 }; // Base de départ pour le calcul
+const BASE_SPEED_FACTOR = 15; 
+const MAX_EQUIPMENT_LEVEL = 10; // Niveau max des composants
+const XP_TO_LEVEL = 100; // XP requis pour le niveau 2 (pour la démo)
+
+let playerResources = { yen: 0, kirin: 0, level: 1 };
+let playerInventory = { cpu_level: 1, memory_level: 1, luck_level: 1 };
+let playerCalculatedStats = { ...BASE_STATS };
+
+// Bonus par niveau d'équipement
+const LEVEL_BONUS = 8; 
 
 // Liste des cibles/missions (PNJs)
 const students = [
-    { name: "DATA VAULT-01", title: "FAIBLE SÉCURITÉ", stats: { vitesse: 20, codage: 30, chance: 40 } }, 
-    { name: "GHOST NETWORK", title: "SÉCURITÉ STANDARD", stats: { vitesse: 45, codage: 50, chance: 50 } }, 
-    { name: "CRYPTO NODE", title: "SÉCURITÉ ÉLEVÉE", stats: { vitesse: 60, codage: 70, chance: 60 } }, 
-    { name: "THE YAKUZA CORE", title: "SÉCURITÉ MAXIMUM", stats: { vitesse: 80, codage: 90, chance: 75 } },
-    { name: "ADMIN TERMINAL", title: "ADMINISTRATEUR CLAN", stats: { vitesse: MAX_BASE_STAT, codage: MAX_BASE_STAT, chance: MAX_BASE_STAT } }
+    { name: "DATA VAULT-01", title: "FAIBLE SÉCURITÉ", stats: { vitesse: 20, codage: 30, chance: 40 }, yenReward: 80, kirinReward: 15 }, 
+    { name: "GHOST NETWORK", title: "SÉCURITÉ STANDARD", stats: { vitesse: 45, codage: 50, chance: 50 }, yenReward: 150, kirinReward: 30 }, 
+    { name: "CRYPTO NODE", title: "SÉCURITÉ ÉLEVÉE", stats: { vitesse: 60, codage: 70, chance: 60 }, yenReward: 300, kirinReward: 50 }, 
+    { name: "THE YAKUZA CORE", title: "SÉCURITÉ MAXIMUM", stats: { vitesse: 80, codage: 90, chance: 75 }, yenReward: 600, kirinReward: 80 },
+    { name: "ADMIN TERMINAL", title: "ADMINISTRATEUR CLAN", stats: { vitesse: 100, codage: 100, chance: 100 }, yenReward: 1000, kirinReward: 100 }
 ];
 
 // Upgrades disponibles dans le shop
 const UPGRADES = [
-    { name: "CPU Overclock", stat: "vitesse", cost: 100, increase: 5 },
-    { name: "Quantum Compiler", stat: "codage", cost: 150, increase: 5 },
-    { name: "Luck Module", stat: "chance", cost: 120, increase: 5 }
+    { name: "CPU Core Upgrade", stat: "cpu_level", cost: (lvl) => 100 + lvl * 50, increase: 1, description: "Améliore la Vitesse de Traitement (VITESSE)" },
+    { name: "RAM Module Upgrade", stat: "memory_level", cost: (lvl) => 150 + lvl * 75, increase: 1, description: "Améliore la Capacité de Script (CODAGE)" },
+    { name: "Luck Chipset v2.0", stat: "luck_level", cost: (lvl) => 120 + lvl * 60, increase: 1, description: "Améliore les Chances de Succès (CHANCE)" }
 ];
 
 
@@ -44,6 +49,8 @@ const elements = {
     sideHud: document.getElementById('side-hud'),
     kirinDisplay: document.getElementById('kirin-display'),
     playerStatsDisplay: document.getElementById('player-stats-display'),
+    agentLevel: document.getElementById('agent-level'),
+    equipmentDisplay: document.getElementById('equipment-display'),
     
     // Écrans
     authScreen: document.getElementById('auth-screen'),
@@ -52,15 +59,14 @@ const elements = {
     raceScreen: document.getElementById('race-screen'),
     
     // Auth & Chat
-    authEmail: document.getElementById('auth-email'),
-    authPassword: document.getElementById('auth-password'),
     authMessage: document.getElementById('auth-message'),
     logoutBtn: document.getElementById('logout-btn'),
-    chatSection: document.getElementById('chat-section'),
     chatMessages: document.getElementById('chat-messages'),
     chatInput: document.getElementById('chat-input'),
     sendChatBtn: document.getElementById('send-chat-btn'),
-
+    authEmail: document.getElementById('auth-email'),
+    authPassword: document.getElementById('auth-password'),
+    
     // Jeu
     kebabDisplay: document.getElementById('kebab-score-display'),
     userWelcome: document.getElementById('user-welcome'),
@@ -75,143 +81,78 @@ const elements = {
 
     // Options
     speedBoost: document.getElementById('speed-boost-option'),
-    luckCharm: document.getElementById('luck-charm-option')
+    luckCharm: document.getElementById('luck-charm-option'),
+
+    // Course
+    raceTrack: document.querySelector('.race-track')
 };
 
-let opponentBot = null;
-let kebabScore = 0; 
-let kirinPoints = 0;
-let chatChannel = null; 
-
-const errorColor = getComputedStyle(document.documentElement).getPropertyValue('--error-color').trim();
-const accentLime = getComputedStyle(document.documentElement).getPropertyValue('--accent-lime').trim();
-
 // ------------------------------------
-// LOGIQUE SUPABASE & AFFICHAGE
+// LOGIQUE DE PROFIL & STATS
 // ------------------------------------
 
-async function loadProfileData(userId) {
-    const { data } = await supabaseClient
-        .from('profiles')
-        .select('kebab_score, username, kirin_points, current_stats')
-        .eq('id', userId)
-        .single();
-    return data;
+// Calcul dynamique des stats du joueur
+function calculatePlayerStats() {
+    // Vitesse = Base + (CPU Level * Bonus)
+    const vitesse = BASE_STATS.vitesse + (playerInventory.cpu_level * LEVEL_BONUS);
+    // Codage = Base + (Memory Level * Bonus)
+    const codage = BASE_STATS.codage + (playerInventory.memory_level * LEVEL_BONUS);
+    // Chance = Base + (Luck Level * Bonus)
+    const chance = BASE_STATS.chance + (playerInventory.luck_level * LEVEL_BONUS);
+
+    playerCalculatedStats = {
+        vitesse: Math.min(vitesse, MAX_BASE_STAT),
+        codage: Math.min(codage, MAX_BASE_STAT),
+        chance: Math.min(chance, MAX_BASE_STAT)
+    };
 }
 
-// Nouvelle fonction pour mettre à jour les stats et le score en DB
+// Met à jour l'affichage des stats dans le HUD
+function updateHudStats() {
+    calculatePlayerStats();
+    
+    elements.kebabDisplay.textContent = playerResources.yen;
+    elements.kirinDisplay.textContent = playerResources.kirin;
+    elements.agentLevel.textContent = playerResources.level;
+    
+    // Affichage des niveaux d'équipement
+    let equipmentHTML = `
+        <div class="stat-line"><span>CPU:</span> <span style="color:var(--stat-vitesse);">LVL ${playerInventory.cpu_level}</span></div>
+        <div class="stat-line"><span>RAM:</span> <span style="color:var(--stat-codage);">LVL ${playerInventory.memory_level}</span></div>
+        <div class="stat-line"><span>LUCK:</span> <span style="color:var(--stat-chance);">LVL ${playerInventory.luck_level}</span></div>
+    `;
+    elements.equipmentDisplay.innerHTML = equipmentHTML;
+
+    // Affichage des stats calculées
+    const statsHTML = `
+        <div class="stats-card-small">
+            <div class="stat-line"><span>Vitesse:</span> <span style="color:var(--stat-vitesse);">${playerCalculatedStats.vitesse}</span></div>
+            <div class="stat-line"><span>Codage:</span> <span style="color:var(--stat-codage);">${playerCalculatedStats.codage}</span></div>
+            <div class="stat-line"><span>Chance:</span> <span style="color:var(--stat-chance);">${playerCalculatedStats.chance}</span></div>
+        </div>
+    `;
+    elements.playerStatsDisplay.innerHTML = statsHTML;
+}
+
+// Met à jour le profil en DB
 async function updateProfileDB() {
     if (!currentUser) return;
     
     await supabaseClient
         .from('profiles')
         .update({ 
-            kebab_score: kebabScore, 
-            kirin_points: kirinPoints,
-            current_stats: playerCurrentStats 
+            kebab_score: playerResources.yen, 
+            kirin_points: playerResources.kirin,
+            level: playerResources.level,
+            inventory: playerInventory
         })
         .eq('id', currentUser.id);
 }
-
-// Fonction pour mettre à jour l'affichage des stats dans le HUD latéral
-function updateHudStats() {
-    elements.kebabDisplay.textContent = kebabScore;
-    elements.kirinDisplay.textContent = kirinPoints;
-
-    const statsHTML = `
-        <div class="stats-card-small">
-            <div class="stat-line"><span>Vitesse:</span> <span style="color:var(--stat-vitesse);">${playerCurrentStats.vitesse}</span></div>
-            <div class="stat-line"><span>Codage:</span> <span style="color:var(--stat-codage);">${playerCurrentStats.codage}</span></div>
-            <div class="stat-line"><span>Chance:</span> <span style="color:var(--stat-chance);">${playerCurrentStats.chance}</span></div>
-        </div>
-    `;
-    elements.playerStatsDisplay.innerHTML = statsHTML;
-}
-
-async function checkAuthSession() {
-    elements.authMessage.textContent = 'Vérification de session...';
-    const { data: { session } } = await supabaseClient.auth.getSession();
-    
-    if (session) {
-        currentUser = session.user;
-        const profileData = await loadProfileData(currentUser.id);
-        
-        if (profileData) {
-            kebabScore = profileData.kebab_score;
-            kirinPoints = profileData.kirin_points || 0;
-            currentUsername = profileData.username;
-            playerCurrentStats = profileData.current_stats || DEFAULT_STATS;
-        }
-        
-        // Affichage des écrans
-        elements.authScreen.style.display = 'none';
-        elements.sideHud.style.display = 'block';
-        elements.logoutBtn.style.display = 'inline-block';
-        
-        elements.userWelcome.textContent = `AGENT: ${currentUsername.toUpperCase()}`;
-        
-        updateHudStats();
-        showScreen('selection');
-        setupRealtimeChat(); 
-        elements.authMessage.textContent = '';
-    } else {
-        // Déconnexion
-        if(chatChannel) supabaseClient.removeChannel(chatChannel);
-        currentUser = null;
-        playerCurrentStats = DEFAULT_STATS;
-        elements.authScreen.style.display = 'block';
-        elements.sideHud.style.display = 'none';
-        elements.logoutBtn.style.display = 'none';
-        showScreen('auth');
-        elements.authMessage.textContent = '';
-    }
-}
-
-// Fonctions d'authentification (signUp, signIn, signOut) restent les mêmes
-async function signUp() {
-    const email = elements.authEmail.value;
-    const password = elements.authPassword.value;
-    elements.authMessage.textContent = 'INITIATION AGENT...';
-
-    const { error } = await supabaseClient.auth.signUp({ email, password });
-    if (error) {
-        elements.authMessage.textContent = `ERREUR: ${error.message}`;
-        elements.authMessage.style.color = errorColor;
-    } else {
-        elements.authMessage.textContent = `CONFIRMATION REQUISE. VÉRIFIEZ VOTRE EMAIL.`;
-        elements.authMessage.style.color = accentLime;
-    }
-}
-
-async function signIn() {
-    const email = elements.authEmail.value;
-    const password = elements.authPassword.value;
-    elements.authMessage.textContent = 'CONNEXION TERMINAL...';
-
-    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-
-    if (error) {
-        elements.authMessage.textContent = `ACCÈS REFUSÉ: ${error.message}`;
-        elements.authMessage.style.color = errorColor;
-    } else {
-        elements.authMessage.textContent = 'ACCÈS AUTORISÉ. BIENVENUE.';
-        elements.authMessage.style.color = accentLime;
-    }
-}
-
-async function signOut() {
-    elements.authMessage.textContent = 'DÉCONNEXION EN COURS...';
-    await supabaseClient.auth.signOut();
-}
-
-elements.logoutBtn.addEventListener('click', signOut);
-
 
 // ------------------------------------
 // LOGIQUE DE NAVIGATION & SHOP
 // ------------------------------------
 
-// Afficher un seul écran à la fois
 function showScreen(screenId) {
     const screens = ['auth', 'selection', 'race', 'history', 'shop', 'chat'];
     screens.forEach(id => {
@@ -223,23 +164,27 @@ function showScreen(screenId) {
     if (targetElement) targetElement.style.display = 'block';
 
     if (screenId === 'shop') renderShop();
+    if (screenId === 'selection') initializeSelection();
 }
 
 function renderShop() {
     let shopHTML = '';
     UPGRADES.forEach(upgrade => {
-        const isDisabled = playerCurrentStats[upgrade.stat] >= MAX_BASE_STAT || kebabScore < upgrade.cost;
-        const buttonText = isDisabled ? (playerCurrentStats[upgrade.stat] >= MAX_BASE_STAT ? 'MAX' : `YEN INSUFFISANT`) : `BUY (${upgrade.cost} YEN)`;
+        const currentLevel = playerInventory[upgrade.stat];
+        const cost = upgrade.cost(currentLevel);
+        const isMaxLevel = currentLevel >= MAX_EQUIPMENT_LEVEL;
+        const isDisabled = isMaxLevel || playerResources.yen < cost;
+        const buttonText = isMaxLevel ? 'NIVEAU MAX' : (playerResources.yen < cost ? `YEN INSUFFISANT` : `ACHETER (${cost} ¥)`);
         
         shopHTML += `
             <div class="shop-item">
                 <h4 class="upgrade-name">${upgrade.name}</h4>
-                <p>Augmente **${upgrade.stat.toUpperCase()}** de +${upgrade.increase}.</p>
-                <p>Niveau Actuel: <span style="color: var(--accent-red);">${playerCurrentStats[upgrade.stat]}</span></p>
+                <p>${upgrade.description}</p>
+                <div class="stat-line">Niveau Actuel: <span style="color: var(--accent-red); font-weight: 700;">${currentLevel} / ${MAX_EQUIPMENT_LEVEL}</span></div>
                 <button 
                     class="action-button log-btn buy-btn" 
                     data-stat="${upgrade.stat}" 
-                    data-cost="${upgrade.cost}"
+                    data-cost="${cost}"
                     data-increase="${upgrade.increase}"
                     ${isDisabled ? 'disabled' : ''}>
                     ${buttonText}
@@ -256,41 +201,33 @@ function renderShop() {
 
 function handleBuyUpgrade(event) {
     const button = event.target;
-    const stat = button.getAttribute('data-stat');
+    const statKey = button.getAttribute('data-stat');
     const cost = parseInt(button.getAttribute('data-cost'));
     const increase = parseInt(button.getAttribute('data-increase'));
+    const currentLevel = playerInventory[statKey];
 
-    if (kebabScore >= cost && playerCurrentStats[stat] < MAX_BASE_STAT) {
-        kebabScore -= cost;
-        playerCurrentStats[stat] += increase;
+    if (playerResources.yen >= cost && currentLevel < MAX_EQUIPMENT_LEVEL) {
+        playerResources.yen -= cost;
+        playerInventory[statKey] += increase;
         
-        // Limiter les stats à MAX_BASE_STAT
-        if (playerCurrentStats[stat] > MAX_BASE_STAT) {
-            playerCurrentStats[stat] = MAX_BASE_STAT;
+        if (playerInventory[statKey] > MAX_EQUIPMENT_LEVEL) {
+            playerInventory[statKey] = MAX_EQUIPMENT_LEVEL;
         }
 
         updateProfileDB();
         updateHudStats();
-        renderShop(); // Rafraîchir le shop
+        renderShop();
         
-        alert(`Upgrade ${stat.toUpperCase()} réussi! Nouveau niveau: ${playerCurrentStats[stat]}`);
+        alert(`UPGRADE RÉUSSI: ${statKey.toUpperCase().replace('_LEVEL', '')} est maintenant Niveau ${playerInventory[statKey]}!`);
     }
 }
 
-
 // ------------------------------------
-// LOGIQUE DE JEU & HACK (COURSE FIXÉE)
+// LOGIQUE DE LA SIMULATION DE HACK (COURSE)
 // ------------------------------------
-
-function generateStats(bot) {
-    // Les stats des cibles sont fixes, stockées dans l'objet students
-    if (!bot.currentStats) {
-        bot.currentStats = { ...bot.stats };
-    }
-}
 
 function renderStats(card, bot) {
-    const stats = bot.currentStats || bot.stats;
+    const stats = bot.stats;
     const statsHTML = `
         <div class="stats-card">
             <div class="stat-bar-container"><label>Vitesse:</label><div class="stat-bar"><div class="stat-fill" data-stat="vitesse" style="width: ${stats.vitesse}%;"></div></div></div>
@@ -306,8 +243,6 @@ function initializeSelection() {
 
     elements.selector.innerHTML = '';
     students.forEach(bot => {
-        generateStats(bot);
-        
         const card = document.createElement('div');
         card.classList.add('student-card');
         
@@ -328,7 +263,6 @@ function initializeSelection() {
         card.appendChild(nameElement);
         card.appendChild(titleElement);
         
-        // Affichage des stats de la CIBLE (pour comparaison)
         renderStats(card, bot); 
         
         card.addEventListener('click', () => selectBot(bot, card, avatarUrl));
@@ -336,7 +270,6 @@ function initializeSelection() {
     });
 
     elements.startBtn.style.display = 'none';
-    showScreen('selection');
 }
 
 function selectBot(bot, card, avatarUrl) {
@@ -344,22 +277,11 @@ function selectBot(bot, card, avatarUrl) {
     card.classList.add('selected');
     opponentBot = bot;
     
-    // Le bot joueur est l'avatar générique pour la piste
     elements.playerCat.src = `https://api.dicebear.com/8.x/bottts/svg?seed=${currentUsername}&scale=110&size=100&color=00ffee,1a1a1a`; 
     elements.opponentCat.src = avatarUrl;
 
     elements.startBtn.style.display = 'block';
 }
-
-elements.startBtn.addEventListener('click', () => {
-    if (!opponentBot) return;
-
-    elements.playerName.textContent = currentUsername.toUpperCase();
-    elements.opponentName.textContent = opponentBot.name;
-    
-    showScreen('race');
-    startCountdown();
-});
 
 function startCountdown() {
     let count = 3;
@@ -377,20 +299,19 @@ function startCountdown() {
         if (count > 0) {
             elements.countdown.textContent = count;
         } else if (count === 0) {
-            elements.countdown.textContent = "HACK!";
+            elements.countdown.textContent = "HACK INITIÉ...";
         } else {
             clearInterval(countdownInterval);
             elements.countdown.style.display = 'none';
-            startHack(); // Renommé pour le contexte
+            startHack();
         }
     }, 1000);
 }
 
 function startHack() {
-    const raceTrack = document.querySelector('.race-track');
+    const raceTrack = elements.raceTrack;
     const playerCat = elements.playerCat;
     
-    // Déterminer la distance maximale de déplacement
     const trackWidth = raceTrack.offsetWidth - playerCat.offsetWidth - 30;
     
     if (trackWidth <= 0) {
@@ -401,28 +322,30 @@ function startHack() {
     let playerPosition = 0;
     let opponentPosition = 0;
     
-    // Calcul de la VITESSE : PlayerCurrentStats (améliorables) vs Stats Opponent (fixes)
-    let playerBaseSpeed = (playerCurrentStats.vitesse * (playerCurrentStats.codage / MAX_BASE_STAT)) * BASE_SPEED_FACTOR;
-    let opponentBaseSpeed = (opponentBot.stats.vitesse * (opponentBot.stats.codage / MAX_BASE_STAT)) * BASE_SPEED_FACTOR;
+    // Stats basées sur l'équipement du joueur
+    const playerStats = playerCalculatedStats;
+    const opponentStats = opponentBot.stats;
+    
+    let playerBaseSpeed = (playerStats.vitesse * (playerStats.codage / MAX_BASE_STAT)) * BASE_SPEED_FACTOR;
+    let opponentBaseSpeed = (opponentStats.vitesse * (opponentStats.codage / MAX_BASE_STAT)) * BASE_SPEED_FACTOR;
     
     if (elements.speedBoost.checked) playerBaseSpeed *= 1.1; 
     
     playerCat.classList.add('running');
     elements.opponentCat.classList.add('running');
+    elements.raceTrack.classList.add('hacking'); // Animation de hack visuelle
+
 
     currentRaceInterval = setInterval(() => {
-        // La variance est maintenant basée sur la Chance du joueur/cible
-        const playerVarianceRange = elements.luckCharm.checked ? (MAX_BASE_STAT - playerCurrentStats.chance) / 10 : (MAX_BASE_STAT - playerCurrentStats.chance) / 50;
-        const opponentVarianceRange = (MAX_BASE_STAT - opponentBot.stats.chance) / 50;
+        const playerVarianceRange = elements.luckCharm.checked ? (MAX_BASE_STAT - playerStats.chance) / 10 : (MAX_BASE_STAT - playerStats.chance) / 50;
+        const opponentVarianceRange = (MAX_BASE_STAT - opponentStats.chance) / 50;
         
-        // Pas de déplacement
         const playerStep = (playerBaseSpeed / 100) + (Math.random() * playerVarianceRange / 10);
         const opponentStep = (opponentBaseSpeed / 100) + (Math.random() * opponentVarianceRange / 10);
         
         playerPosition += playerStep; 
         opponentPosition += opponentStep; 
 
-        // Mise à jour de la position visuelle (FIX CRITIQUE)
         playerCat.style.transform = `translateX(${Math.min(playerPosition, trackWidth)}px)`;
         elements.opponentCat.style.transform = `translateX(${Math.min(opponentPosition, trackWidth)}px)`;
 
@@ -430,10 +353,23 @@ function startHack() {
             clearInterval(currentRaceInterval);
             playerCat.classList.remove('running');
             elements.opponentCat.classList.remove('running');
+            elements.raceTrack.classList.remove('hacking'); // Arrêt de l'animation
             declareWinner(playerPosition, opponentPosition, false);
         }
     }, 70); 
 }
+
+function checkLevelUp() {
+    // Vérification simple de niveau : 100 KIRIN par niveau pour l'instant
+    const nextLevelXP = playerResources.level * XP_TO_LEVEL; 
+    if (playerResources.kirin >= nextLevelXP) {
+        playerResources.level++;
+        playerResources.kirin -= nextLevelXP; 
+        alert(`*** LEVEL UP! *** Votre Agent est maintenant Niveau ${playerResources.level}!`);
+        // Le level up pourrait donner un bonus de base ici si souhaité.
+    }
+}
+
 
 function declareWinner(playerPos, opponentPos, errorState) {
     if (errorState) {
@@ -448,42 +384,115 @@ function declareWinner(playerPos, opponentPos, errorState) {
     let kirinGain = 0;
 
     if (isPlayerWinner) {
-        yenGain = 50 + Math.floor(Math.random() * 100); 
-        kirinGain = 5 + Math.floor(Math.random() * 5); 
+        // Gain basé sur la cible
+        yenGain = opponentBot.yenReward || 100; 
+        kirinGain = opponentBot.kirinReward || 20; 
         
-        kebabScore += yenGain;
-        kirinPoints += kirinGain;
+        playerResources.yen += yenGain;
+        playerResources.kirin += kirinGain;
+
+        checkLevelUp(); // Vérifie le niveau après gain XP
         updateProfileDB();
         updateHudStats();
         
-        elements.raceResult.textContent = `ACCESS GRANTED! GAIN: ${yenGain} YEN, ${kirinGain} KIRIN.`;
+        elements.raceResult.textContent = `HACK RÉUSSI! YEN: +${yenGain} | KIRIN: +${kirinGain}.`;
         elements.raceResult.classList.remove('lose');
         elements.raceResult.classList.add('win');
     } else {
-        yenGain = -20; // Perte en cas d'échec
-        kebabScore = Math.max(0, kebabScore + yenGain);
+        yenGain = -50; 
+        playerResources.yen = Math.max(0, playerResources.yen + yenGain);
         updateProfileDB();
         updateHudStats();
         
-        elements.raceResult.textContent = `DETECTION IMMINENTE! RÉTROGRADATION (${yenGain} YEN).`;
+        elements.raceResult.textContent = `DETECTION! PROTOCOLES DÉFAILLANTS (Perte: ${Math.abs(yenGain)} ¥).`;
         elements.raceResult.classList.remove('win');
         elements.raceResult.classList.add('lose');
-        
-        // playDefeatSound(); // Garder si le fichier audio est présent
     }
     
     elements.resetBtn.style.display = 'block';
 }
 
-elements.resetBtn.addEventListener('click', initializeSelection);
+// ------------------------------------
+// LOGIQUE CHAT EN TEMPS RÉEL (inchangée)
+// ------------------------------------
+// (Fonctions displayMessage, loadMessages, setupRealtimeChat, sendMessage)
+
+function displayMessage(message, isNew = false) {
+    const messageElement = document.createElement('p');
+    messageElement.style.margin = '5px 0';
+    messageElement.style.fontSize = '0.9em';
+    
+    if (isNew) {
+        messageElement.style.color = 'var(--accent-red)';
+        setTimeout(() => messageElement.style.color = 'var(--text-color-light)', 2000);
+    } else {
+        messageElement.style.color = 'var(--text-color-light)';
+    }
+    
+    const time = new Date(message.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    const sender = message.username || 'Bot Inconnu';
+    
+    messageElement.innerHTML = `[<span style="color: var(--accent-cyan);">${time}</span>] <strong>${sender}</strong>: ${message.content}`;
+    elements.chatMessages.appendChild(messageElement);
+    
+    elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+}
+
+async function loadMessages() {
+    elements.chatMessages.innerHTML = ''; 
+    const { data } = await supabaseClient
+        .from('messages')
+        .select('*')
+        .order('created_at', { ascending: true })
+        .limit(20);
+
+    if (data) data.forEach(displayMessage);
+}
+
+function setupRealtimeChat() {
+    if (chatChannel) supabaseClient.removeChannel(chatChannel); 
+    
+    loadMessages(); 
+
+    chatChannel = supabaseClient
+        .channel('public:messages')
+        .on('postgres_changes', 
+            { event: 'INSERT', schema: 'public', table: 'messages' }, 
+            (payload) => {
+                displayMessage(payload.new, true);
+            })
+        .subscribe();
+}
+
+async function sendMessage() {
+    const content = elements.chatInput.value.trim();
+    if (!content || !currentUser || !currentUsername) return;
+
+    elements.chatInput.disabled = true;
+    elements.sendChatBtn.disabled = true;
+
+    await supabaseClient
+        .from('messages')
+        .insert({ user_id: currentUser.id, content: content, username: currentUsername });
+
+    elements.chatInput.disabled = false;
+    elements.sendChatBtn.disabled = false;
+    elements.chatInput.value = '';
+}
+
+elements.sendChatBtn.addEventListener('click', sendMessage);
+elements.chatInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+});
 
 
 // ------------------------------------
 // INITIALISATION
 // ------------------------------------
-// Association des boutons Auth
+
 document.getElementById('signup-btn').addEventListener('click', signUp);
 document.getElementById('signin-btn').addEventListener('click', signIn);
+document.getElementById('reset-race-btn').addEventListener('click', initializeSelection);
 
-// Lancement au chargement
+
 checkAuthSession();
