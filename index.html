@@ -3,100 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KAHINA: FOREST SPIRIT</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+    <title>KAHINA: ASCENSION</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="ambient-light"></div>
-    <div class="firefly"></div>
-    <div class="firefly"></div>
-    <div class="firefly"></div>
+    <div class="leaves-container">
+        <div class="leaf"></div><div class="leaf"></div><div class="leaf"></div>
+        <div class="leaf"></div><div class="leaf"></div><div class="leaf"></div>
+    </div>
 
-    <main class="main-container">
-        
-        <header class="glass-header">
+    <section id="auth-screen" class="auth-overlay">
+        <div class="glass-panel auth-card">
             <div class="logo-area">
                 <h1>KAHINA</h1>
-                <span class="subtitle">SPIRIT GUARDIAN</span>
+                <span class="subtitle">L'ÉVEIL DE LA GARDIENNE</span>
             </div>
-            <div class="player-status">
-                <div class="resource-badge gold">
-                    <span class="icon">✨</span>
-                    <span id="essence-display">0</span> ESSENCE
+            
+            <div class="auth-form">
+                <div class="input-group">
+                    <input type="text" id="player-name-input" placeholder="NOM DE L'ESPRIT" autocomplete="off">
+                    <span class="input-highlight"></span>
                 </div>
-                <div class="resource-badge spirit">
-                    <span class="icon">🌿</span>
-                    <span id="level-display">LVL 1</span>
+                
+                <div class="auth-actions">
+                    <button id="login-btn" class="action-btn gold full-width">ENTRER DANS LA FORÊT</button>
+                    <button id="register-btn" class="action-btn secondary full-width">INSCRIRE SON ÂME</button>
                 </div>
+            </div>
+            <p class="version">v3.0 - Ultra Real Engine</p>
+        </div>
+    </section>
+
+    <main id="game-container" class="main-container hidden-opacity">
+        
+        <header class="glass-header">
+            <div class="player-badge">
+                <img src="./images/princess.avif" alt="Kahina" class="mini-avatar">
+                <span id="display-username">GARDIENNE</span>
+            </div>
+            <div class="resources">
+                <div class="res-item"><span class="icon">✨</span> <span id="essence-display">0</span> ESSENCE</div>
+                <div class="res-item"><span class="icon">❤️</span> <span id="hp-display">100</span> PV</div>
             </div>
         </header>
 
         <div class="content-wrapper">
             
-            <aside class="glass-panel profile-panel 3d-card">
-                <div class="hero-container">
-                    <div class="hero-frame">
-                        <img src="./images/princess.avif" alt="Kahina" class="hero-img">
-                        <div class="glow-ring"></div>
-                    </div>
-                    <h2>KAHINA</h2>
-                    <p class="hero-title">Gardienne de la Source</p>
-                </div>
+            <section id="selection-screen" class="screen active">
+                <h2 class="screen-title">PURIFIER LA FORÊT</h2>
+                <p class="instruction">Choisissez un esprit corrompu à libérer</p>
+                <div id="enemy-grid" class="grid-container"></div>
+            </section>
+
+            <section id="battle-screen" class="screen hidden">
                 
-                <div class="stats-container">
-                    <div class="stat-row">
-                        <label>PUISSANCE</label>
-                        <div class="bar-bg"><div class="bar-fill power" style="width: 60%"></div></div>
+                <div class="battle-arena">
+                    <div class="fighter player">
+                        <div class="aura"></div>
+                        <img src="./images/princess.avif" alt="Kahina" class="fighter-img">
+                        <div class="health-bar-container">
+                            <div id="player-hp-bar" class="health-fill" style="width: 100%"></div>
+                        </div>
+                        <div id="player-shield" class="shield-effect hidden">🛡️</div>
+                        <div id="player-damage" class="floating-text"></div>
                     </div>
-                    <div class="stat-row">
-                        <label>AGILITÉ</label>
-                        <div class="bar-bg"><div class="bar-fill agility" style="width: 60%"></div></div>
-                    </div>
-                    <div class="stat-row">
-                        <label>HARMONIE</label>
-                        <div class="bar-bg"><div class="bar-fill magic" style="width: 60%"></div></div>
+
+                    <div class="vs-symbol">VS</div>
+
+                    <div class="fighter enemy">
+                        <div class="aura red"></div>
+                        <img id="battle-enemy-img" src="" alt="Enemy" class="fighter-img">
+                        <div class="health-bar-container">
+                            <div id="enemy-hp-bar" class="health-fill enemy-fill" style="width: 100%"></div>
+                        </div>
+                        <div id="enemy-damage" class="floating-text"></div>
                     </div>
                 </div>
-            </aside>
 
-            <section class="glass-panel main-stage">
-                
-                <div id="selection-screen" class="screen active">
-                    <h2 class="screen-title">DÉFIEZ LES ESPRITS CORROMPUS</h2>
-                    <div id="enemy-grid" class="grid-container">
-                        </div>
-                    <button id="battle-btn" class="action-btn hidden">COMMENCER LE RITUEL</button>
-                </div>
-
-                <div id="battle-screen" class="screen hidden">
-                    <div class="battle-arena">
-                        <div class="lane player-lane">
-                            <div class="avatar-bubble">
-                                <img src="./images/princess.avif" alt="Kahina">
-                            </div>
-                            <div class="track">
-                                <div id="player-progress" class="progress-liquid player-liquid"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="versus-badge">VS</div>
-
-                        <div class="lane enemy-lane">
-                            <div class="avatar-bubble">
-                                <img id="enemy-img-battle" src="" alt="Enemy">
-                            </div>
-                            <div class="track">
-                                <div id="enemy-progress" class="progress-liquid enemy-liquid"></div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="battle-controls glass-panel">
+                    <div id="battle-log" class="battle-log">Le combat commence...</div>
                     
-                    <div id="battle-log" class="battle-status">PRÉPARATION...</div>
-                    <button id="reset-btn" class="action-btn secondary hidden">RETOUR À LA FORÊT</button>
+                    <div class="skills-grid">
+                        <button id="btn-attack" class="skill-btn attack">
+                            <span class="icon">⚔️</span>
+                            <span>FRAPPE SPIRITUELLE</span>
+                            <span class="desc">Dégâts Moyens</span>
+                        </button>
+                        <button id="btn-heal" class="skill-btn heal">
+                            <span class="icon">🌿</span>
+                            <span>RENAISSANCE</span>
+                            <span class="desc">Soigne +30 PV</span>
+                        </button>
+                        <button id="btn-defend" class="skill-btn defend">
+                            <span class="icon">🛡️</span>
+                            <span>ÉCORCE DE FER</span>
+                            <span class="desc">-50% Dégâts reçus</span>
+                        </button>
+                    </div>
                 </div>
-
+                
+                <button id="leave-battle-btn" class="action-btn secondary hidden" style="margin-top: 20px;">RETOUR</button>
             </section>
 
         </div>
