@@ -1,6 +1,6 @@
 /* ================================================= */
-/* 🧠 JAVASCRIPT FINAL : YAKUZA - DIGITAL HEIST (V3 - Personnages Intégrés) */
-/* (Style Switch, Progression, Hack Fix) */
+/* 🧠 JAVASCRIPT FINAL : YAKUZA - SHADOW CLAN (V3) */
+/* (Personnages Jouables, Progression, Hack Fix) */
 /* ================================================= */
 
 // 1. DÉCLARATION DES CLÉS (Clé Publique)
@@ -25,25 +25,56 @@ const XP_TO_LEVEL = 100;
 let playerResources = { yen: 0, kirin: 0, level: 1 };
 let playerInventory = { cpu_level: 1, memory_level: 1, luck_level: 1 };
 let playerCalculatedStats = { ...BASE_STATS };
+let playerAgent = null; // L'objet de l'agent choisi
 
-// 2. POOL DE PERSONNAGES (AVATARS) - LISTE FOURNIE PAR L'UTILISATEUR
+// 2. POOL DE PERSONNAGES JOUABLES ET RIVAUX (AGENT_AVATARS)
+// Stats basées sur les titres : Vitesse(v), Codage(c), Chance(l)
 const AGENT_AVATARS = [
-    { name: "Alexandre ALVES", title: "Le Débogueur" }, { name: "Douae BOULOUALI", title: "L'impératrice" }, { name: "Sid-Ahmed BOUSLAH", title: "Chill Boy" }, { name: "Leon JIANG", title: "FinoVox" }, { name: "Alheli RODRIGUEZ", title: "L'intentionnée" },
-    { name: "Maxime BOGNON", title: "Maximilien" }, { name: "Corentin BRAND", title: "Le favoris" }, { name: "Maximilien CANONNE", title: "Luminosité Minimum" }, { name: "Adel HENI", title: "Le plavonneur" }, { name: "Kahina MEDJUKANE", title: "THE QUEEN ♕" },
-    { name: "Sully MORETON", title: "Le stagiaire" }, { name: "Aliénor ANTONA", title: "La gourmande🍔" }, { name: "Nicolas CLEMENT", title: "Le délégué" }, { name: "Bryan DE FARIA", title: "Le Chargeur" }, { name: "Hani HOUMIMID", title: "Chargerrr" },
-    { name: "Vithues KANDIAH", title: "ECE Water" }, { name: "Hector LE BACHELIER", title: "L'Ingénieur Papier" }, { name: "Quentin DABOVILLE", title: "Le Bretons" }, { name: "Yassmina HARRISSI", title: "La Libanaise🇱🇧" }, { name: "Allan LAHCENE", title: " Le + Chill" },
-    { name: "Evan MASSE", title: "Hasfy" }, { name: "Seydina SY", title: "Git init" }, { name: "Ilay AL ABIAD", title: "Brother from an other mother" }, { name: "Ahmed ELHATTAB", title: "English Boy", stats: {} }, { name: "Thushyan KOHILAKUMAR", title: "L'Orfèvre" },
-    { name: "Aurélie MAHAUT", title: "La Stratège" }, { name: "Gaspard PONS", title: "Le Philosophe" }, { name: "Rafael RION", title: "L'Alchimiste", stats: {} }, { name: "Faruk SAN", title: "Le connaisseur" },
-    { name: "Mme CHABCHOUB", title: "La Guide du Code Sacré", stats: { vitesse: 100, codage: 100, chance: 100 } }
+    { id: 1, name: "Alexandre ALVES", title: "Le Débogueur", base_stats: { v: 45, c: 55, l: 30 } }, 
+    { id: 2, name: "Douae BOULOUALI", title: "L'impératrice", base_stats: { v: 50, c: 45, l: 40 } }, 
+    { id: 3, name: "Sid-Ahmed BOUSLAH", title: "Chill Boy", base_stats: { v: 40, c: 40, l: 50 } }, 
+    { id: 4, name: "Leon JIANG", title: "FinoVox", base_stats: { v: 55, c: 35, l: 35 } }, 
+    { id: 5, name: "Alheli RODRIGUEZ", title: "L'intentionnée", base_stats: { v: 45, c: 45, l: 45 } },
+    { id: 6, name: "Maxime BOGNON", title: "Maximilien", base_stats: { v: 50, c: 40, l: 35 } }, 
+    { id: 7, name: "Corentin BRAND", title: "Le favoris", base_stats: { v: 48, c: 48, l: 48 } }, 
+    { id: 8, name: "Maximilien CANONNE", title: "Luminosité Minimum", base_stats: { v: 40, c: 40, l: 55 } }, 
+    { id: 9, name: "Adel HENI", title: "Le plavonneur", base_stats: { v: 55, c: 30, l: 40 } }, 
+    { id: 10, name: "Kahina MEDJUKANE", title: "THE QUEEN ♕", base_stats: { v: 50, c: 50, l: 50 } },
+    { id: 11, name: "Sully MORETON", title: "Le stagiaire", base_stats: { v: 35, c: 50, l: 35 } }, 
+    { id: 12, name: "Aliénor ANTONA", title: "La gourmande🍔", base_stats: { v: 40, c: 35, l: 50 } }, 
+    { id: 13, name: "Nicolas CLEMENT", title: "Le délégué", base_stats: { v: 45, c: 40, l: 45 } }, 
+    { id: 14, name: "Bryan DE FARIA", title: "Le Chargeur", base_stats: { v: 55, c: 35, l: 30 } }, 
+    { id: 15, name: "Hani HOUMIMID", title: "Chargerrr", base_stats: { v: 55, c: 35, l: 30 } },
+    { id: 16, name: "Vithues KANDIAH", title: "ECE Water", base_stats: { v: 40, c: 50, l: 35 } }, 
+    { id: 17, name: "Hector LE BACHELIER", title: "L'Ingénieur Papier", base_stats: { v: 35, c: 55, l: 40 } }, 
+    { id: 18, name: "Quentin DABOVILLE", title: "Le Bretons", base_stats: { v: 40, c: 45, l: 45 } }, 
+    { id: 19, name: "Yassmina HARRISSI", title: "La Libanaise🇱🇧", base_stats: { v: 45, c: 40, l: 40 } }, 
+    { id: 20, name: "Allan LAHCENE", title: " Le + Chill", base_stats: { v: 40, c: 40, l: 40 } },
+    { id: 21, name: "Evan MASSE", title: "Hasfy", base_stats: { v: 50, c: 40, l: 35 } }, 
+    { id: 22, name: "Seydina SY", title: "Git init", base_stats: { v: 45, c: 50, l: 35 } }, 
+    { id: 23, name: "Ilay AL ABIAD", title: "Brother from an other mother", base_stats: { v: 50, c: 40, l: 40 } }, 
+    { id: 24, name: "Ahmed ELHATTAB", title: "English Boy", base_stats: { v: 40, c: 45, l: 40 } }, 
+    { id: 25, name: "Thushyan KOHILAKUMAR", title: "L'Orfèvre", base_stats: { v: 40, c: 55, l: 30 } },
+    { id: 26, name: "Aurélie MAHAUT", title: "La Stratège", base_stats: { v: 45, c: 50, l: 45 } }, 
+    { id: 27, name: "Gaspard PONS", title: "Le Philosophe", base_stats: { v: 35, c: 45, l: 55 } }, 
+    { id: 28, name: "Rafael RION", title: "L'Alchimiste", base_stats: { v: 40, c: 45, l: 50 } }, 
+    { id: 29, name: "Faruk SAN", title: "Le connaisseur", base_stats: { v: 40, c: 40, l: 40 } },
+    { id: 30, name: "Mme CHABCHOUB", title: "La Guide du Code Sacré", base_stats: { v: 100, c: 100, l: 100 } }
 ];
 
 // 3. CIBLES DE MISSION (Difficulté et Récompenses Fixes)
 const MISSION_TARGETS = [
-    { id: 1, name: "Data Vault-01", title: "FAIBLE SÉCURITÉ", stats: { vitesse: 20, codage: 30, chance: 40 }, yenReward: 80, kirinReward: 15 }, 
-    { id: 2, name: "Ghost Network", title: "SÉCURITÉ STANDARD", stats: { vitesse: 45, codage: 50, chance: 50 }, yenReward: 150, kirinReward: 30 }, 
-    { id: 3, name: "Crypto Node", title: "SÉCURITÉ ÉLEVÉE", stats: { vitesse: 60, codage: 70, chance: 60 }, yenReward: 300, kirinReward: 50 }, 
-    { id: 4, name: "The Yakuza Core", title: "SÉCURITÉ MAXIMUM", stats: { vitesse: 80, codage: 90, chance: 75 }, yenReward: 600, kirinReward: 80 },
-    { id: 5, name: "ADMIN TERMINAL", title: "ADMINISTRATEUR CLAN", stats: { vitesse: 100, codage: 100, chance: 100 }, yenReward: 1000, kirinReward: 100 }
+    { id: 101, name: "Proxy Hacking", title: "FAIBLE SÉCURITÉ", stats: { vitesse: 20, codage: 30, chance: 40 }, yenReward: 80, kirinReward: 15 }, 
+    { id: 102, name: "Encrypted Node", title: "SÉCURITÉ STANDARD", stats: { vitesse: 45, codage: 50, chance: 50 }, yenReward: 150, kirinReward: 30 }, 
+    { id: 103, name: "Central Bank Server", title: "SÉCURITÉ ÉLEVÉE", stats: { vitesse: 60, codage: 70, chance: 60 }, yenReward: 300, kirinReward: 50 }, 
+    { id: 104, name: "THE YAKUZA CORE", title: "SÉCURITÉ MAXIMUM", stats: { vitesse: 80, codage: 90, chance: 75 }, yenReward: 600, kirinReward: 80 },
+    { id: 105, name: "MME CHABCHOUB'S BACKUP", title: "FINAL JUDGEMENT", stats: { vitesse: 100, codage: 100, chance: 100 }, yenReward: 2000, kirinReward: 200 }
+];
+
+const UPGRADES = [
+    { name: "CPU Core Upgrade", stat: "cpu_level", cost: (lvl) => 100 + lvl * 50, increase: 1, description: "Améliore la Vitesse de Traitement (VITESSE)" },
+    { name: "RAM Module Upgrade", stat: "memory_level", cost: (lvl) => 150 + lvl * 75, increase: 1, description: "Améliore la Capacité de Script (CODAGE)" },
+    { name: "Luck Chipset v2.0", stat: "luck_level", cost: (lvl) => 120 + lvl * 60, increase: 1, description: "Améliore les Chances de Succès (CHANCE)" }
 ];
 
 const elements = {
@@ -53,9 +84,12 @@ const elements = {
     playerStatsDisplay: document.getElementById('player-stats-display'),
     agentLevel: document.getElementById('agent-level'),
     equipmentDisplay: document.getElementById('equipment-display'),
+    agentNameDisplay: document.getElementById('agent-name-display'),
     
     // Écrans
     authScreen: document.getElementById('auth-screen'),
+    agentSelectionScreen: document.getElementById('agent-selection-screen'), // NOUVEAU
+    agentSelectorGrid: document.getElementById('agent-selector-grid'), // NOUVEAU
     selectionScreen: document.getElementById('selection-screen'),
     shopScreen: document.getElementById('shop-screen'),
     raceScreen: document.getElementById('race-screen'),
@@ -69,7 +103,7 @@ const elements = {
     // Jeu
     kebabDisplay: document.getElementById('kebab-score-display'),
     userWelcome: document.getElementById('user-welcome'),
-    selector: document.getElementById('student-selector'),
+    selector: document.getElementById('mission-selector'), // Renommé pour clarté
     startBtn: document.getElementById('start-race-btn'),
     playerCat: document.getElementById('player-cat'),
     opponentCat: document.getElementById('opponent-cat'),
@@ -82,6 +116,7 @@ const elements = {
     speedBoost: document.getElementById('speed-boost-option'),
     luckCharm: document.getElementById('luck-charm-option'),
     raceTrack: document.querySelector('.race-track'),
+    confirmAgentBtn: document.getElementById('confirm-agent-btn'), // NOUVEAU
 
     // Chat
     chatMessages: document.getElementById('chat-messages'),
@@ -98,9 +133,15 @@ const accentRed = getComputedStyle(document.documentElement).getPropertyValue('-
 // ------------------------------------
 
 function calculatePlayerStats() {
-    const vitesse = BASE_STATS.vitesse + (playerInventory.cpu_level * LEVEL_BONUS);
-    const codage = BASE_STATS.codage + (playerInventory.memory_level * LEVEL_BONUS);
-    const chance = BASE_STATS.chance + (playerInventory.luck_level * LEVEL_BONUS);
+    // Stats de base sont maintenant tirées de l'Agent initial
+    const baseV = playerAgent ? playerAgent.base_stats.v : BASE_STATS.vitesse;
+    const baseC = playerAgent ? playerAgent.base_stats.c : BASE_STATS.codage;
+    const baseL = playerAgent ? playerAgent.base_stats.l : BASE_STATS.chance;
+
+    // L'amélioration est ADDITIVE
+    const vitesse = baseV + (playerInventory.cpu_level * LEVEL_BONUS);
+    const codage = baseC + (playerInventory.memory_level * LEVEL_BONUS);
+    const chance = baseL + (playerInventory.luck_level * LEVEL_BONUS);
 
     playerCalculatedStats = {
         vitesse: Math.min(vitesse, 100),
@@ -115,6 +156,12 @@ function updateHudStats() {
     elements.kebabDisplay.textContent = playerResources.yen;
     elements.kirinDisplay.textContent = playerResources.kirin;
     elements.agentLevel.textContent = playerResources.level;
+    
+    // NOUVEAU : Affichage de l'Agent joué
+    if (playerAgent) {
+        elements.agentNameDisplay.textContent = playerAgent.name.toUpperCase();
+        elements.userWelcome.textContent = playerAgent.title.toUpperCase();
+    }
     
     // Affichage des niveaux d'équipement
     let equipmentHTML = `
@@ -144,7 +191,8 @@ async function updateProfileDB() {
             kebab_score: playerResources.yen, 
             kirin_points: playerResources.kirin,
             level: playerResources.level,
-            inventory: playerInventory
+            inventory: playerInventory,
+            agent_id: playerAgent ? playerAgent.id : null // Sauvegarde l'ID de l'Agent
         })
         .eq('id', currentUser.id);
 }
@@ -167,7 +215,7 @@ function switchTheme(isLoggedIn) {
 async function loadProfileData(userId) {
     const { data } = await supabaseClient
         .from('profiles')
-        .select('kebab_score, username, kirin_points, level, inventory')
+        .select('kebab_score, username, kirin_points, level, inventory, agent_id')
         .eq('id', userId)
         .single();
     return data;
@@ -187,6 +235,14 @@ async function checkAuthSession() {
             playerResources.level = profileData.level || 1;
             currentUsername = profileData.username;
             playerInventory = profileData.inventory || { cpu_level: 1, memory_level: 1, luck_level: 1 };
+            
+            // CHARGEMENT CRITIQUE DE L'AGENT JOUE
+            const agentId = profileData.agent_id;
+            playerAgent = AGENT_AVATARS.find(a => a.id === agentId);
+
+        } else {
+            // Profil non trouvé mais connecté, initialisation par défaut
+            playerAgent = null; 
         }
         
         switchTheme(true); 
@@ -194,11 +250,16 @@ async function checkAuthSession() {
         elements.sideHud.style.display = 'block';
         elements.logoutBtn.style.display = 'inline-block';
         
-        elements.userWelcome.textContent = `AGENT: ${currentUsername.toUpperCase()}`;
-        
-        updateHudStats();
-        showScreen('selection');
-        setupRealtimeChat(); 
+        updateHudStats(); // Mise à jour du HUD
+
+        if (!playerAgent) {
+            // NOUVEAU JOUEUR : Doit choisir son agent
+            showAgentSelection();
+        } else {
+            // ANCIEN JOUEUR : Continue les missions
+            showScreen('selection');
+            setupRealtimeChat(); 
+        }
         elements.authMessage.textContent = '';
     } else {
         switchTheme(false); 
@@ -212,7 +273,7 @@ async function checkAuthSession() {
     }
 }
 
-// Fonctions d'authentification (signUp, signIn, signOut) - inchangées
+// Les fonctions signUp, signIn, signOut restent les mêmes
 
 async function signUp() {
     const email = elements.authEmail.value;
@@ -256,113 +317,107 @@ elements.logoutBtn.addEventListener('click', signOut);
 
 
 // ------------------------------------
-// LOGIQUE DE NAVIGATION & SHOP
+// NOUVEL ÉCRAN : SÉLECTION DE L'AGENT JOUEUR
 // ------------------------------------
 
-function showScreen(screenId) {
-    const screens = ['auth', 'selection', 'race', 'history', 'shop', 'chat'];
-    screens.forEach(id => {
-        const screenElement = document.getElementById(`${id}-screen`);
-        if (screenElement) screenElement.style.display = 'none';
-    });
-    
-    const targetElement = document.getElementById(`${screenId}-screen`);
-    if (targetElement) targetElement.style.display = 'block';
+let tempSelectedAgent = null;
 
-    if (screenId === 'shop') renderShop();
-    if (screenId === 'selection') initializeSelection();
+function showAgentSelection() {
+    showScreen('agent-selection');
+    elements.agentSelectorGrid.innerHTML = '';
+
+    AGENT_AVATARS.forEach(agent => {
+        const card = document.createElement('div');
+        card.classList.add('student-card');
+        
+        let avatarUrl = `https://api.dicebear.com/8.x/bottts/svg?seed=${encodeURIComponent(agent.name)}&scale=110&size=100&eyes=sides,round&mouth=smile,pucker&sides=square,round&top=antenna,cone&face=square,round&color=ff4655,00ffff,1a1a1a`;
+        
+        const avatar = document.createElement('img');
+        avatar.classList.add('student-avatar');
+        avatar.src = avatarUrl;
+        
+        const nameElement = document.createElement('h4');
+        nameElement.textContent = agent.name;
+        
+        const titleElement = document.createElement('p');
+        titleElement.classList.add('dark-subtitle');
+        titleElement.textContent = agent.title;
+        
+        card.appendChild(avatar);
+        card.appendChild(nameElement);
+        card.appendChild(titleElement);
+        
+        // Affiche les stats de base de l'agent
+        const baseStatsDisplay = { stats: { vitesse: agent.base_stats.v, codage: agent.base_stats.c, chance: agent.base_stats.l } };
+        renderStats(card, baseStatsDisplay); 
+        
+        card.addEventListener('click', () => {
+            Array.from(elements.agentSelectorGrid.children).forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            tempSelectedAgent = agent;
+            elements.confirmAgentBtn.style.display = 'block';
+        });
+        elements.agentSelectorGrid.appendChild(card);
+    });
+
+    elements.confirmAgentBtn.removeEventListener('click', confirmAgentSelection);
+    elements.confirmAgentBtn.addEventListener('click', confirmAgentSelection);
 }
 
-function renderShop() {
-    let shopHTML = '';
-    UPGRADES.forEach(upgrade => {
-        const currentLevel = playerInventory[upgrade.stat];
-        const cost = upgrade.cost(currentLevel);
-        const isMaxLevel = currentLevel >= MAX_EQUIPMENT_LEVEL;
-        const isDisabled = isMaxLevel || playerResources.yen < cost;
-        const buttonText = isMaxLevel ? 'MAX' : (playerResources.yen < cost ? `INSUFFISANT (${cost} ¥)` : `ACHETER (${cost} ¥)`);
-        
-        shopHTML += `
-            <div class="shop-item">
-                <h4 class="upgrade-name">${upgrade.name}</h4>
-                <p>${upgrade.description}</p>
-                <div class="stat-line">Niveau Actuel: <span style="color: var(--accent-red); font-weight: 700;">${currentLevel} / ${MAX_EQUIPMENT_LEVEL}</span></div>
-                <button 
-                    class="action-button valorant-btn buy-btn" 
-                    data-stat="${upgrade.stat}" 
-                    data-cost="${cost}"
-                    data-increase="${upgrade.increase}"
-                    ${isDisabled ? 'disabled' : ''}>
-                    ${buttonText}
-                </button>
-            </div>
-        `;
-    });
-    elements.upgradeShop.innerHTML = shopHTML;
-    
-    document.querySelectorAll('.buy-btn').forEach(button => {
-        button.addEventListener('click', handleBuyUpgrade);
-    });
-}
-
-function handleBuyUpgrade(event) {
-    const button = event.target;
-    const statKey = button.getAttribute('data-stat');
-    const cost = parseInt(button.getAttribute('data-cost'));
-    const increase = parseInt(button.getAttribute('data-increase'));
-    const currentLevel = playerInventory[statKey];
-
-    if (playerResources.yen >= cost && currentLevel < MAX_EQUIPMENT_LEVEL) {
-        playerResources.yen -= cost;
-        playerInventory[statKey] += increase;
-        
-        if (playerInventory[statKey] > MAX_EQUIPMENT_LEVEL) {
-            playerInventory[statKey] = MAX_EQUIPMENT_LEVEL;
-        }
-
-        updateProfileDB();
-        updateHudStats();
-        renderShop();
-        
-        alert(`UPGRADE RÉUSSI: ${statKey.toUpperCase().replace('_LEVEL', '')} est maintenant Niveau ${playerInventory[statKey]}!`);
+async function confirmAgentSelection() {
+    if (!tempSelectedAgent) {
+        alert("Veuillez sélectionner votre Agent.");
+        return;
     }
+
+    playerAgent = tempSelectedAgent;
+    
+    // Sauvegarde l'ID de l'agent et ses stats de base initiales
+    await updateProfileDB();
+    
+    // Continue le jeu
+    updateHudStats();
+    setupRealtimeChat();
+    showScreen('selection');
 }
 
 
 // ------------------------------------
-// LOGIQUE DE JEU & HACK (FIXÉE)
+// LOGIQUE DE JEU & HACK
 // ------------------------------------
 
 function renderStats(card, bot) {
-    // Affiche les stats de la CIBLE (Mission)
-    const stats = bot.stats;
+    const stats = bot.stats || bot.base_stats;
+    // Remplace les clés courtes (v, c, l) par les noms complets si nécessaire
+    const vitesse = stats.vitesse || stats.v;
+    const codage = stats.codage || stats.c;
+    const chance = stats.chance || stats.l;
+
     const statsHTML = `
         <div class="stats-card">
-            <div class="stat-bar-container"><label>Vitesse:</label><div class="stat-bar"><div class="stat-fill" data-stat="vitesse" style="width: ${stats.vitesse}%;"></div></div></div>
-            <div class="stat-bar-container"><label>Codage:</label><div class="stat-bar"><div class="stat-fill" data-stat="codage" style="width: ${stats.codage}%;"></div></div></div>
-            <div class="stat-bar-container"><label>Chance:</label><div class="stat-bar"><div class="stat-fill" data-stat="chance" style="width: ${stats.chance}%;"></div></div></div>
+            <div class="stat-bar-container"><label>Vitesse:</label><div class="stat-bar"><div class="stat-fill" data-stat="vitesse" style="width: ${vitesse}%;"></div></div></div>
+            <div class="stat-bar-container"><label>Codage:</label><div class="stat-bar"><div class="stat-fill" data-stat="codage" style="width: ${codage}%;"></div></div></div>
+            <div class="stat-bar-container"><label>Chance:</label><div class="stat-bar"><div class="stat-fill" data-stat="chance" style="width: ${chance}%;"></div></div></div>
         </div>
     `;
     card.insertAdjacentHTML('beforeend', statsHTML);
 }
 
-// Fonction pour choisir un avatar aléatoire dans la liste de l'utilisateur
-function getRandomAvatar() {
-    const randomIndex = Math.floor(Math.random() * AGENT_AVATARS.length);
-    return AGENT_AVATARS[randomIndex];
+function getRandomRival(playerAgentId) {
+    const rivals = AGENT_AVATARS.filter(a => a.id !== playerAgentId);
+    const randomIndex = Math.floor(Math.random() * rivals.length);
+    return rivals[randomIndex];
 }
 
 function initializeSelection() {
-    if (!currentUser) return;
+    if (!currentUser || !playerAgent) return;
 
     elements.selector.innerHTML = '';
     MISSION_TARGETS.forEach(mission => {
         
-        // Crée une carte pour chaque mission/difficulté
         const card = document.createElement('div');
         card.classList.add('student-card');
         
-        // Utilise le nom de la mission pour l'avatar (ou un avatar basé sur le niveau de difficulté)
         let avatarUrl = `https://api.dicebear.com/8.x/bottts/svg?seed=${encodeURIComponent(mission.name)}&scale=110&size=100&eyes=sides,round&mouth=smile,pucker&sides=square,round&top=antenna,cone&face=square,round&color=ff4655,00ffff,1a1a1a`;
         
         const avatar = document.createElement('img');
@@ -380,35 +435,33 @@ function initializeSelection() {
         card.appendChild(nameElement);
         card.appendChild(titleElement);
         
-        // Affiche la difficulté de la cible
         renderStats(card, mission); 
         
-        card.addEventListener('click', () => selectBot(mission, card, avatarUrl));
+        card.addEventListener('click', () => selectMission(mission, card, avatarUrl));
         elements.selector.appendChild(card);
     });
 
     elements.startBtn.style.display = 'none';
 }
 
-function selectBot(mission, card, missionAvatarUrl) {
+function selectMission(mission, card, missionAvatarUrl) {
     Array.from(elements.selector.children).forEach(c => c.classList.remove('selected'));
     card.classList.add('selected');
     
     // 1. Définir la cible/mission
     opponentBot = mission;
     
-    // 2. Choisir un avatar aléatoire (votre personnage) pour l'identité de l'adversaire
-    const randomAgent = getRandomAvatar();
-    const opponentName = randomAgent.name;
+    // 2. Choisir un Agent Rival aléatoire
+    const rivalAgent = getRandomRival(playerAgent.id);
     
-    // 3. Charger les avatars
-    const playerAvatarUrl = `https://api.dicebear.com/8.x/bottts/svg?seed=${currentUsername}&scale=110&size=100&color=00ffff,1a1a1a`; 
+    // 3. Charger les avatars et noms pour la course
+    const playerAvatarUrl = `https://api.dicebear.com/8.x/bottts/svg?seed=${playerAgent.name}&scale=110&size=100&color=00ffff,1a1a1a`; 
     
     elements.playerCat.src = playerAvatarUrl;
-    elements.opponentCat.src = missionAvatarUrl; // Utilise l'avatar de la mission
+    elements.opponentCat.src = missionAvatarUrl; 
     
-    elements.playerName.textContent = currentUsername.toUpperCase();
-    elements.opponentName.textContent = `VS ${opponentName.toUpperCase()}`; // L'adversaire prend l'identité du personnage
+    elements.playerName.textContent = playerAgent.name.toUpperCase();
+    elements.opponentName.textContent = `VS ${rivalAgent.name.toUpperCase()}`; // Le nom de l'Agent Rival s'affiche
 
     elements.startBtn.style.display = 'block';
 }
@@ -539,7 +592,7 @@ function declareWinner(playerPos, opponentPos, errorState) {
 }
 
 // ------------------------------------
-// LOGIQUE CHAT EN TEMPS RÉEL
+// LOGIQUE CHAT EN TEMPS RÉEL (inchangée)
 // ------------------------------------
 
 let chatChannel = null;
@@ -623,7 +676,7 @@ document.getElementById('start-race-btn').addEventListener('click', () => {
     startCountdown();
 });
 
+elements.confirmAgentBtn.addEventListener('click', confirmAgentSelection);
 document.getElementById('reset-race-btn').addEventListener('click', initializeSelection);
-
 
 checkAuthSession();
