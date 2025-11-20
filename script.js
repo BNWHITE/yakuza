@@ -1,197 +1,210 @@
-/* ================================================= */
-/* 🧠 ENGINE V2: CLASSROOM PROTOCOL + BEREADY DATA */
-/* ================================================= */
+/* LOGIQUE JEU V3 - CLASSROOM LEAGUE */
 
-// --- CONFIGURATION ---
-const GAME_DURATION = 60; // 60 secondes
-const QUESTIONS_BEREADY = [
-    // Questions inspirées de vos fichiers BeReady (app_elec, archi1, etc.)
-    { theme: "ARCHI", q: "Que signifie CPU ?", options: ["Central Processing Unit", "Computer Power Unit", "Core Process Utility", "Central Power User"], correct: 0 },
-    { theme: "ELEC", q: "Loi d'Ohm : U = ?", options: ["R × I", "R / I", "R + I", "I² × R"], correct: 0 },
-    { theme: "SIGNAL", q: "L'unité de la fréquence ?", options: ["Hertz", "Watt", "Joule", "Volt"], correct: 0 },
-    { theme: "INFO", q: "En binaire, 101 vaut ?", options: ["5", "3", "6", "9"], correct: 0 },
-    { theme: "MATH", q: "Dérivée de x² ?", options: ["2x", "x", "2", "x²"], correct: 0 },
-    { theme: "CULTURE", q: "Capitale du Japon ?", options: ["Tokyo", "Kyoto", "Osaka", "Seoul"], correct: 0 },
-    { theme: "ARCHI", q: "1 Octet = ? bits", options: ["8", "16", "32", "4"], correct: 0 },
-    { theme: "WEB", q: "Balise pour un lien ?", options: ["<a>", "<link>", "<href>", "<p>"], correct: 0 },
-];
-
-// Simulation de la classe (Nom + Seed pour l'avatar)
-const CLASS_ROSTER = [
+// Config
+const GAME_TIME = 60;
+const STUDENTS = [
     { id: 1, name: "Lucas M.", seed: "Lucas" },
     { id: 2, name: "Sarah B.", seed: "Sarah" },
     { id: 3, name: "Enzo D.", seed: "Enzo" },
     { id: 4, name: "Ines L.", seed: "Ines" },
     { id: 5, name: "Thomas P.", seed: "Thomas" },
     { id: 6, name: "Léa F.", seed: "Lea" },
-    { id: 7, name: "Karim S.", seed: "Karim" },
+    { id: 7, name: "Alex K.", seed: "Alex" },
     { id: 8, name: "Julie A.", seed: "Julie" }
 ];
 
-// Mock Leaderboard (Données fictives pour l'instant)
-let leaderboardData = [
-    { name: "Sarah B.", score: 2400 },
-    { name: "Karim S.", score: 2150 },
-    { name: "Lucas M.", score: 1900 },
-    { name: "Enzo D.", score: 1850 },
-    { name: "Moi", score: 0 } // Sera mis à jour
-];
-
-let state = {
-    player: null,
+let gameState = {
+    isPlaying: false,
     score: 0,
-    timer: GAME_DURATION,
-    playerPos: 0, // %
-    botPos: 0,    // %
-    gameActive: false,
-    combo: 0
+    timer: GAME_TIME,
+    playerPos: 0,
+    botPos: 0,
+    combo: 0,
+    correctAnswers: 0,
+    totalQuestions: 0
 };
 
-// --- INITIALISATION ---
+let timerInterval;
+
+// --- INIT ---
 document.addEventListener('DOMContentLoaded', () => {
-    initLobby();
-    updateLeaderboard();
+    setupLobby();
+    loadLeaderboard();
 });
 
-function initLobby() {
+function setupLobby() {
     const select = document.getElementById('student-select');
-    const imgPreview = document.getElementById('avatar-display');
-    const startBtn = document.getElementById('start-btn');
+    const img = document.getElementById('current-avatar');
+    const btn = document.getElementById('start-btn');
 
-    // Remplir le menu déroulant
-    CLASS_ROSTER.forEach(student => {
+    STUDENTS.forEach(s => {
         const opt = document.createElement('option');
-        opt.value = student.id;
-        opt.textContent = student.name;
+        opt.value = s.seed;
+        opt.textContent = s.name;
         select.appendChild(opt);
     });
 
-    // Changement Avatar au changement de sélection
     select.addEventListener('change', (e) => {
-        const studentId = e.target.value;
-        const student = CLASS_ROSTER.find(s => s.id == studentId);
-        if(student) {
-            // Utilisation de l'API DiceBear sans photos réelles
-            imgPreview.src = `https://api.dicebear.com/9.x/avataaars/svg?seed=${student.seed}`;
-            state.player = student;
-            startBtn.disabled = false;
-        }
+        const seed = e.target.value;
+        img.src = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&backgroundColor=transparent`;
+        btn.disabled = false;
     });
 
-    startBtn.addEventListener('click', startGame);
+    btn.addEventListener('click', startGame);
 }
 
-function updateLeaderboard() {
-    const list = document.getElementById('leaderboard-list');
-    list.innerHTML = '';
+function loadLeaderboard() {
+    const list = document.getElementById('leaderboard');
+    // Faux scores pour remplir
+    const scores = [
+        { n: "Sarah B.", s: 4200 },
+        { n: "Lucas M.", s: 3800 },
+        { n: "Ines L.", s: 3500 },
+        { n: "Enzo D.", s: 3100 },
+        { n: "Thomas P.", s: 2900 }
+    ];
     
-    // Trier par score décroissant
-    leaderboardData.sort((a,b) => b.score - a.score);
-    
-    // Afficher Top 5
-    leaderboardData.slice(0, 5).forEach((entry, index) => {
-        const li = document.createElement('li');
-        li.innerHTML = `<span>#${index+1} ${entry.name}</span> <span>${entry.score} pts</span>`;
-        list.appendChild(li);
-    });
+    list.innerHTML = scores.map((s, i) => `
+        <li class="rank-item">
+            <span class="rank-pos">#${i+1}</span>
+            <span class="rank-name">${s.n}</span>
+            <span class="rank-score">${s.s}</span>
+        </li>
+    `).join('');
 }
 
 // --- GAME LOOP ---
 function startGame() {
-    document.getElementById('lobby-screen').classList.add('hidden-screen');
-    document.getElementById('game-screen').classList.remove('hidden-screen');
+    const seed = document.getElementById('student-select').value;
+    document.getElementById('player-img-game').src = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}`;
     
-    // Setup Avatar Jeu
-    document.getElementById('game-avatar').src = `https://api.dicebear.com/9.x/avataaars/svg?seed=${state.player.seed}`;
-    document.getElementById('status-name').textContent = state.player.name;
+    document.getElementById('lobby-screen').classList.remove('active');
+    document.getElementById('lobby-screen').classList.add('hidden');
+    document.getElementById('game-screen').classList.remove('hidden');
+    document.getElementById('game-screen').classList.add('active');
+
+    gameState.isPlaying = true;
+    gameState.score = 0;
+    gameState.timer = GAME_TIME;
+    gameState.playerPos = 0;
+    gameState.botPos = 0;
+
+    loadQuestion();
+    startTimer();
+}
+
+function startTimer() {
+    const circle = document.getElementById('timer-circle');
+    const text = document.getElementById('timer-text');
     
-    state.gameActive = true;
-    state.timer = GAME_DURATION;
-    
-    nextQuestion();
-    
-    // Timer Loop
-    const timerInt = setInterval(() => {
-        if(!state.gameActive) { clearInterval(timerInt); return; }
+    timerInterval = setInterval(() => {
+        gameState.timer--;
+        text.textContent = gameState.timer;
         
-        state.timer--;
-        document.getElementById('timer').textContent = state.timer;
-        
-        // Mouvement Bot (Avance régulière)
-        state.botPos += 1.2; // Vitesse ajustée pour 60s
+        // Bot avance tout seul
+        gameState.botPos += 1.3; // 1.3% par seconde
         updatePositions();
 
-        if(state.timer <= 0 || state.playerPos >= 90) endGame();
+        // Cercle SVG animation
+        const offset = 283 - (283 * gameState.timer / GAME_TIME);
+        circle.style.strokeDashoffset = offset;
+
+        if(gameState.timer <= 0 || gameState.playerPos >= 95) {
+            endGame();
+        }
     }, 1000);
 }
 
 function updatePositions() {
-    const playerEl = document.getElementById('player-racer');
-    const botEl = document.getElementById('bot-racer');
-    const pBar = document.getElementById('p-bar');
-
-    playerEl.style.left = Math.min(state.playerPos, 90) + '%';
-    botEl.style.left = Math.min(state.botPos, 90) + '%';
-    pBar.style.width = (state.timer / GAME_DURATION * 100) + '%';
+    const pLane = document.getElementById('player-racer');
+    const bLane = document.getElementById('bot-racer');
+    
+    pLane.style.left = Math.min(gameState.playerPos, 95) + '%';
+    bLane.style.left = Math.min(gameState.botPos, 95) + '%';
 }
 
-// --- QUIZ LOGIC ---
-function nextQuestion() {
-    // Prendre une question au hasard
-    const q = QUESTIONS_BEREADY[Math.floor(Math.random() * QUESTIONS_BEREADY.length)];
+// --- QUIZ ENGINE ---
+function loadQuestion() {
+    const q = getQuestion(); // depuis data_questions.js
     
-    document.getElementById('q-theme').textContent = q.theme;
+    document.getElementById('q-cat').textContent = q.cat;
     document.getElementById('q-text').textContent = q.q;
     
-    const container = document.getElementById('options-box');
-    container.innerHTML = '';
-    
-    q.options.forEach((opt, index) => {
+    const grid = document.getElementById('answers-grid');
+    grid.innerHTML = '';
+
+    q.a.forEach((ans, i) => {
         const btn = document.createElement('button');
-        btn.className = 'opt-btn';
-        btn.textContent = opt;
-        btn.onclick = () => handleAnswer(index === q.correct, btn);
-        container.appendChild(btn);
+        btn.className = 'ans-btn';
+        btn.textContent = ans;
+        btn.onclick = () => handleAnswer(i === q.ok, btn);
+        grid.appendChild(btn);
     });
 }
 
 function handleAnswer(isCorrect, btn) {
+    // Bloquer les clics
+    const allBtns = document.querySelectorAll('.ans-btn');
+    allBtns.forEach(b => b.disabled = true);
+
+    gameState.totalQuestions++;
+
     if(isCorrect) {
-        btn.style.background = '#10b981'; // Vert
-        state.playerPos += 8; // Avance
-        state.score += 100 + (state.combo * 20);
-        state.combo++;
+        btn.classList.add('correct');
+        gameState.correctAnswers++;
+        gameState.combo++;
         
-        // Effet Feu si combo > 2
-        if(state.combo > 2) document.querySelector('.fire-fx').classList.remove('hidden');
+        // Calcul Score
+        const points = 100 + (gameState.combo * 20);
+        gameState.score += points;
+        document.getElementById('score').textContent = gameState.score;
+
+        // Avance
+        gameState.playerPos += 6;
+
+        // Effet Combo
+        if(gameState.combo > 2) {
+            document.querySelector('.fire-particles').classList.remove('hidden');
+            document.getElementById('combo-display').classList.remove('hidden');
+            document.getElementById('combo-display').textContent = `COMBO x${gameState.combo} 🔥`;
+        }
+
     } else {
-        btn.style.background = '#ff4655'; // Rouge
-        state.combo = 0;
-        document.querySelector('.fire-fx').classList.add('hidden');
+        btn.classList.add('wrong');
+        gameState.combo = 0;
+        document.querySelector('.fire-particles').classList.add('hidden');
+        document.getElementById('combo-display').classList.add('hidden');
     }
-    
+
     updatePositions();
-    
-    // Délai avant la prochaine question
-    setTimeout(nextQuestion, 400);
+
+    // Si arrivé
+    if(gameState.playerPos >= 95) {
+        setTimeout(endGame, 500);
+    } else {
+        setTimeout(loadQuestion, 600);
+    }
 }
 
 function endGame() {
-    state.gameActive = false;
-    const overlay = document.getElementById('result-overlay');
+    clearInterval(timerInterval);
+    gameState.isPlaying = false;
+
+    const overlay = document.getElementById('overlay');
+    const title = document.getElementById('end-title');
+    
     overlay.classList.remove('hidden');
     
-    document.getElementById('res-score').textContent = `Score Final: ${state.score}`;
-    
-    if(state.playerPos > state.botPos) {
-        document.getElementById('res-title').textContent = "VICTOIRE ÉCLATANTE";
-        document.getElementById('res-title').style.color = "#10b981";
-    } else {
-        document.getElementById('res-title').textContent = "ÉCHEC MISSION";
-        document.getElementById('res-title').style.color = "#ff4655";
-    }
+    document.getElementById('end-score').textContent = gameState.score;
+    const acc = Math.round((gameState.correctAnswers / gameState.totalQuestions) * 100) || 0;
+    document.getElementById('end-acc').textContent = acc + '%';
 
-    // Mise à jour du leaderboard local (simulation)
-    leaderboardData.push({ name: state.player.name, score: state.score });
-    updateLeaderboard();
+    if(gameState.playerPos > gameState.botPos) {
+        title.textContent = "VICTOIRE !";
+        title.style.color = "#00C853";
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+    } else {
+        title.textContent = "DÉFAITE...";
+        title.style.color = "#D50000";
+    }
 }
