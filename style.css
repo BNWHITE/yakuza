@@ -1,155 +1,230 @@
+/* ================================================= */
+/* 🎨 CSS GLOBAL: YAKUZA (LAVENDER + VALORANT FUSION) */
+/* ================================================= */
+
+/* --------------------- FONT IMPORT --------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Dosis:wght@700;900&family=Montserrat:wght@400;700;900&display=swap');
+
+/* --------------------- VARIABLES GLOBALES --------------------- */
+
+/* LAVENDER THEME (Auth/Landing) */
 :root {
-    --primary: #FF4F00; /* Orange vif style Nike/Strava */
-    --secondary: #0057FF; /* Bleu électrique */
-    --bg-body: #F0F2F5;
-    --bg-card: #FFFFFF;
-    --text-main: #1A1A1A;
-    --text-muted: #666666;
-    --border-color: #E0E0E0;
-    --font-display: 'Teko', sans-serif;
-    --font-ui: 'Roboto Condensed', sans-serif;
+    --lavender-bg-light: #f6f0ff;
+    --lavender-primary: #8a2be2; /* Bleu-Violet */
+    --lavender-accent: #ffeb3b; /* Jaune Vif */
+    --lavender-green: #90ee90;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* VALORANT/YAKUZA THEME (Game/HUD) */
+:root {
+    --bg-deep-dark: #121212;      /* Noir Profond */
+    --bg-section: #1c1c21;        /* Gris Charbon */
+    --accent-red: #ff4655;        /* Rouge Valorant */
+    --accent-cyan: #00ffff;       /* Cyan pour les données */
+    --text-color-light: #f0f0f0;  /* Texte clair */
+    --text-color-data: #b0b0b0;   /* Texte secondaire */
+    
+    --glow-red: 0 0 8px var(--accent-red), 0 0 4px rgba(255, 70, 85, 0.5);
+    --glow-cyan: 0 0 8px var(--accent-cyan), 0 0 4px rgba(0, 255, 255, 0.5);
+    
+    --error-color: #ff4545;
+    
+    /* Couleurs de stats */
+    --stat-vitesse: var(--accent-cyan);
+    --stat-codage: var(--accent-red); 
+    --stat-chance: var(--lavender-accent); 
+}
+
+/* --------------------- BODY STYLING (THEME SWITCHER) --------------------- */
+* {
+    box-sizing: border-box;
+    min-width: 0;
+    transition: background-color 0.5s, color 0.5s;
+}
 
 body {
-    background-color: var(--bg-body);
-    color: var(--text-main);
-    font-family: var(--font-ui);
-    overflow-x: hidden;
-}
-
-/* --- TYPO --- */
-h1, h2, h3, .panel-title { font-family: var(--font-display); text-transform: uppercase; line-height: 1; }
-.glitch-text { font-size: 5rem; color: var(--text-main); position: relative; }
-
-/* --- NAVIGATION --- */
-.navbar {
-    background: var(--bg-card);
-    padding: 15px 30px;
+    margin: 0;
+    min-height: 100vh;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    position: sticky; top: 0; z-index: 100;
-}
-.logo { font-size: 1.5rem; font-weight: 700; letter-spacing: 1px; }
-.nav-items { display: flex; gap: 20px; align-items: center; }
-.nav-link { text-decoration: none; color: var(--text-main); font-weight: 700; text-transform: uppercase; }
-.nav-btn { 
-    background: var(--text-main); color: white; padding: 8px 15px; 
-    text-decoration: none; font-weight: bold; border-radius: 4px;
+    overflow-x: hidden; 
+    min-width: 320px;
+    font-family: 'Montserrat', sans-serif;
 }
 
-/* --- HERO --- */
-.hero {
+/* --- THEME 1: LAVENDER (Default/Auth Mode) --- */
+.auth-mode {
+    background: linear-gradient(135deg, var(--lavender-bg-light) 0%, var(--lavender-primary) 100%);
+    color: var(--lavender-primary);
+    font-family: 'Dosis', sans-serif;
+}
+.auth-mode .main-title, .auth-mode .auth-subtitle { color: var(--lavender-primary); text-shadow: none; }
+.auth-mode .main-header, .auth-mode .main-footer { background-color: rgba(255, 255, 255, 0.95); color: var(--lavender-primary); border-bottom: 2px solid var(--lavender-primary); }
+.auth-mode .auth-input { border-color: var(--lavender-primary); background: #fff; color: var(--lavender-primary); }
+.auth-mode .lavender-btn { background-color: var(--lavender-primary); color: #fff; box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4); font-family: 'Dosis', sans-serif; }
+.auth-mode .lavender-btn:hover { background-color: #9340e7; }
+.auth-mode section { background-color: rgba(255, 255, 255, 0.9); border: 1px solid var(--lavender-primary); box-shadow: 0 0 20px rgba(138, 43, 226, 0.2); }
+
+/* --- THEME 2: VALORANT (Game Mode) --- */
+.game-mode {
+    background-color: var(--bg-deep-dark);
+    color: var(--text-color-light);
+    font-family: 'Roboto Mono', monospace;
+}
+.game-mode .main-header, .game-mode .main-footer { background-color: var(--bg-section); border-bottom: 2px solid var(--accent-red); color: var(--text-color-light); }
+.game-mode .valorant-title { color: var(--accent-red); text-shadow: var(--glow-red); }
+.game-mode .dark-subtitle { color: var(--accent-cyan); }
+.game-mode .auth-input.valorant-input { border-color: var(--accent-cyan); background-color: #000; color: var(--text-color-light); }
+.game-mode section { background-color: var(--bg-section); border: 1px solid var(--accent-red); box-shadow: 0 0 15px rgba(255, 70, 85, 0.1); }
+.game-mode .valorant-btn { 
+    background-color: var(--accent-red); 
+    color: #fff; 
+    box-shadow: var(--glow-red); 
+    font-family: 'Roboto Mono', monospace;
+    transition: background-color 0.2s;
+}
+.game-mode .valorant-btn:hover { background-color: #ff6677; }
+
+/* --------------------- LAYOUTS GÉNERAUX --------------------- */
+main {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 60px 10%;
-    height: 80vh;
-    background: white;
-    position: relative;
+    width: 95%;
+    max-width: 1400px;
+    margin-top: 20px;
+    flex-grow: 1;
+    padding-bottom: 50px;
+}
+.central-area { flex-grow: 1; }
+section { padding: 40px; border-radius: 5px; margin: 10px 0; width: 100%; text-align: center; }
+.main-header, .main-footer { width: 100%; padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+.main-title { font-size: 3.5em; font-weight: 900; }
+.auth-subtitle { font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--text-color-data); }
+
+/* --- NAVIGATION / AUTH --- */
+.desktop-nav a { color: var(--text-color-data); text-decoration: none; margin-left: 25px; font-weight: 700; transition: color 0.3s; }
+.game-mode .desktop-nav a:hover { color: var(--accent-cyan); }
+.auth-form-container { display: flex; flex-direction: column; align-items: center; max-width: 400px; margin: 0 auto; }
+.auth-input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid; border-radius: 3px; font-size: 1em; }
+.action-button { padding: 10px 20px; margin: 10px; font-size: 1em; border-radius: 3px; }
+
+/* --------------------- HUD LATÉRAL (GAME MODE ONLY) --------------------- */
+#side-hud {
+    width: 300px;
+    margin-right: 20px;
+    padding: 15px;
+    /* VALORANT GRID LINES */
+    border: 1px solid var(--accent-red);
+    background-color: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 10px rgba(255, 70, 85, 0.2);
+    position: sticky;
+    top: 80px; 
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+}
+.hud-box { padding: 15px 0; border-top: 1px dashed rgba(255, 255, 255, 0.1); }
+.hud-title { color: var(--accent-cyan); font-size: 1em; margin-top: 0; text-shadow: var(--glow-cyan); }
+.stat-line { display: flex; justify-content: space-between; font-size: 0.9em; margin-bottom: 5px; }
+.agent-level span, .yen-display { font-weight: 700; color: var(--accent-red); text-shadow: var(--glow-red); }
+
+/* --- STATS DYNAMIQUE --- */
+.stats-card { background: #000; padding: 10px; border-radius: 5px; margin-top: 10px; }
+.stat-bar-container { display: flex; align-items: center; margin-bottom: 5px; font-size: 0.8em; }
+.stat-bar-container label { color: var(--text-color-data); width: 45%; text-align: left; padding-right: 5px; white-space: nowrap; }
+.stat-bar { flex-grow: 1; height: 8px; background-color: #333; border-radius: 4px; overflow: hidden; }
+.stat-fill { height: 100%; border-radius: 4px; transition: width 0.5s; filter: drop-shadow(0 0 2px); }
+.stat-fill[data-stat="codage"] { background-color: var(--stat-codage); }
+.stat-fill[data-stat="vitesse"] { background-color: var(--stat-vitesse); }
+.stat-fill[data-stat="chance"] { background-color: var(--stat-chance); }
+
+/* --- CAROUSEL & SHOP --- */
+.selector-carousel { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px; }
+.shop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
+.student-card { background-color: #2a2e35; border: 1px solid var(--text-color-data); padding: 15px; border-radius: 5px; cursor: pointer; }
+.student-avatar { border: 3px solid var(--accent-red); border-radius: 50%; }
+
+/* --- RACE TRACK (Hack Visuals) --- */
+.race-track {
+    border: 5px solid var(--accent-red);
+    box-shadow: 0 0 10px var(--accent-red);
+    height: 250px;
+    width: 95%;
+    margin: 20px auto;
     overflow: hidden;
+    position: relative;
+    padding: 10px;
+    background-color: #000;
 }
-.hero-bg-pattern {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background-image: radial-gradient(#e0e0e0 1px, transparent 1px);
-    background-size: 20px 20px; opacity: 0.5; z-index: 0;
+/* Animation de fond pour le hack */
+@keyframes matrix-rain {
+    0% { background-position: 0 0; }
+    100% { background-position: -200px -200px; }
 }
-.hero-content { z-index: 1; max-width: 50%; }
-.subtitle { font-size: 1.5rem; color: var(--text-muted); margin: 20px 0; }
-
-.stats-row { display: flex; gap: 40px; margin-bottom: 40px; }
-.stat-item { display: flex; flex-direction: column; }
-.stat-item .number { font-size: 2.5rem; font-weight: 900; color: var(--primary); font-family: var(--font-display); }
-
-.cta-btn {
-    display: inline-block;
-    padding: 15px 40px;
-    background: var(--primary);
-    color: white;
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    text-decoration: none;
-    clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
-    transition: transform 0.2s;
+.race-track.hacking {
+    background: #000 url('data:image/svg+xml;utf8,<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><text x="0" y="15" font-size="16" font-family="monospace" fill="%23ff4655" opacity="0.5">101010</text><text x="100" y="65" font-size="16" font-family="monospace" fill="%2300ffff" opacity="0.5">011001</text><text x="50" y="115" font-size="16" font-family="monospace" fill="%23ff4655" opacity="0.5">111000</text><text x="150" y="165" font-size="16" font-family="monospace" fill="%2300ffff" opacity="0.5">010101</text></svg>') repeat;
+    animation: matrix-rain 2s linear infinite;
 }
-.cta-btn:hover { transform: translateX(5px); }
-
-.hero-visual img { max-width: 500px; animation: float 3s ease-in-out infinite; }
-@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-
-/* --- APP LAYOUT --- */
-#app-container { max-width: 1200px; margin: 0 auto; padding: 20px; min-height: 100vh; }
-.screen { display: none; opacity: 0; transition: opacity 0.5s; }
-.screen.active { display: block; opacity: 1; }
-
-/* LOBBY */
-.lobby-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; }
-.panel { background: var(--bg-card); padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
-
-.avatar-selector { text-align: center; margin: 30px 0; }
-.avatar-display-large img { width: 150px; height: 150px; border-radius: 50%; border: 4px solid var(--bg-body); }
-.game-select { width: 100%; padding: 15px; margin-top: 20px; font-size: 1.1rem; border: 2px solid var(--border-color); border-radius: 8px; }
-
-.game-btn {
-    width: 100%; padding: 15px; border: none; background: var(--primary);
-    color: white; font-family: var(--font-display); font-size: 1.8rem;
-    cursor: pointer; clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
+.cat-lane img.running {
+    animation: bot-run 0.15s infinite alternate; 
 }
-.game-btn:disabled { background: #ccc; cursor: not-allowed; }
+.result-message { font-size: 1.5em; font-weight: 700; margin-top: 10px; }
 
-/* GAMEPLAY UI */
-.game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-.timer-module { position: relative; width: 80px; height: 80px; }
-.timer-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
-.timer-circle-bg { fill: none; stroke: #eee; stroke-width: 8; }
-.timer-circle-fg { fill: none; stroke: var(--primary); stroke-width: 8; stroke-dasharray: 283; stroke-dashoffset: 0; transition: stroke-dashoffset 1s linear; }
-#timer-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2rem; font-weight: bold; }
+/* --------------------- MOBILE OPTIMIZATION (BREAKPOINT <= 992px) --------------------- */
 
-.track-area { 
-    height: 200px; background: var(--bg-card); border-radius: 12px; 
-    position: relative; overflow: hidden; margin-bottom: 30px;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+@media (max-width: 992px) {
+    /* --- STRUCTURE GENERALE FIX --- */
+    .main-header { padding: 10px 15px; flex-wrap: wrap; }
+    .desktop-nav { display: none; }
+    
+    /* FIX CRITIQUE MOBILE LAYOUT */
+    main { 
+        flex-direction: column; 
+        width: 100%; 
+        padding: 0;
+        margin-top: 10px;
+    }
+    
+    /* FIX CRITIQUE HUD/ASIDE */
+    #side-hud {
+        width: 100%;
+        margin: 0;
+        position: static; /* Retire l'effet sticky sur mobile */
+        padding: 15px 20px;
+        border-bottom: 2px solid var(--accent-red); 
+    }
+    
+    /* --- TITRES/SECTIONS FIX --- */
+    .main-title { font-size: 2.2em; margin: 15px 0 10px; }
+    .dark-subtitle { font-size: 1em; }
+    section { padding: 20px 15px; margin: 10px 0; width: 95%; margin: 10px auto; }
+    
+    /* --- CAROUSEL FIX (Menu Roulette) --- */
+    .selector-carousel {
+        display: flex;
+        overflow-x: scroll; 
+        scroll-snap-type: x mandatory; 
+        gap: 15px;
+        padding-bottom: 10px;
+        padding-left: 15px; 
+        padding-right: 15px; 
+        width: 100%; 
+        margin: 20px 0;
+        justify-content: flex-start;
+    }
+    .student-card { flex: 0 0 220px; min-width: 220px; }
+    
+    /* --- COURSE FIX --- */
+    .race-track { height: 150px; padding: 5px; }
+    .cat-lane img { width: 60px; height: 60px; }
+    
+    /* --- CHAT/AUTH INPUT FIX --- */
+    .chat-input-area { flex-direction: column; gap: 5px; }
+    .chat-input-area .auth-input { max-width: 100%; }
+    .chat-input-area .send-btn { min-width: 100%; }
 }
-.track-lane { height: 50%; position: relative; border-bottom: 1px dashed #eee; }
-.racer-wrapper { 
-    position: absolute; left: 0; top: 50%; transform: translateY(-50%); 
-    display: flex; flex-direction: column; align-items: center; transition: left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); z-index: 2;
-}
-.racer-avatar { width: 60px; height: 60px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-.racer-avatar.gray { filter: grayscale(1); opacity: 0.7; }
-.finish-flag { position: absolute; right: 20px; top: 0; height: 100%; display: flex; align-items: center; font-size: 2rem; border-left: 2px dashed #ccc; padding-left: 10px; color: #ccc; }
 
-/* QUIZ */
-.quiz-card { background: white; padding: 30px; border-radius: 12px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-.category-badge { background: var(--secondary); color: white; padding: 5px 10px; font-weight: bold; border-radius: 4px; font-size: 0.9rem; }
-.question-text { font-size: 1.8rem; margin: 20px 0 30px; color: var(--text-main); }
-
-.answers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-.ans-btn {
-    background: var(--bg-body); border: 2px solid transparent; padding: 20px;
-    font-size: 1.2rem; font-weight: bold; cursor: pointer; border-radius: 8px;
-    transition: all 0.2s; color: var(--text-main);
-}
-.ans-btn:hover { border-color: var(--secondary); background: white; }
-.ans-btn.correct { background: #00C853; color: white; border-color: #00C853; }
-.ans-btn.wrong { background: #D50000; color: white; border-color: #D50000; }
-
-/* RESULT OVERLAY */
-.overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(255,255,255,0.9); z-index: 200; display: flex; justify-content: center; align-items: center; }
-.result-modal { background: white; padding: 50px; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); text-align: center; max-width: 500px; width: 90%; }
-#end-title { font-size: 5rem; color: var(--primary); margin-bottom: 20px; }
-.end-stats { display: flex; justify-content: space-around; margin-bottom: 30px; }
-.end-stat strong { display: block; font-size: 2.5rem; color: var(--text-main); }
-
-/* RESPONSIVE */
-@media (max-width: 768px) {
-    .hero { flex-direction: column; height: auto; text-align: center; padding: 40px 20px; }
-    .hero-content { max-width: 100%; }
-    .hero-visual img { max-width: 80%; margin-top: 30px; }
-    .lobby-grid { grid-template-columns: 1fr; }
-    .answers-grid { grid-template-columns: 1fr; }
-    .glitch-text { font-size: 3rem; }
+@media (max-width: 600px) {
+    .main-title { font-size: 1.8em; }
+    .auth-form-container { max-width: 100%; }
+    .student-card { flex: 0 0 180px; min-width: 180px; }
 }
