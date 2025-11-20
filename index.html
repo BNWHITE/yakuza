@@ -3,103 +3,131 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <meta charset="UTF-8">
-    <title>YAKUZA CODE QUEST - Supabase Edition</title>
+    <title>YAKUZA: DIGITAL HEIST - Terminal</title>
     
     <link rel="stylesheet" href="style.css">
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
 </head>
 <body>
-    <header class="ninja-header">
-        <div class="logo-text"># YAKUZA</div>
+    <header class="cyber-header">
+        <div class="logo-text">YAKUZA: HEIST</div>
         <nav class="desktop-nav">
-            <a href="#">Quêtes</a>
-            <a href="#">Clan</a>
-            <a href="#">Histoire</a>
-            <a href="#">Blog</a>
+            <a href="#" onclick="showScreen('selection')">MISSIONS</a>
+            <a href="#" onclick="showScreen('shop')">UPGRADES</a>
+            <a href="#" onclick="showScreen('history')">LOGS</a>
         </nav>
-        <button id="logout-btn" class="explore-btn" style="display: none;">Déconnexion</button>
-        <div id="kebab-score-display" class="score-display">0 K</div>
+        <button id="logout-btn" class="log-btn" style="display: none;">LOGOUT</button>
     </header>
 
-    <main>
-        <section id="auth-screen">
-            <h2 class="dark-title">🔐 ACCÈS CLAN TERNINAL</h2>
-            <p style="color: var(--accent-lime); margin-bottom: 25px;">Connectez-vous pour commencer la Quête ou créez un nouveau Bot-Explorateur !</p>
-            
-            <input type="email" id="auth-email" placeholder="Email (Identifiant Bot)" class="auth-input">
-            <input type="password" id="auth-password" placeholder="Mot de Passe (Clé de Sécurité)" class="auth-input">
-            
-            <button id="signup-btn" class="action-button">S'inscrire</button>
-            <button id="signin-btn" class="action-button">Se Connecter</button>
-            
-            <p id="auth-message" style="margin-top: 20px;"></p>
-        </section>
-
-        <section id="selection-screen" style="display: none;">
-            <h1 class="maquette-title">UNMASK THE FUTURE OF YAKUZA BOTS</h1>
-            <h2 class="dark-subtitle">Choisissez votre Bot-Explorateur :</h2>
-            <p id="user-welcome" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: var(--accent-orange); margin-bottom: 20px;">Bienvenue, Explorateur !</p>
-            <p id="mq-status"></p>
-
-            <div id="student-selector" class="selector-carousel">
+    <main class="main-content">
+        <aside id="side-hud" style="display: none;">
+            <div class="hud-box profile-info">
+                <h3 class="hud-title">AGENT INFO</h3>
+                <p id="user-welcome">AGENT [UNKNOWN]</p>
+                <div class="stat-line">
+                    <span>💳 YEN:</span> <span id="kebab-score-display" class="yen-display">0</span>
                 </div>
-            
-            <button id="start-race-btn" class="action-button explore-btn" style="display: none;">Lancer la Quête !</button>
-            
-            <div id="options-menu">
-                <h3>🛠️ Options de Course</h3>
-                <label>
-                    <input type="checkbox" id="speed-boost-option">
-                    Boost de Vitesse (Bonus de 10% sur la stat Vitesse)
-                </label>
-                <label>
-                    <input type="checkbox" id="luck-charm-option">
-                    Talisman de Chance (Augmente la variance de victoire)
-                </label>
+                <div class="stat-line">
+                    <span>⭐ KIRIN:</span> <span id="kirin-display">0</span>
+                </div>
             </div>
-        </section>
-
-        <section id="race-screen" style="display: none;">
-            <h2>SENTIER DE LA CONNAISSANCE PERDUE</h2>
-            <h3 id="countdown">3</h3>
             
-            <div class="race-track">
-                <div class="finish-line"></div>
+            <div class="hud-box">
+                <h3 class="hud-title">BOT STATS</h3>
+                <div id="player-stats-display">
+                    <p>Stats chargement...</p>
+                </div>
+            </div>
+        </aside>
+        
+        <div class="central-area">
+            
+            <section id="auth-screen">
+                <h2 class="terminal-title">🔐 TERMINAL LOGIN</h2>
+                <p class="auth-message">AUTHENTIFICATION REQUISE POUR ACCÉDER AUX PROTOCOLES.</p>
                 
-                <div class="cat-lane">
-                    <img id="player-cat" src="" alt="Votre Bot">
-                    <span id="player-name" class="cat-name"></span>
+                <input type="email" id="auth-email" placeholder="AGENT EMAIL" class="auth-input">
+                <input type="password" id="auth-password" placeholder="SECURITY KEY" class="auth-input">
+                
+                <button id="signup-btn" class="action-button primary-btn">CREATE NEW AGENT</button>
+                <button id="signin-btn" class="action-button primary-btn">CONNECT</button>
+                
+                <p id="auth-message" class="auth-feedback" style="margin-top: 20px;"></p>
+            </section>
+
+            <section id="selection-screen" style="display: none;">
+                <h1 class="main-title">MISSION HUB: HACK PROTOCOLS</h1>
+                <h2 class="dark-subtitle">SÉLECTIONNER CIBLE DE HACK :</h2>
+
+                <div id="student-selector" class="selector-carousel">
+                    </div>
+                
+                <p id="mq-status" class="mobile-hint"></p>
+                <button id="start-race-btn" class="action-button primary-btn" style="display: none;">INITIER HACK</button>
+                
+                <div id="options-menu">
+                    <h3>🛠️ MODIFICATEURS DE TENTATIVE</h3>
+                    <label>
+                        <input type="checkbox" id="speed-boost-option">
+                        SURCHARGE PROCESSEUR (+10% Vitesse)
+                    </label>
+                    <label>
+                        <input type="checkbox" id="luck-charm-option">
+                        CRYPTO TALISMAN (Augmente la variance de succès)
+                    </label>
                 </div>
-                <div class="cat-lane">
-                    <img id="opponent-cat" src="" alt="Bot Adversaire">
-                    <span id="opponent-name" class="cat-name"></span>
+            </section>
+            
+            <section id="shop-screen" style="display: none;">
+                <h1 class="main-title">HARDWARE UPGRADES</h1>
+                <h2 class="dark-subtitle">AMÉLIORER CAPACITÉS DU BOT (YEN)</h2>
+                
+                <div id="upgrade-shop" class="shop-grid">
+                    </div>
+            </section>
+
+            <section id="race-screen" style="display: none;">
+                <h2>HACK EN COURS...</h2>
+                <h3 id="countdown" class="countdown-timer">3</h3>
+                
+                <div class="race-track">
+                    <div class="finish-line"></div>
+                    
+                    <div class="cat-lane player-lane">
+                        <img id="player-cat" src="" alt="Votre Bot" class="bot-avatar">
+                        <span id="player-name" class="cat-name"></span>
+                    </div>
+                    <div class="cat-lane opponent-lane">
+                        <img id="opponent-cat" src="" alt="Bot Adversaire" class="bot-avatar">
+                        <span id="opponent-name" class="cat-name"></span>
+                    </div>
                 </div>
-            </div>
-            <h3 id="race-result"></h3>
-            <button id="reset-race-btn" class="action-button" style="display: none;">Nouvelle Expédition</button>
-        </section>
-        
-        <section id="history-section" style="display: none;">
-            <h2>📜 Historique des Quêtes</h2>
-            <div id="history-log">
-                <p style="opacity: 0.7;">Aucune course n'a été lancée pour le moment.</p>
-            </div>
-        </section>
-    </main>
-    
-    <section id="chat-section" style="display: none;">
-        <h2 class="dark-subtitle">💬 Chat en Direct (Terminal Public)</h2>
-        
-        <div id="chat-messages" style="height: 300px; overflow-y: auto; background: #000; padding: 10px; border-radius: 8px; border: 1px solid var(--accent-lime); margin-bottom: 15px; text-align: left;">
-            </div>
-        
-        <div style="display: flex; gap: 10px;">
-            <input type="text" id="chat-input" placeholder="Tapez votre message ici..." class="auth-input" style="flex-grow: 1; margin: 0; border-color: var(--accent-lime);">
-            <button id="send-chat-btn" class="action-button explore-btn" style="padding: 10px 20px; margin: 0; font-size: 0.8em;">Envoyer</button>
+                <h3 id="race-result" class="result-message"></h3>
+                <button id="reset-race-btn" class="action-button primary-btn" style="display: none;">NOUVELLE CIBLE</button>
+            </section>
+            
+            <section id="history-section" style="display: none;">
+                <h2 class="dark-subtitle">📜 LOGS DES OPÉRATIONS</h2>
+                <div id="history-log" class="log-output">
+                    <p style="opacity: 0.7;">Aucune opération enregistrée.</p>
+                </div>
+            </section>
+
+            <section id="chat-section" style="display: none;">
+                <h2 class="dark-subtitle">💬 CHAT - CANAL OUVERT</h2>
+                
+                <div id="chat-messages" class="chat-window">
+                    </div>
+                
+                <div class="chat-input-area">
+                    <input type="text" id="chat-input" placeholder="ENVOYER MESSAGE DE HACK..." class="auth-input">
+                    <button id="send-chat-btn" class="action-button primary-btn send-btn">SEND</button>
+                </div>
+            </section>
+            
         </div>
-    </section>
+    </main>
 
     <audio id="defeat-audio" src="madame-la-directrice-degat-degat-le-p-breziani_orZPPW2u.mp3" preload="auto"></audio>
 
