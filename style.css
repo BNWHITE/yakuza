@@ -1,5 +1,5 @@
 /* ================================================= */
-/* 🎨 CSS ENHANCED : Style YAKUZA (Optimisation V3) */
+/* 🎨 CSS ENHANCED : Style YAKUZA (Optimisation V4) */
 /* ================================================= */
 
 /* --------------------- FONT IMPORT --------------------- */
@@ -25,7 +25,6 @@
 /* --------------------- GLOBAL & STRUCTURE --------------------- */
 * {
     box-sizing: border-box;
-    /* Correction : Assure que le padding et le border sont inclus dans la taille */
     min-width: 0;
 }
 
@@ -39,10 +38,10 @@ body {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    overflow-x: hidden;
+    overflow-x: hidden; /* Prévient le scrolling horizontal non désiré */
     padding-bottom: 50px;
     position: relative;
-    min-width: 320px; /* Sécurité pour les plus petits mobiles */
+    min-width: 320px;
 }
 
 /* --- HEADER YAKUZA --- */
@@ -68,7 +67,6 @@ body {
     margin-left: 25px;
     font-weight: 700;
 }
-/* ... Styles de titres, boutons, sections (inchangés sauf mobile) ... */
 
 /* --- TITRES MAQUETTE --- */
 .maquette-title {
@@ -103,7 +101,7 @@ section {
     text-align: center;
 }
 
-/* --- FORMULAIRE ET INPUTS --- */
+/* --- CHAMP D'ENTRÉE --- */
 .auth-input {
     width: 80%;
     max-width: 400px;
@@ -130,13 +128,6 @@ section {
     margin: 15px 10px 0;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
 }
-.explore-btn {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    padding: 10px 20px;
-    border-radius: 5px;
-    margin: 0;
-}
 
 /* --------------------- MENU ROULETTE (CAROUSEL) --------------------- */
 .selector-carousel {
@@ -153,64 +144,29 @@ section {
     cursor: pointer;
     border: 2px solid transparent;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
-    /* Correction mobile : empêche la carte de rétrécir sous 0 */
     min-width: 0; 
 }
-.student-card.selected {
-    border-color: var(--accent-orange);
-    box-shadow: 0 0 25px var(--accent-orange);
-    transform: scale(1.05);
-    background-color: #333842;
-}
 
-/* --- STATS CARD (corrigé) --- */
-.stats-card {
-    background: #101216;
-    padding: 10px;
-    border-radius: 8px;
-    margin-top: 15px;
-}
-.stat-bar-container {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 0.75em;
-    font-weight: 400;
-    display: flex;
-    align-items: center;
-    margin-bottom: 7px;
-}
-.stat-bar-container label {
-    color: var(--text-color-light); 
-    width: 45%;
-    text-align: left;
-    padding-right: 5px;
-    /* Correction : empêche le label de forcer le wrap */
-    white-space: nowrap; 
-}
-.stat-fill {
-    height: 100%;
-    border-radius: 5px;
-    filter: drop-shadow(0 0 3px); 
-}
+/* --- STATS CARD --- */
+.stats-card { background: #101216; padding: 10px; border-radius: 8px; margin-top: 15px; }
+.stat-bar-container { font-family: 'Montserrat', sans-serif; font-size: 0.75em; font-weight: 400; display: flex; align-items: center; margin-bottom: 7px; }
+.stat-bar-container label { color: var(--text-color-light); width: 45%; text-align: left; padding-right: 5px; white-space: nowrap; }
+.stat-bar { flex-grow: 1; height: 10px; background-color: #444; border-radius: 5px; overflow: hidden; }
+.stat-fill { height: 100%; border-radius: 5px; transition: width 0.5s; filter: drop-shadow(0 0 3px); }
 .stat-fill[data-stat="codage"] { background-color: var(--stat-codage); }
 .stat-fill[data-stat="vitesse"] { background-color: var(--stat-vitesse); }
 .stat-fill[data-stat="chance"] { background-color: var(--stat-chance); }
 
 /* --------------------- ÉCRAN DE COURSE & ANIMATIONS --------------------- */
 .race-track {
-    background-color: var(--track-color);
-    border: 5px solid var(--accent-lime);
-    border-radius: 10px;
-    margin: 30px auto;
     padding: 20px;
     position: relative;
     height: 250px;
     width: 95%;
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8), 0 0 15px rgba(170, 255, 0, 0.3);
     overflow: hidden;
 }
 
 .cat-lane img {
-    /* Ajout du style de bordure pour l'avatar */
     border: 3px solid var(--accent-lime);
     padding: 5px;
     background-color: #222;
@@ -219,7 +175,6 @@ section {
     z-index: 10;
 }
 
-/* Animation de Course (Subtile) */
 @keyframes bot-run {
     0% { transform: translateY(0); }
     50% { transform: translateY(-5px); }
@@ -227,78 +182,61 @@ section {
 }
 
 .cat-lane img.running {
-    animation: bot-run 0.15s infinite alternate; /* Mouvement rapide et rythmé */
+    animation: bot-run 0.15s infinite alternate; 
 }
 
 
-/* --------------------- MOBILE OPTIMIZATION (BREAKPOINT <= 992px) --------------------- */
+/* --------------------- MOBILE OPTIMIZATION (RÉELLEMENT ADAPTÉ) --------------------- */
+
 @media (max-width: 992px) {
+    /* --- Général / Header --- */
     .ninja-header {
-        padding: 15px 20px;
+        padding: 15px 10px;
         flex-wrap: wrap; 
         justify-content: center;
     }
-    .desktop-nav {
-        display: none; 
-    }
+    .desktop-nav { display: none; }
+    .score-display, #logout-btn { margin-left: 10px; margin-top: 10px; }
     
-    /* Correction : Maintient le titre principal lisible */
-    .maquette-title {
-        font-size: 2em;
-        margin: 20px 0 5px;
-    }
+    /* --- Titres & Sections --- */
+    .maquette-title { font-size: 2em; margin: 20px 0 5px; }
+    .dark-subtitle, .dark-title { font-size: 1.2em; }
+    section { padding: 20px 15px; }
     
-    /* Menu Roulette (Carrousel) */
+    /* --- Menu Roulette --- */
     .selector-carousel {
         display: flex;
         overflow-x: scroll; 
         scroll-snap-type: x mandatory; 
-        -webkit-overflow-scrolling: touch; 
         gap: 15px;
         padding-bottom: 10px;
-        /* Correction : Ajoute du padding horizontal pour éviter le bord de l'écran */
-        padding-left: 15px;
-        padding-right: 15px;
-        margin-left: -15px;
-        margin-right: -15px;
-        width: calc(100% + 30px); /* Ajuste la largeur pour le padding */
+        /* Correction Mobile: utilise une largeur 100% et laisse le scrolling faire */
+        width: 100%; 
+        justify-content: flex-start;
     }
     
     .student-card {
         flex: 0 0 250px; 
         scroll-snap-align: center;
-        min-width: 250px; /* Force la taille pour le carrousel */
+        min-width: 250px; 
     }
     
-    section { padding: 30px 15px; }
-    .score-display, #logout-btn { margin-left: 15px; margin-top: 10px;}
-    .action-button { font-size: 0.8em; }
-    
-    /* Correction Chat/Auth : pour les inputs en flexbox */
+    /* --- Chat/Auth Input Fix --- */
     #chat-section div[style*="display: flex"] {
         flex-direction: column;
+        gap: 5px !important;
     }
-    #chat-section #chat-input {
-        width: 100%;
-    }
-    #chat-section #send-chat-btn {
-        width: 100%;
-    }
+    #chat-section #chat-input { width: 100% !important; max-width: 100%; }
+    #chat-section #send-chat-btn { width: 100%; }
+
+    /* --- Course Fix --- */
+    .race-track { height: 180px; padding: 10px; }
+    .cat-lane img { width: 70px; }
 }
 
-/* --------------------- PETITS MOBILES (BREAKPOINT <= 600px) --------------------- */
 @media (max-width: 600px) {
-    .maquette-title {
-        font-size: 1.5em;
-    }
-    .dark-subtitle, .dark-title {
-        font-size: 1.2em;
-    }
-    .student-card {
-        flex: 0 0 200px; 
-        min-width: 200px;
-    }
-    .race-track {
-        height: 180px;
-    }
+    .maquette-title { font-size: 1.2em; }
+    .dark-subtitle, .dark-title { font-size: 1em; }
+    .student-card { flex: 0 0 180px; min-width: 180px; }
+    .cat-lane img { width: 60px; }
 }
