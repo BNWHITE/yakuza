@@ -1,165 +1,106 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <meta charset="UTF-8">
-    <title>YAKUZA: SHADOW CLAN - Terminal</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAHINA: FOREST SPIRIT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="auth-mode"> 
+<body>
 
-    <header class="main-header">
-        <div class="logo-text">SHADOW CLAN</div>
-        <nav class="desktop-nav">
-            <a href="#" onclick="showScreen('selection');">MISSIONS</a>
-            <a href="#" onclick="showScreen('shop');">UPGRADES</a>
-            <a href="#" onclick="showScreen('history');">LOGS</a>
-            <a href="#" onclick="showScreen('chat');">COMMS</a>
-        </nav>
-        <button id="logout-btn" class="main-btn logout-btn" style="display: none;">LOGOUT</button>
-    </header>
+    <div class="ambient-light"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
 
-    <main class="main-content">
+    <main class="main-container">
         
-        <aside id="side-hud" style="display: none;">
-            <div class="hud-box profile-info">
-                <h3 class="hud-title">AGENT PROFILE</h3>
-                <p id="agent-name-display">[AGENT NAME]</p>
-                <p id="user-welcome" style="font-size: 0.8em;">[UNKNOWN]</p>
-                <div class="stat-line agent-level">
-                    <span>LVL:</span> <span id="agent-level">1</span>
+        <header class="glass-header">
+            <div class="logo-area">
+                <h1>KAHINA</h1>
+                <span class="subtitle">SPIRIT GUARDIAN</span>
+            </div>
+            <div class="player-status">
+                <div class="resource-badge gold">
+                    <span class="icon">✨</span>
+                    <span id="essence-display">0</span> ESSENCE
+                </div>
+                <div class="resource-badge spirit">
+                    <span class="icon">🌿</span>
+                    <span id="level-display">LVL 1</span>
                 </div>
             </div>
-            
-            <div class="hud-box">
-                <h3 class="hud-title">ÉQUIPEMENT ACTIF</h3>
-                <div id="equipment-display"></div>
-            </div>
+        </header>
 
-            <div class="hud-box">
-                <h3 class="hud-title">STATS CALCULÉES</h3>
-                <div id="player-stats-display"></div>
-            </div>
-             <div class="hud-box resource-display">
-                <h3 class="hud-title">RESSOURCES</h3>
-                <div class="stat-line">
-                    <span>💳 YEN:</span> <span id="kebab-score-display" class="yen-display">0</span>
-                </div>
-                <div class="stat-line">
-                    <span>⭐ KIRIN (XP):</span> <span id="kirin-display" class="kirin-display">0</span>
-                </div>
-            </div>
-        </aside>
-        
-        <div class="central-area">
+        <div class="content-wrapper">
             
-            <section id="auth-screen">
-                <h1 class="main-title lavender-title">READY TO INFILTRATE?</h1>
-                <h2 class="auth-subtitle">ACCÈS AU PROTOCOLE D'AGENT</h2>
+            <aside class="glass-panel profile-panel 3d-card">
+                <div class="hero-container">
+                    <div class="hero-frame">
+                        <img src="./images/princess.avif" alt="Kahina" class="hero-img">
+                        <div class="glow-ring"></div>
+                    </div>
+                    <h2>KAHINA</h2>
+                    <p class="hero-title">Gardienne de la Source</p>
+                </div>
                 
-                <div class="auth-form-container">
-                    <input type="email" id="auth-email" placeholder="AGENT EMAIL" class="auth-input">
-                    <input type="password" id="auth-password" placeholder="SECURITY KEY" class="auth-input">
+                <div class="stats-container">
+                    <div class="stat-row">
+                        <label>PUISSANCE</label>
+                        <div class="bar-bg"><div class="bar-fill power" style="width: 60%"></div></div>
+                    </div>
+                    <div class="stat-row">
+                        <label>AGILITÉ</label>
+                        <div class="bar-bg"><div class="bar-fill agility" style="width: 60%"></div></div>
+                    </div>
+                    <div class="stat-row">
+                        <label>HARMONIE</label>
+                        <div class="bar-bg"><div class="bar-fill magic" style="width: 60%"></div></div>
+                    </div>
+                </div>
+            </aside>
+
+            <section class="glass-panel main-stage">
+                
+                <div id="selection-screen" class="screen active">
+                    <h2 class="screen-title">DÉFIEZ LES ESPRITS CORROMPUS</h2>
+                    <div id="enemy-grid" class="grid-container">
+                        </div>
+                    <button id="battle-btn" class="action-btn hidden">COMMENCER LE RITUEL</button>
+                </div>
+
+                <div id="battle-screen" class="screen hidden">
+                    <div class="battle-arena">
+                        <div class="lane player-lane">
+                            <div class="avatar-bubble">
+                                <img src="./images/princess.avif" alt="Kahina">
+                            </div>
+                            <div class="track">
+                                <div id="player-progress" class="progress-liquid player-liquid"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="versus-badge">VS</div>
+
+                        <div class="lane enemy-lane">
+                            <div class="avatar-bubble">
+                                <img id="enemy-img-battle" src="" alt="Enemy">
+                            </div>
+                            <div class="track">
+                                <div id="enemy-progress" class="progress-liquid enemy-liquid"></div>
+                            </div>
+                        </div>
+                    </div>
                     
-                    <button id="signup-btn" class="action-button primary-btn lavender-btn">CRÉER NOUVEL AGENT</button>
-                    <button id="signin-btn" class="action-button primary-btn lavender-btn">ACCÈS TERMINAL</button>
+                    <div id="battle-log" class="battle-status">PRÉPARATION...</div>
+                    <button id="reset-btn" class="action-btn secondary hidden">RETOUR À LA FORÊT</button>
                 </div>
-                
-                <p id="auth-message" class="auth-feedback" style="margin-top: 20px;"></p>
-            </section>
-            
-            <section id="agent-selection-screen" style="display: none;">
-                <h1 class="main-title valorant-title">CHOIX D'IDENTITÉ</h1>
-                <h2 class="dark-subtitle">SÉLECTIONNEZ VOTRE AGENT POUR REJOINDRE LE CLAN :</h2>
-                <p class="mobile-hint">Les stats de base de votre Agent ne peuvent être améliorées qu'avec des UPGRADES.</p>
 
-                <div id="agent-selector-grid" class="selector-carousel agent-selector-grid">
-                    </div>
-                
-                <button id="confirm-agent-btn" class="action-button valorant-btn" style="display: none;">CONFIRMER L'AGENT CHOISI</button>
             </section>
 
-            <section id="selection-screen" style="display: none;">
-                <h1 class="main-title valorant-title">MISSION HUB: SELECT TARGET</h1>
-                <h2 class="dark-subtitle">SÉLECTIONNER CIBLE DE HACK :</h2>
-
-                <div id="mission-selector" class="selector-carousel"></div>
-                
-                <p id="mq-status" class="mobile-hint"></p>
-                <button id="start-race-btn" class="action-button valorant-btn" style="display: none;">INITIER HACK</button>
-                
-                <div id="options-menu">
-                    <h3>🛠️ MODIFICATEURS</h3>
-                    <label>
-                        <input type="checkbox" id="speed-boost-option">
-                        SURCHARGE PROCESSEUR (+10% Vitesse)
-                    </label>
-                    <label>
-                        <input type="checkbox" id="luck-charm-option">
-                        CRYPTO TALISMAN (Augmente la variance)
-                    </label>
-                </div>
-            </section>
-            
-            <section id="shop-screen" style="display: none;">
-                <h1 class="main-title valorant-title">HARDWARE UPGRADES</h1>
-                <h2 class="dark-subtitle">AMÉLIORER ÉQUIPEMENT (YEN)</h2>
-                
-                <div id="upgrade-shop" class="shop-grid"></div>
-            </section>
-
-            <section id="race-screen" style="display: none;">
-                <h2>HACK EN COURS...</h2>
-                <h3 id="countdown" class="countdown-timer">3</h3>
-                
-                <div class="race-track">
-                    <div class="finish-line"></div>
-                    
-                    <div class="cat-lane player-lane">
-                        <img id="player-cat" src="" alt="Votre Bot" class="bot-avatar">
-                        <span id="player-name" class="cat-name"></span>
-                    </div>
-                    <div class="cat-lane opponent-lane">
-                        <img id="opponent-cat" src="" alt="Bot Adversaire" class="bot-avatar">
-                        <span id="opponent-name" class="cat-name"></span>
-                    </div>
-                </div>
-                <h3 id="race-result" class="result-message"></h3>
-                <button id="reset-race-btn" class="action-button valorant-btn" style="display: none;">NOUVELLE CIBLE</button>
-            </section>
-            
-            <section id="history-section" style="display: none;">
-                <h2 class="dark-subtitle">📜 LOGS DES OPÉRATIONS</h2>
-                <div id="history-log" class="log-output">
-                    <p style="opacity: 0.7;">Aucune opération enregistrée.</p>
-                </div>
-            </section>
-
-            <section id="chat-section" style="display: none;">
-                <h2 class="dark-subtitle">💬 CHAT - CANAL OUVERT</h2>
-                
-                <div id="chat-messages" class="chat-window"></div>
-                
-                <div class="chat-input-area">
-                    <input type="text" id="chat-input" placeholder="ENVOYER MESSAGE DE HACK..." class="auth-input valorant-input">
-                    <button id="send-chat-btn" class="action-button valorant-btn send-btn">SEND</button>
-                </div>
-            </section>
-            
         </div>
     </main>
-    
-    <footer class="main-footer">
-        <p>&copy; 2025 Yakuza Shadow Clan. Code Fusion: Lavender & Valorant.</p>
-        <div class="footer-links">
-            <a href="#">Security Protocol</a> | <a href="#">Terms of Service</a>
-        </div>
-    </footer>
-
-    <audio id="defeat-audio" src="madame-la-directrice-degat-degat-le-p-breziani_orZPPW2u.mp3" preload="auto"></audio>
 
     <script src="script.js"></script>
 </body>
