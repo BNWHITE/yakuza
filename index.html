@@ -13,9 +13,10 @@
     <header class="cyber-header">
         <div class="logo-text">YAKUZA: HEIST</div>
         <nav class="desktop-nav">
-            <a href="#" onclick="showScreen('selection')">MISSIONS</a>
-            <a href="#" onclick="showScreen('shop')">UPGRADES</a>
-            <a href="#" onclick="showScreen('history')">LOGS</a>
+            <a href="#" onclick="showScreen('selection');">MISSIONS</a>
+            <a href="#" onclick="showScreen('shop');">UPGRADES</a>
+            <a href="#" onclick="showScreen('history');">LOGS</a>
+            <a href="#" onclick="showScreen('chat');">CHAT</a>
         </nav>
         <button id="logout-btn" class="log-btn" style="display: none;">LOGOUT</button>
     </header>
@@ -23,20 +24,32 @@
     <main class="main-content">
         <aside id="side-hud" style="display: none;">
             <div class="hud-box profile-info">
-                <h3 class="hud-title">AGENT INFO</h3>
+                <h3 class="hud-title">AGENT PROFILE</h3>
                 <p id="user-welcome">AGENT [UNKNOWN]</p>
                 <div class="stat-line">
-                    <span>💳 YEN:</span> <span id="kebab-score-display" class="yen-display">0</span>
+                    <span>LVL:</span> <span id="agent-level" class="yen-display">1</span>
                 </div>
                 <div class="stat-line">
-                    <span>⭐ KIRIN:</span> <span id="kirin-display">0</span>
+                    <span>⭐ KIRIN (XP):</span> <span id="kirin-display" class="kirin-display">0</span>
                 </div>
             </div>
             
             <div class="hud-box">
-                <h3 class="hud-title">BOT STATS</h3>
+                <h3 class="hud-title">ÉQUIPEMENT ACTIF</h3>
+                <div id="equipment-display">
+                    </div>
+            </div>
+
+            <div class="hud-box">
+                <h3 class="hud-title">STATS DYNAMIQUES</h3>
                 <div id="player-stats-display">
                     <p>Stats chargement...</p>
+                </div>
+            </div>
+             <div class="hud-box resource-display">
+                <h3 class="hud-title">RESSOURCES</h3>
+                <div class="stat-line">
+                    <span>💳 YEN:</span> <span id="kebab-score-display" class="yen-display">0</span>
                 </div>
             </div>
         </aside>
@@ -57,7 +70,7 @@
             </section>
 
             <section id="selection-screen" style="display: none;">
-                <h1 class="main-title">MISSION HUB: HACK PROTOCOLS</h1>
+                <h1 class="main-title">MISSION HUB: SELECT TARGET</h1>
                 <h2 class="dark-subtitle">SÉLECTIONNER CIBLE DE HACK :</h2>
 
                 <div id="student-selector" class="selector-carousel">
