@@ -1,5 +1,3 @@
-// ===== KAHINA: L'ASCENSION - MOTEUR DE JEU CONNECTÉ =====
-
 class KahinaGame {
     constructor() {
         this.supabase = null;
@@ -43,6 +41,7 @@ class KahinaGame {
         // Configuration Supabase
         this.supabase = supabase.createClient(
             'https://dxiefxcfnggezuiifeqf.supabase.co',
+            
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4aWVmeGNmbmdnZXp1aWlmZXFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQ2ODg2MzQsImV4cCI6MjAyMDI2NDYzNH0.3kPr5Ydqc-Nd2lZdR1d1VtYVYAOUc7mA0U3VcTGTbR8'
         );
 
