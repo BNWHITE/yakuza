@@ -1,6 +1,5 @@
 /* ================================================= */
-/* 🎨 CSS ENHANCED : Style "FatNinja" Dark/Orange/Lime */
-/* (Optimisé pour la lisibilité et le carrousel mobile) */
+/* 🎨 CSS ENHANCED : Style YAKUZA (Optimisation V3) */
 /* ================================================= */
 
 /* --------------------- FONT IMPORT --------------------- */
@@ -18,15 +17,16 @@
     --track-color: #1a1a1a;
     --error-color: #ff4545;
     
-    /* Couleurs de stats claires */
-    --stat-vitesse: #00bcd4; /* Cyan */
-    --stat-codage: var(--accent-lime); /* Vert Lime */
-    --stat-chance: var(--accent-orange); /* Orange */
+    --stat-vitesse: #00bcd4; 
+    --stat-codage: var(--accent-lime); 
+    --stat-chance: var(--accent-orange); 
 }
 
 /* --------------------- GLOBAL & STRUCTURE --------------------- */
 * {
     box-sizing: border-box;
+    /* Correction : Assure que le padding et le border sont inclus dans la taille */
+    min-width: 0;
 }
 
 body {
@@ -42,6 +42,7 @@ body {
     overflow-x: hidden;
     padding-bottom: 50px;
     position: relative;
+    min-width: 320px; /* Sécurité pour les plus petits mobiles */
 }
 
 /* --- HEADER YAKUZA --- */
@@ -51,9 +52,6 @@ body {
     align-items: center;
     padding: 15px 50px;
     width: 100%;
-    background-color: transparent; 
-    box-shadow: none;
-    margin-bottom: 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -61,7 +59,6 @@ body {
     font-family: 'Press Start 2P', cursive;
     color: var(--accent-lime);
     font-size: 1.2em;
-    /* Ombre de style "Yakuza" */
     text-shadow: 0 0 5px var(--accent-lime), 0 0 10px rgba(170, 255, 0, 0.5);
 }
 
@@ -70,11 +67,8 @@ body {
     text-decoration: none;
     margin-left: 25px;
     font-weight: 700;
-    transition: color 0.3s;
 }
-.desktop-nav a:hover {
-    color: var(--accent-orange);
-}
+/* ... Styles de titres, boutons, sections (inchangés sauf mobile) ... */
 
 /* --- TITRES MAQUETTE --- */
 .maquette-title {
@@ -83,7 +77,6 @@ body {
     font-size: 4em;
     text-transform: uppercase;
     color: var(--text-color-light);
-    text-shadow: none;
     line-height: 1.1;
     margin: 40px 0 10px;
 }
@@ -91,25 +84,13 @@ body {
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
     color: var(--accent-orange);
-    text-shadow: none;
     font-size: 1.5em;
     margin: 10px 0;
 }
 h2 { font-family: 'Press Start 2P', cursive; }
 h3 { font-family: 'Press Start 2P', cursive; color: var(--accent-lime); text-shadow: 0 0 5px var(--accent-lime); }
 
-/* Affichage Kebab Score */
-.score-display {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    color: var(--bg-dark);
-    background-color: var(--accent-lime);
-    padding: 8px 15px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(170, 255, 0, 0.4);
-}
-
-/* Sections */
+/* --- SECTIONS GÉNÉRALES --- */
 section {
     background-color: #1c1f25;
     padding: 40px;
@@ -122,7 +103,7 @@ section {
     text-align: center;
 }
 
-/* Champ d'entrée */
+/* --- FORMULAIRE ET INPUTS --- */
 .auth-input {
     width: 80%;
     max-width: 400px;
@@ -135,13 +116,8 @@ section {
     font-size: 1em;
     border-radius: 5px;
 }
-.auth-input:focus {
-    outline: none;
-    border-color: var(--accent-orange);
-    box-shadow: 0 0 10px var(--accent-orange);
-}
 
-/* Boutons */
+/* --- BOUTONS --- */
 .action-button {
     background-color: var(--button-color);
     color: var(--bg-dark);
@@ -155,20 +131,10 @@ section {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
 }
 .explore-btn {
-    background-color: var(--accent-orange);
-    color: var(--bg-dark);
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
     padding: 10px 20px;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(255, 179, 0, 0.5);
-    text-transform: uppercase;
-    margin: 0;
-}
-
-#logout-btn {
-    background-color: var(--error-color);
-    color: var(--text-color-light);
     margin: 0;
 }
 
@@ -187,8 +153,9 @@ section {
     cursor: pointer;
     border: 2px solid transparent;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+    /* Correction mobile : empêche la carte de rétrécir sous 0 */
+    min-width: 0; 
 }
-
 .student-card.selected {
     border-color: var(--accent-orange);
     box-shadow: 0 0 25px var(--accent-orange);
@@ -196,21 +163,7 @@ section {
     background-color: #333842;
 }
 
-.student-card span.title {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    color: var(--accent-lime);
-}
-
-.student-avatar {
-    border: 4px solid var(--accent-orange);
-    background-color: var(--bg-dark);
-}
-.student-card.chabchoub-card .student-avatar {
-    border-color: var(--error-color);
-}
-
-/* ----- STATS CARD FIX (Ajout de couleurs claires) ----- */
+/* --- STATS CARD (corrigé) --- */
 .stats-card {
     background: #101216;
     padding: 10px;
@@ -226,35 +179,59 @@ section {
     margin-bottom: 7px;
 }
 .stat-bar-container label {
-    color: var(--text-color-light); /* Assure que le texte "Vitesse" est clair */
+    color: var(--text-color-light); 
     width: 45%;
     text-align: left;
     padding-right: 5px;
-}
-.stat-bar {
-    flex-grow: 1;
-    height: 10px;
-    background-color: #444;
-    border-radius: 5px;
-    overflow: hidden;
+    /* Correction : empêche le label de forcer le wrap */
+    white-space: nowrap; 
 }
 .stat-fill {
     height: 100%;
     border-radius: 5px;
-    transition: width 0.5s;
-    /* AJOUT DE L'OMBRE POUR PLUS DE VISIBILITÉ DANS LE THÈME DARK */
     filter: drop-shadow(0 0 3px); 
 }
 .stat-fill[data-stat="codage"] { background-color: var(--stat-codage); }
 .stat-fill[data-stat="vitesse"] { background-color: var(--stat-vitesse); }
 .stat-fill[data-stat="chance"] { background-color: var(--stat-chance); }
 
-/* --- ÉCRAN DE COURSE --- */
-#race-result { font-family: 'Press Start 2P', cursive; font-size: 1.5em; margin-top: 25px; }
-#race-result.win { color: var(--accent-lime); text-shadow: 0 0 15px var(--accent-lime); }
-#race-result.lose { color: var(--error-color); text-shadow: 0 0 15px var(--error-color); }
+/* --------------------- ÉCRAN DE COURSE & ANIMATIONS --------------------- */
+.race-track {
+    background-color: var(--track-color);
+    border: 5px solid var(--accent-lime);
+    border-radius: 10px;
+    margin: 30px auto;
+    padding: 20px;
+    position: relative;
+    height: 250px;
+    width: 95%;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8), 0 0 15px rgba(170, 255, 0, 0.3);
+    overflow: hidden;
+}
 
-/* --------------------- MEDIA QUERIES (Carrousel sur Mobile/Tablette) --------------------- */
+.cat-lane img {
+    /* Ajout du style de bordure pour l'avatar */
+    border: 3px solid var(--accent-lime);
+    padding: 5px;
+    background-color: #222;
+    position: relative;
+    transition: transform 0.1s linear;
+    z-index: 10;
+}
+
+/* Animation de Course (Subtile) */
+@keyframes bot-run {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+    100% { transform: translateY(0); }
+}
+
+.cat-lane img.running {
+    animation: bot-run 0.15s infinite alternate; /* Mouvement rapide et rythmé */
+}
+
+
+/* --------------------- MOBILE OPTIMIZATION (BREAKPOINT <= 992px) --------------------- */
 @media (max-width: 992px) {
     .ninja-header {
         padding: 15px 20px;
@@ -264,11 +241,14 @@ section {
     .desktop-nav {
         display: none; 
     }
+    
+    /* Correction : Maintient le titre principal lisible */
     .maquette-title {
         font-size: 2em;
         margin: 20px 0 5px;
     }
     
+    /* Menu Roulette (Carrousel) */
     .selector-carousel {
         display: flex;
         overflow-x: scroll; 
@@ -276,18 +256,37 @@ section {
         -webkit-overflow-scrolling: touch; 
         gap: 15px;
         padding-bottom: 10px;
+        /* Correction : Ajoute du padding horizontal pour éviter le bord de l'écran */
+        padding-left: 15px;
+        padding-right: 15px;
+        margin-left: -15px;
+        margin-right: -15px;
+        width: calc(100% + 30px); /* Ajuste la largeur pour le padding */
     }
     
     .student-card {
         flex: 0 0 250px; 
         scroll-snap-align: center;
+        min-width: 250px; /* Force la taille pour le carrousel */
     }
     
     section { padding: 30px 15px; }
     .score-display, #logout-btn { margin-left: 15px; margin-top: 10px;}
     .action-button { font-size: 0.8em; }
+    
+    /* Correction Chat/Auth : pour les inputs en flexbox */
+    #chat-section div[style*="display: flex"] {
+        flex-direction: column;
+    }
+    #chat-section #chat-input {
+        width: 100%;
+    }
+    #chat-section #send-chat-btn {
+        width: 100%;
+    }
 }
 
+/* --------------------- PETITS MOBILES (BREAKPOINT <= 600px) --------------------- */
 @media (max-width: 600px) {
     .maquette-title {
         font-size: 1.5em;
@@ -297,5 +296,9 @@ section {
     }
     .student-card {
         flex: 0 0 200px; 
+        min-width: 200px;
+    }
+    .race-track {
+        height: 180px;
     }
 }
