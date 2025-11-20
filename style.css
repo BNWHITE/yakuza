@@ -1,5 +1,5 @@
 /* ================================================= */
-/* 🎨 CSS TOTAL OVERHAUL : YAKUZA CYBER-CRIMSON HUD */
+/* 🎨 CSS TOTAL OVERHAUL : YAKUZA CYBER-CRIMSON HUD (V2) */
 /* ================================================= */
 
 /* --------------------- FONT IMPORT --------------------- */
@@ -7,10 +7,10 @@
 
 /* --------------------- VARIABLES GLOBALES --------------------- */
 :root {
-    --bg-deep-dark: #0a0a0d;      /* Fond principal très sombre */
-    --bg-section: #1c1f25;        /* Fond de section Gris charbon */
-    --accent-red: #ff0033;        /* Rouge Néon / Crimson (Yakuza) */
-    --accent-cyan: #00ffee;       /* Cyan pour les données / Vitesse */
+    --bg-deep-dark: #0a0a0d;      /* Noir Profond */
+    --bg-section: #1c1f25;        /* Gris charbon */
+    --accent-red: #ff0033;        /* Rouge Néon */
+    --accent-cyan: #00ffee;       /* Cyan */
     --text-color-light: #e0e0e0;  /* Texte clair */
     --text-color-data: #b0b0b0;   /* Texte secondaire */
     
@@ -22,7 +22,7 @@
     /* Couleurs de stats */
     --stat-vitesse: var(--accent-cyan);
     --stat-codage: var(--accent-red); 
-    --stat-chance: #ffaa00; /* Jaune/Orange pour Chance */
+    --stat-chance: #ffaa00; 
 }
 
 /* --------------------- GLOBAL & STRUCTURE --------------------- */
@@ -32,7 +32,7 @@
 }
 
 body {
-    font-family: 'Roboto Mono', monospace; /* Police Terminal */
+    font-family: 'Roboto Mono', monospace; 
     margin: 0;
     background-color: var(--bg-deep-dark);
     color: var(--text-color-light);
@@ -50,6 +50,7 @@ main {
     max-width: 1400px;
     margin-top: 20px;
     flex-grow: 1;
+    padding-bottom: 50px;
 }
 
 /* --- HEADER YAKUZA --- */
@@ -74,61 +75,6 @@ main {
     font-weight: 900;
     text-shadow: var(--glow-red);
 }
-.desktop-nav a {
-    color: var(--text-color-data);
-    text-decoration: none;
-    margin-left: 25px;
-    font-weight: 700;
-    transition: color 0.3s;
-}
-.desktop-nav a:hover { color: var(--accent-red); }
-
-/* --- HUD LATÉRAL (ASIDE) --- */
-#side-hud {
-    width: 300px;
-    margin-right: 20px;
-    padding: 15px;
-    /* Rendu Terminal */
-    border: 1px solid var(--accent-red);
-    background-color: rgba(0, 0, 0, 0.3);
-    box-shadow: 0 0 10px rgba(255, 0, 51, 0.2);
-    align-self: flex-start;
-    position: sticky;
-    top: 80px; /* Aligné sous le header */
-}
-
-.hud-box {
-    padding: 15px 0;
-    border-top: 1px dashed rgba(255, 255, 255, 0.1);
-}
-.hud-title {
-    color: var(--accent-cyan);
-    font-size: 1em;
-    margin-top: 0;
-    text-shadow: 0 0 5px var(--accent-cyan);
-}
-.stat-line {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.9em;
-    margin-bottom: 5px;
-}
-.yen-display {
-    color: var(--accent-red);
-    font-weight: 700;
-    text-shadow: var(--glow-red);
-}
-#kirin-display {
-    color: var(--accent-cyan);
-    font-weight: 700;
-}
-#player-stats-display { padding-top: 5px; }
-
-
-/* --- CONTENU CENTRAL --- */
-.central-area {
-    flex-grow: 1;
-}
 
 /* --- TITRES --- */
 .main-title {
@@ -147,8 +93,31 @@ main {
     margin-bottom: 20px;
     font-size: 2em;
 }
+h2 { color: var(--accent-cyan); }
 
-/* --- SECTIONS --- */
+/* --- HUD LATÉRAL (ASIDE) --- */
+#side-hud {
+    width: 300px;
+    margin-right: 20px;
+    padding: 15px;
+    border: 1px solid var(--accent-red);
+    background-color: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 10px rgba(255, 0, 51, 0.2);
+    align-self: flex-start;
+    position: sticky;
+    top: 80px; 
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+}
+.hud-box { padding: 15px 0; border-top: 1px dashed rgba(255, 255, 255, 0.1); }
+.hud-title { color: var(--accent-cyan); font-size: 1em; margin-top: 0; text-shadow: 0 0 5px var(--accent-cyan); }
+.stat-line { display: flex; justify-content: space-between; font-size: 0.9em; margin-bottom: 5px; }
+.yen-display { color: var(--accent-red); font-weight: 700; text-shadow: var(--glow-red); }
+.kirin-display { color: var(--accent-cyan); font-weight: 700; }
+.resource-display { border-bottom: 1px dashed rgba(255, 255, 255, 0.1); }
+
+/* --- CONTENU CENTRAL --- */
+.central-area { flex-grow: 1; }
 section {
     background-color: var(--bg-section);
     padding: 40px;
@@ -160,89 +129,37 @@ section {
     text-align: center;
 }
 
-/* --- INPUTS & BUTTONS --- */
-.auth-input {
-    width: 80%;
-    max-width: 400px;
-    padding: 12px;
-    margin: 10px auto;
-    border: 1px solid var(--accent-cyan);
-    background-color: #2a2e35;
-    color: var(--text-color-light);
-    border-radius: 3px;
-    font-family: 'Roboto Mono', monospace;
-}
-
-.action-button {
-    font-family: 'Dosis', sans-serif;
-    font-weight: 700;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    margin: 10px;
-    border-radius: 3px;
-    transition: background-color 0.2s, transform 0.1s;
-}
-.primary-btn {
-    background-color: var(--accent-red);
-    color: var(--bg-deep-dark);
-    box-shadow: var(--glow-red);
-}
-.primary-btn:hover {
-    background-color: #ff3355;
-    transform: translateY(-2px);
-}
-.log-btn { background-color: var(--accent-cyan); color: var(--bg-deep-dark); }
-.log-btn:hover { background-color: #00ffff; }
-
-.auth-feedback {
-    min-height: 1.5em;
-    font-size: 0.9em;
-}
-
 /* --- CAROUSEL & CARDS --- */
 .selector-carousel {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Moins de colonnes par défaut pour un meilleur look */
+    grid-template-columns: repeat(3, 1fr); 
     gap: 20px;
     margin-top: 20px;
 }
+.student-card { background-color: #2a2e35; border: 1px solid var(--text-color-data); padding: 15px; border-radius: 5px; cursor: pointer; }
+.student-avatar { border: 3px solid var(--accent-red); border-radius: 50%; }
 
-.student-card {
-    background-color: #2a2e35;
-    border: 1px solid var(--text-color-data);
-    padding: 15px;
+/* --- SHOP GRID --- */
+.shop-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+.shop-item {
+    background: #2a2e35;
+    padding: 20px;
     border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.2s;
+    border: 1px solid var(--accent-cyan);
+    text-align: left;
 }
-.student-card:hover {
-    border-color: var(--accent-cyan);
-    box-shadow: 0 0 15px rgba(0, 255, 238, 0.3);
-}
-.student-card.selected {
-    border-color: var(--accent-red);
-    box-shadow: 0 0 20px var(--accent-red);
+.shop-item .upgrade-name {
+    color: var(--accent-red);
+    font-family: 'Dosis', sans-serif;
+    font-size: 1.2em;
 }
 
-.student-avatar {
-    width: 100px;
-    height: 100px;
-    border: 3px solid var(--accent-red);
-    border-radius: 50%;
-    margin-bottom: 10px;
-    transition: border-color 0.3s;
-}
-.student-card.selected .student-avatar {
-    border-color: var(--accent-cyan);
-}
-.stats-card-small {
-    padding: 5px;
-    background: #000;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* --- RACE TRACK --- */
+/* --- RACE TRACK (Hack Visuals) --- */
 .race-track {
     background-color: var(--track-color);
     border: 5px solid var(--accent-red);
@@ -261,78 +178,42 @@ section {
     position: relative;
     transition: transform 0.1s linear;
 }
-.cat-lane {
-    position: absolute;
-    left: 0;
-    padding-left: 10px;
+/* Animation de fond pour le hack (Inspiration Matrix) */
+@keyframes matrix-rain {
+    0% { background-position: 0 0; }
+    100% { background-position: -200px -200px; }
 }
-.cat-lane:nth-child(2) { top: 10px; }
-.cat-lane:nth-child(3) { bottom: 10px; } 
+.race-track.hacking {
+    background: #000 url('data:image/svg+xml;utf8,<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><text x="0" y="15" font-size="16" font-family="monospace" fill="%23ff0033" opacity="0.5">101010</text><text x="100" y="65" font-size="16" font-family="monospace" fill="%2300ffee" opacity="0.5">011001</text><text x="50" y="115" font-size="16" font-family="monospace" fill="%23ff0033" opacity="0.5">111000</text><text x="150" y="165" font-size="16" font-family="monospace" fill="%2300ffee" opacity="0.5">010101</text></svg>') repeat;
+    animation: matrix-rain 2s linear infinite;
+}
 
-/* --- ANIMATION --- */
-@keyframes bot-run {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-    100% { transform: translateY(0); }
-}
-.cat-lane img.running {
-    animation: bot-run 0.15s infinite alternate; 
-}
-.result-message { font-size: 1.5em; font-weight: 700; margin-top: 10px; }
-.result-message.win { color: var(--accent-cyan); }
-.result-message.lose { color: var(--error-color); }
-
-/* --- CHAT & LOGS --- */
-.chat-window {
-    height: 300px;
-    overflow-y: auto;
-    background: #000;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid var(--accent-cyan);
-    text-align: left;
-    margin-bottom: 10px;
-}
-.chat-input-area {
-    display: flex;
-    gap: 10px;
-}
-.chat-input-area .auth-input { width: 100%; margin: 0; }
-.chat-input-area .send-btn { min-width: 100px; }
-
-/* --------------------- MOBILE OPTIMIZATION (BREAKPOINT <= 992px) --------------------- */
-
+/* --- MOBILE OPTIMIZATION (FINAL FIX) --- */
 @media (max-width: 992px) {
-    /* --- HEADER / HUD --- */
+    /* --- STRUCTURE GENERALE FIX --- */
     .cyber-header { padding: 10px 15px; flex-wrap: wrap; }
     .desktop-nav { display: none; }
-    .logo-text { font-size: 1.5em; margin-bottom: 5px; }
+    main { flex-direction: column; width: 100%; margin-top: 10px; padding: 0 10px 50px 10px; }
     
-    main { 
-        flex-direction: column; /* Stacks HUD above content */
-        width: 100%;
-    }
-    
+    /* --- HUD FIX --- */
     #side-hud {
         width: 100%;
-        margin-right: 0;
-        margin-bottom: 20px;
+        margin: 0;
         position: static;
         top: auto;
-        border-left: none;
-        border-right: none;
-        border-top: 2px solid var(--accent-red);
+        padding: 10px;
+        border-top: none;
+        border-bottom: 2px solid var(--accent-red); /* Mieux que top/bottom */
     }
-    .hud-box { padding: 10px 15px; }
 
-    /* --- Titres & Sections --- */
-    .main-title { font-size: 2.2em; margin: 15px 0 10px; }
+    /* --- TITRES/SECTIONS FIX --- */
+    .main-title { font-size: 2em; margin: 15px 0 10px; }
     .dark-subtitle { font-size: 1em; }
     section { padding: 20px 15px; margin: 10px 0; }
     
-    /* --- Menu Roulette (Fixe l'affichage sur mobile) --- */
+    /* --- CAROUSEL FIX (Menu Roulette) --- */
     .selector-carousel {
-        display: flex; /* Active le carrousel horizontal */
+        display: flex;
         overflow-x: scroll; 
         scroll-snap-type: x mandatory; 
         gap: 15px;
@@ -342,32 +223,22 @@ section {
         width: 100%; 
         margin: 20px 0;
         justify-content: flex-start;
-        /* Correction de la position du carrousel pour éviter les coupures */
+        /* Correction critique pour enlever le défilement horizontal de la page */
         margin-left: 50%;
         transform: translateX(-50%);
     }
+    .student-card { flex: 0 0 220px; min-width: 220px; }
     
-    .student-card {
-        flex: 0 0 220px; 
-        scroll-snap-align: center;
-        min-width: 220px; 
-    }
-    
-    /* --- Course Fix --- */
+    /* --- SHOP FIX --- */
+    .shop-grid { grid-template-columns: 1fr; }
+
+    /* --- COURSE FIX --- */
     .race-track { height: 150px; padding: 5px; }
     .cat-lane img { width: 60px; height: 60px; }
     .cat-lane .cat-name { font-size: 0.7em; }
-
-    /* --- Chat/Auth Input Fix --- */
+    
+    /* --- CHAT/AUTH INPUT FIX --- */
     .chat-input-area { flex-direction: column; gap: 5px; }
     .chat-input-area .auth-input { max-width: 100%; }
     .chat-input-area .send-btn { min-width: 100%; }
-    .auth-screen .auth-input { max-width: 100%; }
-}
-
-@media (max-width: 600px) {
-    .main-title { font-size: 1.8em; }
-    .dark-subtitle { font-size: 0.9em; }
-    .student-card { flex: 0 0 180px; min-width: 180px; }
-    .cat-lane img { width: 50px; height: 50px; }
 }
