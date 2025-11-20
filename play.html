@@ -3,91 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GAME // CLASSROOM PROTOCOL</title>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <title>ARENA - Classroom League</title>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;600&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="game-body">
 
-    <header class="game-header">
-        <a href="index.html" class="back-link">← ACCUEIL</a>
-        <div class="user-status">AGENT: <span id="status-name">GUEST</span></div>
-    </header>
-
-    <main>
-        <section id="lobby-screen" class="active-screen">
-            <div class="lobby-wrapper">
-                
-                <div class="lobby-card selection-area">
-                    <h3>// SÉLECTION AGENT</h3>
+    <div id="app-container">
+        
+        <section id="lobby-screen" class="screen active">
+            <div class="lobby-grid">
+                <div class="panel selection-panel">
+                    <h2 class="panel-title">IDENTIFICATION</h2>
                     
-                    <div class="avatar-preview-box">
-                        <img id="avatar-display" src="https://api.dicebear.com/9.x/avataaars/svg?seed=X" alt="Avatar">
-                    </div>
-
-                    <div class="input-group">
-                        <label>IDENTITÉ DE CLASSE</label>
-                        <select id="student-select" class="val-select">
-                            <option value="" disabled selected>-- CHOISIR UN ÉLÈVE --</option>
+                    <div class="avatar-selector">
+                        <div class="avatar-display-large">
+                            <img id="current-avatar" src="" alt="Avatar">
+                            <div class="avatar-ring"></div>
+                        </div>
+                        <select id="student-select" class="game-select">
+                            <option value="" disabled selected>CHOISIS TON AGENT...</option>
                             </select>
                     </div>
 
-                    <button id="start-btn" class="val-btn full-width" disabled>ENTRER DANS L'ARÈNE</button>
+                    <div class="stats-preview">
+                        <div class="stat-bar"><label>VITESSE</label><div class="bar"><div style="width: 80%"></div></div></div>
+                        <div class="stat-bar"><label>INTEL</label><div class="bar"><div style="width: 65%"></div></div></div>
+                    </div>
+
+                    <button id="start-btn" class="game-btn big" disabled>PRÊT AU COMBAT</button>
                 </div>
 
-                <div class="lobby-card leaderboard-area">
-                    <h3>🏆 TOP PERFORMANCE</h3>
-                    <ul id="leaderboard-list" class="rank-list">
-                        <li>Chargement...</li>
-                    </ul>
-                </div>
-
-                <div class="mini-ad">
-                    <a href="https://github.com/BNWHITE/BeReady" target="_blank">Besoin de réviser ? Go sur <strong>BeReady</strong></a>
+                <div class="panel info-panel">
+                    <h2 class="panel-title">TOP CLASSE</h2>
+                    <ul id="leaderboard" class="ranking-list">
+                        </ul>
+                    
+                    <div class="ad-box">
+                        <span class="ad-tag">PARTENAIRE</span>
+                        <h4>Besoin de réviser le TD4 ?</h4>
+                        <a href="https://beready-7yyt.onrender.com/" target="_blank">Ouvrir BeReady ></a>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <section id="game-screen" class="hidden-screen">
-            <div class="hud-top">
-                <div class="timer-display"><span id="timer">60</span>s</div>
-                <div class="progress-bar-container">
-                    <div id="p-bar" class="p-bar-fill"></div>
+        <section id="game-screen" class="screen hidden">
+            <div class="game-header">
+                <div class="timer-module">
+                    <svg class="timer-svg" viewBox="0 0 100 100">
+                        <circle class="timer-circle-bg" cx="50" cy="50" r="45"></circle>
+                        <circle id="timer-circle" class="timer-circle-fg" cx="50" cy="50" r="45"></circle>
+                    </svg>
+                    <span id="timer-text">60</span>
                 </div>
+                <div class="score-module">SCORE: <span id="score">0</span></div>
             </div>
 
-            <div class="race-track">
-                <div class="finish-line"></div>
-                <div id="player-racer" class="racer">
-                    <img id="game-avatar" src="" alt="You">
-                    <div class="fire-fx hidden">🔥</div>
+            <div class="track-area">
+                <div class="track-lane player-lane">
+                    <div class="racer-wrapper" id="player-racer">
+                        <span class="racer-name">TOI</span>
+                        <img id="player-img-game" src="" class="racer-avatar">
+                        <div class="fire-particles hidden"></div>
+                    </div>
+                    <div class="progress-line"></div>
                 </div>
-                <div id="bot-racer" class="racer bot">
-                    <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Teacher" alt="Bot">
+                <div class="track-lane bot-lane">
+                    <div class="racer-wrapper" id="bot-racer">
+                        <span class="racer-name">RIVAL</span>
+                        <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Rival" class="racer-avatar gray">
+                    </div>
+                    <div class="progress-line dashed"></div>
                 </div>
+                <div class="finish-flag">🏁</div>
             </div>
 
-            <div class="quiz-container val-card">
-                <div class="q-header">
-                    <span class="tag" id="q-theme">INFO</span>
+            <div class="quiz-card">
+                <div class="quiz-header">
+                    <span class="category-badge" id="q-cat">INFO</span>
+                    <div class="combo-counter hidden" id="combo-display">COMBO x2 🔥</div>
                 </div>
-                <h2 id="q-text">Prêt ?</h2>
-                <div class="options-grid" id="options-box">
+                <h3 id="q-text" class="question-text">Chargement du module...</h3>
+                <div id="answers-grid" class="answers-grid">
                     </div>
             </div>
         </section>
 
-        <div id="result-overlay" class="hidden">
-            <div class="result-box">
-                <h1 id="res-title">VICTOIRE</h1>
-                <p id="res-score">Score: 0</p>
-                <button onclick="location.reload()" class="val-btn">REJOUER</button>
-                <br><br>
-                <a href="https://beready-7yyt.onrender.com/" class="ad-link-end">Voir les cours sur BeReady</a>
+        <div id="overlay" class="overlay hidden">
+            <div class="result-modal">
+                <h1 id="end-title">VICTOIRE</h1>
+                <div class="end-stats">
+                    <div class="end-stat"><span>SCORE FINAL</span><strong id="end-score">0</strong></div>
+                    <div class="end-stat"><span>PRÉCISION</span><strong id="end-acc">0%</strong></div>
+                </div>
+                <div class="action-buttons">
+                    <button onclick="location.reload()" class="game-btn">REJOUER</button>
+                    <a href="https://github.com/BNWHITE/BeReady" class="game-btn outline">RÉVISER SUR BEREADY</a>
+                </div>
             </div>
         </div>
-    </main>
 
+    </div>
+
+    <script src="data_questions.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
