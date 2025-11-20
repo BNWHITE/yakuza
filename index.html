@@ -3,14 +3,16 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <meta charset="UTF-8">
-    <title>YAKUZA: CYBER INFILTRATION - Launch Edition</title>
+    <title>YAKUZA: SHADOW CLAN - Terminal</title>
     
     <link rel="stylesheet" href="style.css">
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="auth-mode"> <header class="main-header">
-        <div class="logo-text">YAKUZA: INFILTRATION</div>
+<body class="auth-mode"> 
+
+    <header class="main-header">
+        <div class="logo-text">SHADOW CLAN</div>
         <nav class="desktop-nav">
             <a href="#" onclick="showScreen('selection');">MISSIONS</a>
             <a href="#" onclick="showScreen('shop');">UPGRADES</a>
@@ -25,7 +27,8 @@
         <aside id="side-hud" style="display: none;">
             <div class="hud-box profile-info">
                 <h3 class="hud-title">AGENT PROFILE</h3>
-                <p id="user-welcome">AGENT [UNKNOWN]</p>
+                <p id="agent-name-display">[AGENT NAME]</p>
+                <p id="user-welcome" style="font-size: 0.8em;">[UNKNOWN]</p>
                 <div class="stat-line agent-level">
                     <span>LVL:</span> <span id="agent-level">1</span>
                 </div>
@@ -67,12 +70,23 @@
                 
                 <p id="auth-message" class="auth-feedback" style="margin-top: 20px;"></p>
             </section>
+            
+            <section id="agent-selection-screen" style="display: none;">
+                <h1 class="main-title valorant-title">CHOIX D'IDENTITÉ</h1>
+                <h2 class="dark-subtitle">SÉLECTIONNEZ VOTRE AGENT POUR REJOINDRE LE CLAN :</h2>
+                <p class="mobile-hint">Les stats de base de votre Agent ne peuvent être améliorées qu'avec des UPGRADES.</p>
+
+                <div id="agent-selector-grid" class="selector-carousel agent-selector-grid">
+                    </div>
+                
+                <button id="confirm-agent-btn" class="action-button valorant-btn" style="display: none;">CONFIRMER L'AGENT CHOISI</button>
+            </section>
 
             <section id="selection-screen" style="display: none;">
                 <h1 class="main-title valorant-title">MISSION HUB: SELECT TARGET</h1>
                 <h2 class="dark-subtitle">SÉLECTIONNER CIBLE DE HACK :</h2>
 
-                <div id="student-selector" class="selector-carousel"></div>
+                <div id="mission-selector" class="selector-carousel"></div>
                 
                 <p id="mq-status" class="mobile-hint"></p>
                 <button id="start-race-btn" class="action-button valorant-btn" style="display: none;">INITIER HACK</button>
@@ -139,7 +153,7 @@
     </main>
     
     <footer class="main-footer">
-        <p>&copy; 2025 Yakuza Digital Heist. Powered by Seydi</p>
+        <p>&copy; 2025 Yakuza Shadow Clan. Code Fusion: Lavender & Valorant.</p>
         <div class="footer-links">
             <a href="#">Security Protocol</a> | <a href="#">Terms of Service</a>
         </div>
