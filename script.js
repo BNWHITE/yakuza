@@ -1,444 +1,668 @@
-/* =========================================
-   KAHINA: L'HÉRITAGE DES ANCIENS - GAME ENGINE V4
-   ========================================= */
+// ===== KAHINA: SAUVEZ LA REINE - MOTEUR DE JEU MOBILE =====
 
-// --- CONFIGURATION ---
-const PLAYER_BASE_STATS = { 
-    maxHp: 100, 
-    maxMana: 50, 
-    attack: 15, 
-    defense: 5, 
-    heal: 30 
-};
+class KahinaGame {
+    constructor() {
+        this.player = {
+            name: "GARDIENNE",
+            level: 1,
+            xp: 0,
+            xpToNextLevel: 100,
+            hp: 100,
+            maxHp: 100,
+            mana: 50,
+            maxMana: 50,
+            essence: 0,
+            stats: {
+                attack: 15,
+                defense: 8,
+                magic: 12
+            }
+        };
 
-let player = { 
-    name: "Gardienne", 
-    level: 1,
-    xp: 0,
-    xpToNextLevel: 100,
-    hp: 100, 
-    mana: 50,
-    essence: 0, 
-    defenseMode: false,
-    stats: { ...PLAYER_BASE_STATS },
-    equipment: {
-        weapon: null,
-        armor: null,
-        accessory: null
-    },
-    skills: [],
-    inventory: []
-};
+        this.currentEnemy = null;
+        this.currentZone = "vallee";
+        this.gameState = "auth";
+        this.combatActive = false;
 
-let currentEnemy = null;
-let currentZone = "sanctuary";
-
-// Zones de jeu avec ennemis spécifiques
-const ZONES = {
-    sanctuary: {
-        name: "Sanctuaire Central",
-        levelRange: "1-5",
-        enemies: [
-            { name: "L'OMBRE", img: "./images/5.jpg", hp: 80, attack: 10, xp: 50, type: "Ombre" },
-            { name: "PYRO", img: "./images/12.jpg", hp: 100, attack: 15, xp: 80, type: "Feu" }
-        ]
-    },
-    ruins: {
-        name: "Ruines Antiques",
-        levelRange: "5-10",
-        enemies: [
-            { name: "TITAN", img: "./images/9.jpg", hp: 150, attack: 8, xp: 100, type: "Terre" },
-            { name: "VIPER", img: "./images/8.jpg", hp: 90, attack: 12, xp: 60, type: "Poison" }
-        ]
-    },
-    abyss: {
-        name: "Abysse Corrompu",
-        levelRange: "10-15",
-        enemies: [
-            { name: "SNIPER", img: "./images/10.jpg", hp: 70, attack: 20, xp: 70, type: "Vent" },
-            { name: "RONIN", img: "./images/6.jpg", hp: 110, attack: 14, xp: 90, type: "Lame" }
-        ]
-    },
-    citadel: {
-        name: "Citadelle des Anciens",
-        levelRange: "15-20",
-        enemies: [
-            { name: "DRACONIS", img: "./images/7.jpg", hp: 200, attack: 25, xp: 150, type: "Dragon" },
-            { name: "SPECTRE", img: "./images/11.jpg", hp: 120, attack: 18, xp: 120, type: "Spectre" }
-        ]
-    }
-};
-
-// Compétences disponibles
-const SKILLS = {
-    attack: { name: "Frappe Spirituelle", cost: 0, type: "attack", desc: "Inflige des dégâts de base" },
-    heal: { name: "Renaissance", cost: 10, type: "heal", desc: "Restaure vos points de vie" },
-    defend: { name: "Écorce de Fer", cost: 5, type: "defense", desc: "Réduit les dégâts subis" },
-    special: { name: "Furie des Anciens", cost: 20, type: "special", desc: "Attaque puissante des ancêtres" }
-};
-
-// --- DOM ELEMENTS ---
-const authScreen = document.getElementById('auth-screen');
-const gameContainer = document.getElementById('game-container');
-const playerNameInput = document.getElementById('player-name-input');
-const displayUsername = document.getElementById('display-username');
-const playerLevel = document.getElementById('player-level');
-const enemyGrid = document.getElementById('enemy-grid');
-const battleScreen = document.getElementById('battle-screen');
-const selectionScreen = document.getElementById('selection-screen');
-const worldMapScreen = document.getElementById('world-map');
-const inventoryScreen = document.getElementById('inventory-screen');
-
-// --- SYSTEME D'AUTHENTIFICATION ---
-document.getElementById('login-btn').addEventListener('click', handleLogin);
-document.getElementById('register-btn').addEventListener('click', handleLogin);
-
-function handleLogin() {
-    const name = playerNameInput.value.trim() || "Gardienne";
-    player.name = name;
-    displayUsername.textContent = name.toUpperCase();
-
-    // Animation de succès
-    alert(`✨ Bienvenue, ${name}. L'héritage des anciens vous attend.`);
-    
-    // Transition
-    authScreen.style.opacity = '0';
-    setTimeout(() => {
-        authScreen.style.display = 'none';
-        gameContainer.classList.remove('hidden-opacity');
-        initWorldMap();
-    }, 800);
-}
-
-// --- MONDE ET ZONES ---
-function initWorldMap() {
-    // Déverrouiller les zones selon le niveau
-    document.querySelectorAll('.zone-card').forEach(card => {
-        const zone = card.dataset.zone;
-        if (zone === "sanctuary" || (zone === "ruins" && player.level >= 5) || 
-            (zone === "abyss" && player.level >= 10) || (zone === "citadel" && player.level >= 15)) {
-            card.classList.remove('locked');
-            card.addEventListener('click', () => selectZone(zone));
-        }
-    });
-}
-
-function selectZone(zone) {
-    currentZone = zone;
-    document.getElementById('zone-title').textContent = ZONES[zone].name;
-    worldMapScreen.classList.remove('active');
-    selectionScreen.classList.add('active');
-    initEnemySelection();
-}
-
-function initEnemySelection() {
-    enemyGrid.innerHTML = '';
-    ZONES[currentZone].enemies.forEach((enemy, index) => {
-        const card = document.createElement('div');
-        card.classList.add('enemy-card');
-        card.innerHTML = `
-            <img src="${enemy.img}">
-            <div style="margin-top:10px; font-weight:bold;">${enemy.name}</div>
-            <div style="font-size:0.8em; opacity:0.7;">PV: ${enemy.hp} | Type: ${enemy.type}</div>
-        `;
-        card.addEventListener('click', () => startBattle(index));
-        enemyGrid.appendChild(card);
-    });
-}
-
-// --- MOTEUR DE COMBAT AMÉLIORÉ ---
-function startBattle(enemyIndex) {
-    // Clonage de l'ennemi avec mise à l'échelle selon le niveau
-    const baseEnemy = ZONES[currentZone].enemies[enemyIndex];
-    const levelScale = 1 + (player.level - 1) * 0.1;
-    
-    currentEnemy = { 
-        ...baseEnemy, 
-        maxHp: Math.floor(baseEnemy.hp * levelScale),
-        hp: Math.floor(baseEnemy.hp * levelScale),
-        attack: Math.floor(baseEnemy.attack * levelScale),
-        xp: Math.floor(baseEnemy.xp * levelScale)
-    };
-
-    // Réinitialisation du joueur
-    player.hp = player.stats.maxHp;
-    player.mana = player.stats.maxMana;
-    player.defenseMode = false;
-
-    // UI Setup
-    selectionScreen.classList.remove('active');
-    battleScreen.classList.add('active');
-    battleScreen.classList.remove('hidden');
-    
-    document.getElementById('battle-enemy-img').src = currentEnemy.img;
-    document.getElementById('enemy-type').textContent = currentEnemy.type;
-    document.getElementById('leave-battle-btn').classList.add('hidden');
-    document.querySelector('.battle-controls').style.pointerEvents = 'auto';
-    
-    updateHealthBars();
-    updateManaBar();
-    logBattle(`Un ${currentEnemy.name} corrompu apparaît !`);
-}
-
-function updateHealthBars() {
-    const playerPct = (player.hp / player.stats.maxHp) * 100;
-    const enemyPct = (currentEnemy.hp / currentEnemy.maxHp) * 100;
-    
-    document.getElementById('player-hp-bar').style.width = `${Math.max(0, playerPct)}%`;
-    document.getElementById('enemy-hp-bar').style.width = `${Math.max(0, enemyPct)}%`;
-    document.getElementById('hp-display').textContent = Math.max(0, player.hp);
-    document.getElementById('max-hp-display').textContent = player.stats.maxHp;
-}
-
-function updateManaBar() {
-    const manaPct = (player.mana / player.stats.maxMana) * 100;
-    document.getElementById('player-mana-bar').style.width = `${Math.max(0, manaPct)}%`;
-    document.getElementById('mana-display').textContent = Math.max(0, player.mana);
-    document.getElementById('max-mana-display').textContent = player.stats.maxMana;
-}
-
-// --- ACTIONS DU JOUEUR AVEC SYSTÈME DE MANA ---
-document.getElementById('btn-attack').addEventListener('click', () => playerTurn('attack'));
-document.getElementById('btn-heal').addEventListener('click', () => playerTurn('heal'));
-document.getElementById('btn-defend').addEventListener('click', () => playerTurn('defend'));
-document.getElementById('btn-special').addEventListener('click', () => playerTurn('special'));
-
-function playerTurn(action) {
-    if (player.hp <= 0 || currentEnemy.hp <= 0) return;
-
-    const skill = SKILLS[action];
-    
-    // Vérifier le mana
-    if (player.mana < skill.cost) {
-        logBattle("Pas assez de mana !");
-        return;
+        this.initializeGame();
     }
 
-    // Dépenser le mana
-    player.mana -= skill.cost;
-    updateManaBar();
+    initializeGame() {
+        this.createLeaves();
+        this.bindEvents();
+        this.loadGame();
+        this.updateUI();
+    }
 
-    let logMsg = "";
-    player.defenseMode = false;
-    document.getElementById('player-shield').classList.add('hidden');
-
-    if (action === 'attack') {
-        let dmg = Math.floor(Math.random() * 10) + player.stats.attack;
-        if(Math.random() > 0.8) { 
-            dmg *= 2; 
-            logMsg += "CRITIQUE ! "; 
+    createLeaves() {
+        const container = document.getElementById('leaves-container');
+        for (let i = 0; i < 15; i++) {
+            const leaf = document.createElement('div');
+            leaf.className = 'leaf';
+            leaf.style.left = Math.random() * 100 + '%';
+            leaf.style.animationDuration = (Math.random() * 10 + 5) + 's';
+            leaf.style.animationDelay = Math.random() * 5 + 's';
+            container.appendChild(leaf);
         }
+    }
+
+    bindEvents() {
+        // Navigation
+        document.getElementById('start-btn').addEventListener('click', () => this.startGame());
+        document.getElementById('continue-btn').addEventListener('click', () => this.continueGame());
+        document.getElementById('explore-btn').addEventListener('click', () => this.exploreZone());
+        document.getElementById('flee-btn').addEventListener('click', () => this.fleeCombat());
         
-        currentEnemy.hp -= dmg;
-        showFloatingText('enemy', `-${dmg}`);
-        animateFighter('player', 'attack');
-        animateFighter('enemy', 'hit');
-        logMsg += `Vous infligez ${dmg} dégâts à ${currentEnemy.name}.`;
-    
-    } else if (action === 'heal') {
-        const healAmount = player.stats.heal;
-        player.hp = Math.min(player.hp + healAmount, player.stats.maxHp);
-        showFloatingText('player', `+${healAmount}`, '#52b788');
-        logMsg = "La nature restaure vos forces.";
+        // Menu
+        document.getElementById('menu-toggle').addEventListener('click', () => this.toggleMenu());
+        document.getElementById('close-menu').addEventListener('click', () => this.toggleMenu());
+        document.getElementById('menu-overlay').addEventListener('click', () => this.toggleMenu());
 
-    } else if (action === 'defend') {
-        player.defenseMode = true;
-        document.getElementById('player-shield').classList.remove('hidden');
-        logMsg = "Vous renforcez votre écorce spirituelle.";
-    
-    } else if (action === 'special') {
-        let dmg = Math.floor(Math.random() * 15) + 20;
-        currentEnemy.hp -= dmg;
-        showFloatingText('enemy', `-${dmg}`, '#ff9900');
-        animateFighter('player', 'attack');
-        animateFighter('enemy', 'hit');
-        logMsg = `La FURIE DES ANCIENS inflige ${dmg} dégâts dévastateurs !`;
-    }
+        // Compétences de combat
+        document.querySelectorAll('.skill-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const skill = e.currentTarget.dataset.skill;
+                this.useSkill(skill);
+            });
+        });
 
-    logBattle(logMsg);
-    updateHealthBars();
+        // Sélection d'ennemis
+        document.querySelectorAll('.combat-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const enemyType = e.currentTarget.dataset.enemy;
+                this.startCombat(enemyType);
+            });
+        });
 
-    if (currentEnemy.hp <= 0) {
-        endBattle(true);
-    } else {
-        // Tour de l'ennemi après 1 seconde
-        disableSkills();
-        setTimeout(enemyTurn, 1200);
-    }
-}
+        // Navigation entre écrans
+        document.querySelectorAll('.back-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const target = e.currentTarget.dataset.target;
+                this.switchScreen(target);
+            });
+        });
 
-function enemyTurn() {
-    if (currentEnemy.hp <= 0) return;
+        // Entrée du nom
+        document.getElementById('player-name-input').addEventListener('input', (e) => {
+            this.player.name = e.target.value.toUpperCase() || "GARDIENNE";
+            this.updateUI();
+        });
 
-    let dmg = Math.floor(Math.random() * 5) + currentEnemy.attack;
-    
-    // Si joueur défend, dégâts réduits de 50%
-    if (player.defenseMode) {
-        dmg = Math.floor(dmg / 2);
-    }
-
-    player.hp -= dmg;
-    showFloatingText('player', `-${dmg}`, '#e63946');
-    animateFighter('enemy', 'attack');
-    animateFighter('player', 'hit');
-    
-    logBattle(`${currentEnemy.name} attaque et inflige ${dmg} dégâts !`);
-    updateHealthBars();
-
-    // Réactiver les boutons
-    enableSkills();
-
-    if (player.hp <= 0) {
-        endBattle(false);
-    }
-}
-
-function disableSkills() {
-    document.querySelectorAll('.skill-btn').forEach(btn => {
-        btn.style.opacity = '0.5';
-        btn.style.pointerEvents = 'none';
-    });
-}
-
-function enableSkills() {
-    document.querySelectorAll('.skill-btn').forEach(btn => {
-        btn.style.opacity = '1';
-        btn.style.pointerEvents = 'auto';
-        
-        // Désactiver les boutons si pas assez de mana
-        const action = btn.id.replace('btn-', '');
-        if (SKILLS[action].cost > player.mana) {
-            btn.disabled = true;
-        } else {
-            btn.disabled = false;
-        }
-    });
-}
-
-// --- SYSTÈME DE PROGRESSION ---
-function gainXP(amount) {
-    player.xp += amount;
-    
-    if (player.xp >= player.xpToNextLevel) {
-        levelUp();
-    }
-}
-
-function levelUp() {
-    player.level++;
-    player.xp -= player.xpToNextLevel;
-    player.xpToNextLevel = Math.floor(player.xpToNextLevel * 1.5);
-    
-    // Amélioration des stats
-    player.stats.maxHp += 20;
-    player.stats.maxMana += 10;
-    player.stats.attack += 3;
-    player.stats.heal += 5;
-    
-    // Soin complet
-    player.hp = player.stats.maxHp;
-    player.mana = player.stats.maxMana;
-    
-    // Mise à jour de l'UI
-    playerLevel.textContent = `Niv. ${player.level}`;
-    updateHealthBars();
-    updateManaBar();
-    
-    alert(`🎉 FÉLICITATIONS ! Vous atteignez le niveau ${player.level} !`);
-    
-    // Vérifier le déverrouillage de nouvelles zones
-    initWorldMap();
-}
-
-// --- UTILITAIRES ---
-function logBattle(msg) {
-    const log = document.getElementById('battle-log');
-    log.textContent = msg;
-    log.style.animation = 'none';
-    log.offsetHeight;
-    log.style.animation = 'shake 0.2s';
-}
-
-function showFloatingText(target, text, color = 'white') {
-    const el = document.getElementById(`${target}-damage`);
-    el.textContent = text;
-    el.style.color = color;
-    el.classList.remove('show');
-    void el.offsetWidth;
-    el.classList.add('show');
-}
-
-function animateFighter(who, type) {
-    const el = document.querySelector(`.fighter.${who} .fighter-img`);
-    if (type === 'attack') {
-        el.classList.add('attack-anim');
-        setTimeout(() => el.classList.remove('attack-anim'), 200);
-    } else {
-        el.classList.add('hit-anim');
-        setTimeout(() => el.classList.remove('hit-anim'), 500);
-    }
-}
-
-function endBattle(victory) {
-    const btn = document.getElementById('leave-battle-btn');
-    btn.classList.remove('hidden');
-    document.querySelector('.skills-grid').style.pointerEvents = 'none';
-
-    if (victory) {
-        logBattle(`VICTOIRE ! Vous gagnez ${currentEnemy.xp} XP et ${Math.floor(currentEnemy.xp/2)} Essence.`);
-        player.essence += Math.floor(currentEnemy.xp/2);
-        gainXP(currentEnemy.xp);
-        document.getElementById('essence-display').textContent = player.essence;
-    } else {
-        logBattle("DÉFAITE... L'esprit vous a submergé.");
-    }
-
-    btn.onclick = () => {
-        battleScreen.classList.remove('active');
-        battleScreen.classList.add('hidden');
-        selectionScreen.classList.add('active');
-    };
-}
-
-// --- NAVIGATION ---
-document.querySelectorAll('.nav-btn').forEach(btn => {
-    if (btn.id !== 'stats-btn') {
-        btn.addEventListener('click', () => {
-            const screen = btn.dataset.screen;
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(screen).classList.add('active');
+        // Zones interactives
+        document.querySelectorAll('.zone').forEach(zone => {
+            zone.addEventListener('click', (e) => {
+                if (!zone.classList.contains('locked-zone')) {
+                    this.selectZone(zone.dataset.zone);
+                }
+            });
         });
     }
-});
 
-document.getElementById('back-to-map').addEventListener('click', () => {
-    selectionScreen.classList.remove('active');
-    worldMapScreen.classList.add('active');
-});
+    startGame() {
+        const name = document.getElementById('player-name-input').value.trim();
+        this.player.name = name || "GARDIENNE";
+        
+        this.showMessage(`Bienvenue, ${this.player.name}! L'aventure commence...`);
+        this.switchScreen('world-map');
+        this.saveGame();
+    }
 
-document.getElementById('back-from-inventory').addEventListener('click', () => {
-    inventoryScreen.classList.remove('active');
-    worldMapScreen.classList.add('active');
-});
+    continueGame() {
+        this.switchScreen('world-map');
+        this.showMessage(`Bienvenue de retour, ${this.player.name}!`);
+    }
 
-// Initialisation des compétences dans l'inventaire
-function initSkills() {
-    const skillsList = document.getElementById('skills-list');
-    skillsList.innerHTML = '';
-    
-    Object.values(SKILLS).forEach(skill => {
-        const skillEl = document.createElement('div');
-        skillEl.classList.add('skill-item');
-        skillEl.innerHTML = `
-            <div style="font-weight:bold">${skill.name}</div>
-            <div style="font-size:0.8em; opacity:0.7">${skill.desc}</div>
-            <div style="font-size:0.7em; color:var(--mana)">Coût: ${skill.cost} mana</div>
+    selectZone(zone) {
+        this.currentZone = zone;
+        document.getElementById('zone-name').textContent = this.getZoneName(zone);
+        this.switchScreen('enemy-select');
+    }
+
+    exploreZone() {
+        this.showMessage(`Vous explorez la ${this.getZoneName(this.currentZone)}...`);
+        // Ici on pourrait ajouter des événements aléatoires
+    }
+
+    startCombat(enemyType) {
+        this.currentEnemy = this.createEnemy(enemyType);
+        this.combatActive = true;
+        
+        // Mise à jour de l'interface de combat
+        document.getElementById('enemy-img').src = this.currentEnemy.image;
+        document.getElementById('enemy-name').textContent = this.currentEnemy.name;
+        document.getElementById('enemy-hp').textContent = this.currentEnemy.hp;
+        
+        this.updateCombatUI();
+        this.switchScreen('combat-screen');
+        
+        this.showCombatMessage(`Un ${this.currentEnemy.name} apparaît!`);
+    }
+
+    createEnemy(type) {
+        const enemies = {
+            gobelin: {
+                name: "Gobelin Corrompu",
+                image: "./images/5.jpg",
+                hp: 80,
+                maxHp: 80,
+                attack: 12,
+                defense: 5,
+                xp: 50
+            },
+            orc: {
+                name: "Orc Brute",
+                image: "./images/9.jpg",
+                hp: 120,
+                maxHp: 120,
+                attack: 15,
+                defense: 8,
+                xp: 80
+            },
+            mage: {
+                name: "Mage Noir",
+                image: "./images/12.jpg",
+                hp: 70,
+                maxHp: 70,
+                attack: 25,
+                defense: 3,
+                xp: 100
+            }
+        };
+
+        return { ...enemies[type] };
+    }
+
+    useSkill(skill) {
+        if (!this.combatActive || this.player.hp <= 0) return;
+
+        let message = "";
+        let damage = 0;
+
+        switch(skill) {
+            case 'attack':
+                damage = this.calculateDamage(this.player.stats.attack, this.currentEnemy.defense);
+                message = `Vous attaquez et infligez ${damage} dégâts!`;
+                this.createProjectile('player', 'enemy', 'sword');
+                break;
+                
+            case 'fireball':
+                if (this.player.mana >= 15) {
+                    this.player.mana -= 15;
+                    damage = this.calculateDamage(this.player.stats.magic + 10, this.currentEnemy.defense);
+                    message = `Boule de feu! ${damage} dégâts magiques!`;
+                    this.createProjectile('player', 'enemy', 'fire');
+                } else {
+                    this.showCombatMessage("Pas assez de mana!");
+                    return;
+                }
+                break;
+                
+            case 'heal':
+                if (this.player.mana >= 20) {
+                    this.player.mana -= 20;
+                    const healAmount = 30;
+                    this.player.hp = Math.min(this.player.hp + healAmount, this.player.maxHp);
+                    message = `Vous vous soignez de ${healAmount} PV!`;
+                    this.createHealEffect();
+                } else {
+                    this.showCombatMessage("Pas assez de mana!");
+                    return;
+                }
+                break;
+                
+            case 'lightning':
+                if (this.player.mana >= 30) {
+                    this.player.mana -= 30;
+                    damage = this.calculateDamage(this.player.stats.magic + 20, this.currentEnemy.defense);
+                    message = `Foudre! ${damage} dégâts électriques!`;
+                    this.createLightningEffect();
+                } else {
+                    this.showCombatMessage("Pas assez de mana!");
+                    return;
+                }
+                break;
+        }
+
+        if (damage > 0) {
+            this.currentEnemy.hp -= damage;
+            this.showDamageNumber('enemy', damage);
+            this.shakeElement('.enemy-combatant');
+        }
+
+        this.showCombatMessage(message);
+        this.updateCombatUI();
+
+        // Vérifier si l'ennemi est vaincu
+        if (this.currentEnemy.hp <= 0) {
+            this.endCombat(true);
+            return;
+        }
+
+        // Tour de l'ennemi
+        setTimeout(() => this.enemyTurn(), 1500);
+    }
+
+    enemyTurn() {
+        if (!this.combatActive || this.currentEnemy.hp <= 0) return;
+
+        const damage = this.calculateDamage(this.currentEnemy.attack, this.player.stats.defense);
+        this.player.hp -= damage;
+        
+        this.showCombatMessage(`${this.currentEnemy.name} vous attaque et inflige ${damage} dégâts!`);
+        this.showDamageNumber('player', damage);
+        this.createProjectile('enemy', 'player', 'dark');
+        this.shakeElement('.player-combatant');
+        
+        this.updateCombatUI();
+
+        // Vérifier si le joueur est vaincu
+        if (this.player.hp <= 0) {
+            this.endCombat(false);
+        }
+    }
+
+    calculateDamage(attack, defense) {
+        const baseDamage = attack - defense / 2;
+        const variance = baseDamage * 0.3;
+        const finalDamage = Math.max(1, baseDamage + (Math.random() * variance * 2 - variance));
+        return Math.round(finalDamage);
+    }
+
+    endCombat(victory) {
+        this.combatActive = false;
+        
+        if (victory) {
+            const xpGained = this.currentEnemy.xp;
+            this.player.xp += xpGained;
+            this.player.essence += Math.floor(xpGained / 2);
+            
+            this.showCombatMessage(`Victoire! +${xpGained} XP et +${Math.floor(xpGained/2)} Essence!`);
+            this.checkLevelUp();
+            
+            // Effet de victoire
+            this.createVictoryEffect();
+        } else {
+            this.showCombatMessage("Défaite... Vous perdez de l'essence.");
+            this.player.essence = Math.max(0, this.player.essence - 20);
+            this.player.hp = this.player.maxHp; // Reset HP après défaite
+        }
+
+        this.saveGame();
+        
+        setTimeout(() => {
+            this.switchScreen('enemy-select');
+        }, 3000);
+    }
+
+    fleeCombat() {
+        if (Math.random() > 0.3) { // 70% de chance de fuite
+            this.showCombatMessage("Vous fuyez le combat!");
+            this.combatActive = false;
+            setTimeout(() => this.switchScreen('enemy-select'), 1000);
+        } else {
+            this.showCombatMessage("Fuite échouée!");
+            this.enemyTurn();
+        }
+    }
+
+    checkLevelUp() {
+        if (this.player.xp >= this.player.xpToNextLevel) {
+            this.player.level++;
+            this.player.xp -= this.player.xpToNextLevel;
+            this.player.xpToNextLevel = Math.floor(this.player.xpToNextLevel * 1.5);
+            
+            // Amélioration des stats
+            this.player.maxHp += 20;
+            this.player.maxMana += 10;
+            this.player.stats.attack += 2;
+            this.player.stats.defense += 1;
+            this.player.stats.magic += 2;
+            
+            // Soin complet
+            this.player.hp = this.player.maxHp;
+            this.player.mana = this.player.maxMana;
+            
+            this.showMessage(`🎉 NIVEAU ${this.player.level} ATTEINT!`);
+            this.updateUI();
+        }
+    }
+
+    // EFFETS VISUELS
+    createProjectile(from, to, type) {
+        const container = document.getElementById('projectile-container');
+        const projectile = document.createElement('div');
+        projectile.className = `projectile ${type}`;
+        
+        const fromRect = document.querySelector(`.${from}-combatant`).getBoundingClientRect();
+        const toRect = document.querySelector(`.${to}-combatant`).getBoundingClientRect();
+        
+        const startX = from === 'player' ? fromRect.right : fromRect.left;
+        const startY = fromRect.top + fromRect.height / 2;
+        const endX = to === 'player' ? toRect.left : toRect.right;
+        const endY = toRect.top + toRect.height / 2;
+        
+        projectile.style.left = startX + 'px';
+        projectile.style.top = startY + 'px';
+        projectile.style.setProperty('--targetX', (endX - startX) + 'px');
+        projectile.style.setProperty('--targetY', (endY - startY) + 'px');
+        
+        container.appendChild(projectile);
+        
+        setTimeout(() => {
+            projectile.remove();
+            this.createImpactEffect(to, type);
+        }, 800);
+    }
+
+    createImpactEffect(target, type) {
+        const container = document.getElementById('effect-overlay');
+        const effect = document.createElement('div');
+        effect.className = `impact-effect ${type}`;
+        
+        const targetRect = document.querySelector(`.${target}-combatant`).getBoundingClientRect();
+        effect.style.left = (targetRect.left + targetRect.width / 2) + 'px';
+        effect.style.top = (targetRect.top + targetRect.height / 2) + 'px';
+        
+        container.appendChild(effect);
+        
+        setTimeout(() => effect.remove(), 1000);
+    }
+
+    createHealEffect() {
+        const container = document.getElementById('effect-overlay');
+        const effect = document.createElement('div');
+        effect.className = 'heal-effect';
+        
+        const playerRect = document.querySelector('.player-combatant').getBoundingClientRect();
+        effect.style.left = (playerRect.left + playerRect.width / 2) + 'px';
+        effect.style.top = (playerRect.top + playerRect.height / 2) + 'px';
+        
+        container.appendChild(effect);
+        
+        setTimeout(() => effect.remove(), 1500);
+    }
+
+    createLightningEffect() {
+        const container = document.getElementById('effect-overlay');
+        const effect = document.createElement('div');
+        effect.className = 'lightning-effect';
+        
+        const enemyRect = document.querySelector('.enemy-combatant').getBoundingClientRect();
+        effect.style.left = (enemyRect.left + enemyRect.width / 2) + 'px';
+        effect.style.top = enemyRect.top + 'px';
+        
+        container.appendChild(effect);
+        
+        setTimeout(() => effect.remove(), 1000);
+    }
+
+    createVictoryEffect() {
+        const container = document.getElementById('effect-overlay');
+        for (let i = 0; i < 10; i++) {
+            setTimeout(() => {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'victory-sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 1 + 's';
+                container.appendChild(sparkle);
+                
+                setTimeout(() => sparkle.remove(), 2000);
+            }, i * 200);
+        }
+    }
+
+    showDamageNumber(target, amount) {
+        const combatant = document.querySelector(`.${target}-combatant`);
+        const damageText = document.createElement('div');
+        damageText.className = 'damage-number';
+        damageText.textContent = `-${amount}`;
+        damageText.style.color = target === 'player' ? '#ff6b6b' : '#4ecdc4';
+        
+        combatant.appendChild(damageText);
+        
+        setTimeout(() => {
+            damageText.style.transform = 'translateY(-50px)';
+            damageText.style.opacity = '0';
+        }, 100);
+        
+        setTimeout(() => damageText.remove(), 1000);
+    }
+
+    shakeElement(selector) {
+        const element = document.querySelector(selector);
+        element.style.animation = 'shake 0.5s';
+        setTimeout(() => element.style.animation = '', 500);
+    }
+
+    // INTERFACE UTILISATEUR
+    switchScreen(screenId) {
+        // Transition entre écrans
+        const transition = document.getElementById('screen-transition');
+        transition.style.opacity = '1';
+        
+        setTimeout(() => {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            document.getElementById(screenId).classList.add('active');
+            
+            transition.style.opacity = '0';
+        }, 300);
+    }
+
+    toggleMenu() {
+        const menu = document.getElementById('side-menu');
+        const overlay = document.getElementById('menu-overlay');
+        
+        menu.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
+
+    updateUI() {
+        // Mise à jour des informations du joueur
+        document.getElementById('display-username').textContent = this.player.name;
+        document.getElementById('quick-essence').textContent = this.player.essence;
+        document.getElementById('quick-level').textContent = this.player.level;
+        document.getElementById('menu-player-name').textContent = this.player.name;
+        document.getElementById('menu-level').textContent = this.player.level;
+        document.getElementById('menu-essence').textContent = this.player.essence;
+    }
+
+    updateCombatUI() {
+        // Mise à jour des barres de vie et mana
+        const playerHpPercent = (this.player.hp / this.player.maxHp) * 100;
+        const playerManaPercent = (this.player.mana / this.player.maxMana) * 100;
+        const enemyHpPercent = (this.currentEnemy.hp / this.currentEnemy.maxHp) * 100;
+        
+        document.getElementById('player-health').style.width = playerHpPercent + '%';
+        document.getElementById('player-mana').style.width = playerManaPercent + '%';
+        document.getElementById('enemy-health').style.width = enemyHpPercent + '%';
+        
+        document.getElementById('player-hp').textContent = this.player.hp;
+        document.getElementById('player-mp').textContent = this.player.mana;
+        document.getElementById('enemy-hp').textContent = this.currentEnemy.hp;
+        document.getElementById('current-hp').textContent = this.player.hp;
+    }
+
+    showMessage(message) {
+        // Créer une notification temporaire
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        notification.textContent = message;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: #ffd700;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            border: 1px solid #ffd700;
+            z-index: 1000;
+            animation: fadeInOut 3s ease;
         `;
-        skillsList.appendChild(skillEl);
-    });
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+
+    showCombatMessage(message) {
+        const log = document.getElementById('combat-log');
+        const entry = document.createElement('div');
+        entry.className = 'log-entry';
+        entry.textContent = message;
+        
+        log.appendChild(entry);
+        log.scrollTop = log.scrollHeight;
+        
+        // Garder seulement les 5 derniers messages
+        while (log.children.length > 5) {
+            log.removeChild(log.firstChild);
+        }
+    }
+
+    getZoneName(zone) {
+        const names = {
+            vallee: "Vallée des Larmes",
+            foret: "Forêt Hurlante",
+            montagnes: "Montagnes Maudites"
+        };
+        return names[zone] || "Zone Inconnue";
+    }
+
+    // SAUVEGARDE
+    saveGame() {
+        const saveData = {
+            player: this.player,
+            currentZone: this.currentZone
+        };
+        localStorage.setItem('kahina_save', JSON.stringify(saveData));
+    }
+
+    loadGame() {
+        const saveData = localStorage.getItem('kahina_save');
+        if (saveData) {
+            const data = JSON.parse(saveData);
+            this.player = { ...this.player, ...data.player };
+            this.currentZone = data.currentZone;
+        }
+    }
 }
 
-// Initialisation au chargement
-window.addEventListener('load', () => {
-    initSkills();
+// Initialisation du jeu
+document.addEventListener('DOMContentLoaded', () => {
+    window.game = new KahinaGame();
 });
+
+// Styles CSS dynamiques pour les animations
+const style = document.createElement('style');
+style.textContent = `
+    .projectile {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        animation: projectile 0.8s linear forwards;
+        z-index: 15;
+    }
+    
+    .projectile.sword {
+        background: radial-gradient(circle, #fff, #4ecdc4);
+        box-shadow: 0 0 10px #4ecdc4;
+    }
+    
+    .projectile.fire {
+        background: radial-gradient(circle, #ff6b6b, #ffd700);
+        box-shadow: 0 0 15px #ff6b6b;
+    }
+    
+    .projectile.dark {
+        background: radial-gradient(circle, #6c5ce7, #2d3436);
+        box-shadow: 0 0 10px #6c5ce7;
+    }
+    
+    .impact-effect {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        animation: explode 0.6s ease-out forwards;
+        z-index: 16;
+    }
+    
+    .impact-effect.sword {
+        background: radial-gradient(circle, transparent 30%, #4ecdc4 70%);
+    }
+    
+    .impact-effect.fire {
+        background: radial-gradient(circle, transparent 30%, #ff6b6b 70%);
+    }
+    
+    .impact-effect.dark {
+        background: radial-gradient(circle, transparent 30%, #6c5ce7 70%);
+    }
+    
+    .heal-effect {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(circle, transparent 30%, #00b894 70%);
+        border-radius: 50%;
+        animation: healPulse 1.5s ease-out forwards;
+        z-index: 16;
+    }
+    
+    .lightning-effect {
+        position: absolute;
+        width: 5px;
+        height: 200px;
+        background: linear-gradient(to bottom, transparent, #ffeaa7, transparent);
+        animation: lightningStrike 0.3s ease-out forwards;
+        z-index: 16;
+    }
+    
+    .victory-sparkle {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: #ffd700;
+        border-radius: 50%;
+        animation: sparkleFloat 2s ease-out forwards;
+        z-index: 16;
+    }
+    
+    .damage-number {
+        position: absolute;
+        font-size: 1.5rem;
+        font-weight: bold;
+        transition: all 1s ease;
+        z-index: 17;
+    }
+    
+    @keyframes healPulse {
+        0% { transform: scale(0); opacity: 1; }
+        100% { transform: scale(2); opacity: 0; }
+    }
+    
+    @keyframes lightningStrike {
+        0% { transform: scaleY(0); opacity: 1; }
+        100% { transform: scaleY(1); opacity: 0; }
+    }
+    
+    @keyframes sparkleFloat {
+        0% { transform: translateY(0) scale(1); opacity: 1; }
+        100% { transform: translateY(-100px) scale(0); opacity: 0; }
+    }
+    
+    @keyframes fadeInOut {
+        0%, 100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+        20%, 80% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+`;
+document.head.appendChild(style);
