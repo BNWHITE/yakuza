@@ -1,244 +1,279 @@
-/* ================================================= */
-/* 🎨 CSS TOTAL OVERHAUL : YAKUZA CYBER-CRIMSON HUD (V2) */
-/* ================================================= */
-
-/* --------------------- FONT IMPORT --------------------- */
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Dosis:wght@700;900&display=swap');
-
-/* --------------------- VARIABLES GLOBALES --------------------- */
+/* ================= VALORANT THEME VARIABLES ================= */
 :root {
-    --bg-deep-dark: #0a0a0d;      /* Noir Profond */
-    --bg-section: #1c1f25;        /* Gris charbon */
-    --accent-red: #ff0033;        /* Rouge Néon */
-    --accent-cyan: #00ffee;       /* Cyan */
-    --text-color-light: #e0e0e0;  /* Texte clair */
-    --text-color-data: #b0b0b0;   /* Texte secondaire */
-    
-    --glow-red: 0 0 8px var(--accent-red), 0 0 4px rgba(255, 0, 51, 0.5);
-    --glow-cyan: 0 0 8px var(--accent-cyan), 0 0 4px rgba(0, 255, 238, 0.5);
-    
-    --error-color: #ff4545;
-    
-    /* Couleurs de stats */
-    --stat-vitesse: var(--accent-cyan);
-    --stat-codage: var(--accent-red); 
-    --stat-chance: #ffaa00; 
-}
-
-/* --------------------- GLOBAL & STRUCTURE --------------------- */
-* {
-    box-sizing: border-box;
-    min-width: 0;
+    --val-red: #ff4655;
+    --val-black: #0f1923;
+    --val-white: #ece8e1;
+    --val-gray: #8b9bb4;
+    --font-head: 'Oswald', sans-serif;
+    --font-body: 'Rajdhani', sans-serif;
 }
 
 body {
-    font-family: 'Roboto Mono', monospace; 
     margin: 0;
-    background-color: var(--bg-deep-dark);
-    color: var(--text-color-light);
-    min-height: 100vh;
+    background-color: var(--val-black);
+    color: var(--val-white);
+    font-family: var(--font-body);
+    overflow: hidden; /* Pas de scroll pendant le jeu */
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-image: radial-gradient(circle at 50% 50%, #1f2731 0%, #0f1923 100%);
+}
+
+/* --- UI ELEMENTS GENERIC --- */
+.val-btn {
+    background-color: var(--val-red);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-family: var(--font-head);
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+    /* Le fameux angle coupé Valorant */
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+    transition: all 0.2s ease;
+}
+
+.val-btn:hover {
+    background-color: white;
+    color: var(--val-black);
+    transform: translateY(-2px);
+}
+
+.val-btn:disabled {
+    background-color: #333;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.val-btn.secondary {
+    background-color: transparent;
+    border: 1px solid var(--val-white);
+    color: var(--val-white);
+}
+
+.val-input {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid transparent;
+    border-bottom: 2px solid var(--val-gray);
+    color: white;
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 15px;
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+}
+.val-input:focus {
+    outline: none;
+    border-bottom-color: var(--val-red);
+}
+
+/* --- LAYOUT --- */
+.val-header {
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    background: rgba(15, 25, 35, 0.9);
+}
+.brand-logo {
+    font-family: var(--font-head);
+    font-size: 2rem;
+    font-weight: bold;
+}
+.brand-logo .accent { color: var(--val-red); }
+
+.hidden-screen { display: none !important; }
+
+/* --- LOBBY --- */
+.lobby-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 50px;
+    padding: 50px;
+    height: 100%;
+}
+.val-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 30px;
+    position: relative;
+}
+/* Lignes décoratives aux coins */
+.val-card::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: -1px;
+    width: 20px; height: 20px;
+    border-top: 2px solid var(--val-red);
+    border-left: 2px solid var(--val-red);
+}
+
+.agents-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+    max-height: 40vh;
+    overflow-y: auto;
+}
+.agent-choice {
+    border: 2px solid rgba(255,255,255,0.1);
+    cursor: pointer;
+    transition: 0.3s;
+    text-align: center;
+    padding: 10px;
+}
+.agent-choice img { width: 60px; height: 60px; }
+.agent-choice:hover, .agent-choice.selected {
+    border-color: var(--val-red);
+    background: rgba(255, 70, 85, 0.1);
+}
+
+/* --- GAME AREA --- */
+#game-screen {
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow-x: hidden; 
-    min-width: 320px;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    padding: 0 5%;
 }
 
-main {
-    display: flex;
-    width: 95%;
-    max-width: 1400px;
-    margin-top: 20px;
-    flex-grow: 1;
-    padding-bottom: 50px;
-}
-
-/* --- HEADER YAKUZA --- */
-.cyber-header {
+.game-hud {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 15px 50px;
     width: 100%;
-    background-color: var(--bg-section);
-    border-bottom: 2px solid var(--accent-red);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.logo-text {
-    font-family: 'Dosis', sans-serif;
-    color: var(--accent-red);
-    font-size: 1.8em;
-    font-weight: 900;
-    text-shadow: var(--glow-red);
-}
-
-/* --- TITRES --- */
-.main-title {
-    font-family: 'Dosis', sans-serif;
-    font-weight: 900;
-    font-size: 3.5em;
-    text-transform: uppercase;
-    color: var(--text-color-light);
-    text-shadow: var(--glow-red);
-    margin: 10px 0 20px;
-}
-.terminal-title {
-    font-family: 'Roboto Mono', monospace;
-    color: var(--accent-cyan);
-    text-shadow: var(--glow-cyan);
     margin-bottom: 20px;
-    font-size: 2em;
 }
-h2 { color: var(--accent-cyan); }
-
-/* --- HUD LATÉRAL (ASIDE) --- */
-#side-hud {
-    width: 300px;
-    margin-right: 20px;
-    padding: 15px;
-    border: 1px solid var(--accent-red);
-    background-color: rgba(0, 0, 0, 0.3);
-    box-shadow: 0 0 10px rgba(255, 0, 51, 0.2);
-    align-self: flex-start;
-    position: sticky;
-    top: 80px; 
-    max-height: calc(100vh - 100px);
-    overflow-y: auto;
+.timer-box, .score-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-.hud-box { padding: 15px 0; border-top: 1px dashed rgba(255, 255, 255, 0.1); }
-.hud-title { color: var(--accent-cyan); font-size: 1em; margin-top: 0; text-shadow: 0 0 5px var(--accent-cyan); }
-.stat-line { display: flex; justify-content: space-between; font-size: 0.9em; margin-bottom: 5px; }
-.yen-display { color: var(--accent-red); font-weight: 700; text-shadow: var(--glow-red); }
-.kirin-display { color: var(--accent-cyan); font-weight: 700; }
-.resource-display { border-bottom: 1px dashed rgba(255, 255, 255, 0.1); }
+.timer-val {
+    font-family: var(--font-head);
+    font-size: 3rem;
+    color: var(--val-red);
+}
 
-/* --- CONTENU CENTRAL --- */
-.central-area { flex-grow: 1; }
-section {
-    background-color: var(--bg-section);
-    padding: 40px;
-    border-radius: 5px;
-    border: 1px solid var(--accent-red);
-    box-shadow: 0 0 15px rgba(255, 0, 51, 0.1);
-    margin: 10px 0;
+/* --- RACE TRACK --- */
+.race-container {
     width: 100%;
+    height: 200px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+/* Ligne d'arrivée */
+.finish-line {
+    position: absolute;
+    right: 5%;
+    top: 0; bottom: 0;
+    width: 4px;
+    background: repeating-linear-gradient(0deg, var(--val-red), var(--val-red) 10px, transparent 10px, transparent 20px);
+    z-index: 0;
+}
+
+.racer-lane {
+    position: relative;
+    height: 50%;
+    width: 100%;
+    border-bottom: 1px dashed rgba(255,255,255,0.05);
+}
+
+.avatar-wrapper {
+    position: absolute;
+    left: 0; /* C'est ça qu'on va animer en JS */
+    bottom: 10px;
+    width: 80px;
+    height: 80px;
+    transition: left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Animation fluide */
+    z-index: 10;
+}
+.avatar-wrapper img {
+    width: 100%;
+    height: 100%;
+    border: 2px solid white;
+    background: black;
+}
+
+/* FIRE EFFECT (COMBO) */
+.fire-effect {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    animation: bounce 0.5s infinite;
+    text-shadow: 0 0 10px orange;
+}
+.hidden { display: none !important; }
+
+/* --- QUIZ UI --- */
+.quiz-interface {
+    width: 100%;
+    max-width: 800px;
     text-align: center;
 }
-
-/* --- CAROUSEL & CARDS --- */
-.selector-carousel {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 20px;
-    margin-top: 20px;
+.category-tag {
+    display: inline-block;
+    background: var(--val-gray);
+    color: var(--val-black);
+    padding: 2px 8px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
-.student-card { background-color: #2a2e35; border: 1px solid var(--text-color-data); padding: 15px; border-radius: 5px; cursor: pointer; }
-.student-avatar { border: 3px solid var(--accent-red); border-radius: 50%; }
-
-/* --- SHOP GRID --- */
-.shop-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
+.question-header h2 {
+    font-size: 1.5rem;
+    margin: 0 0 20px 0;
 }
-.shop-item {
-    background: #2a2e35;
+
+.answers-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+.answer-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
     padding: 20px;
-    border-radius: 5px;
-    border: 1px solid var(--accent-cyan);
-    text-align: left;
+    font-size: 1.1rem;
+    cursor: pointer;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+    transition: all 0.1s;
 }
-.shop-item .upgrade-name {
-    color: var(--accent-red);
-    font-family: 'Dosis', sans-serif;
-    font-size: 1.2em;
-}
+.answer-btn:hover { background: rgba(255,255,255,0.1); }
+.answer-btn:active { transform: scale(0.98); }
 
-/* --- RACE TRACK (Hack Visuals) --- */
-.race-track {
-    background-color: var(--track-color);
-    border: 5px solid var(--accent-red);
-    box-shadow: 0 0 10px var(--accent-red);
-    height: 250px;
-    width: 95%;
-    margin: 20px auto;
-    overflow: hidden;
-    position: relative;
-    padding: 10px;
-}
-.cat-lane img {
-    width: 90px;
-    height: 90px;
-    border: 3px solid var(--accent-cyan);
-    position: relative;
-    transition: transform 0.1s linear;
-}
-/* Animation de fond pour le hack (Inspiration Matrix) */
-@keyframes matrix-rain {
-    0% { background-position: 0 0; }
-    100% { background-position: -200px -200px; }
-}
-.race-track.hacking {
-    background: #000 url('data:image/svg+xml;utf8,<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><text x="0" y="15" font-size="16" font-family="monospace" fill="%23ff0033" opacity="0.5">101010</text><text x="100" y="65" font-size="16" font-family="monospace" fill="%2300ffee" opacity="0.5">011001</text><text x="50" y="115" font-size="16" font-family="monospace" fill="%23ff0033" opacity="0.5">111000</text><text x="150" y="165" font-size="16" font-family="monospace" fill="%2300ffee" opacity="0.5">010101</text></svg>') repeat;
-    animation: matrix-rain 2s linear infinite;
-}
+/* Feedbacks réponses */
+.answer-btn.correct { background: #10b981; border-color: #10b981; }
+.answer-btn.wrong { background: var(--val-red); border-color: var(--val-red); }
 
-/* --- MOBILE OPTIMIZATION (FINAL FIX) --- */
-@media (max-width: 992px) {
-    /* --- STRUCTURE GENERALE FIX --- */
-    .cyber-header { padding: 10px 15px; flex-wrap: wrap; }
-    .desktop-nav { display: none; }
-    main { flex-direction: column; width: 100%; margin-top: 10px; padding: 0 10px 50px 10px; }
-    
-    /* --- HUD FIX --- */
-    #side-hud {
-        width: 100%;
-        margin: 0;
-        position: static;
-        top: auto;
-        padding: 10px;
-        border-top: none;
-        border-bottom: 2px solid var(--accent-red); /* Mieux que top/bottom */
-    }
-
-    /* --- TITRES/SECTIONS FIX --- */
-    .main-title { font-size: 2em; margin: 15px 0 10px; }
-    .dark-subtitle { font-size: 1em; }
-    section { padding: 20px 15px; margin: 10px 0; }
-    
-    /* --- CAROUSEL FIX (Menu Roulette) --- */
-    .selector-carousel {
-        display: flex;
-        overflow-x: scroll; 
-        scroll-snap-type: x mandatory; 
-        gap: 15px;
-        padding-bottom: 10px;
-        padding-left: 15px; 
-        padding-right: 15px; 
-        width: 100%; 
-        margin: 20px 0;
-        justify-content: flex-start;
-        /* Correction critique pour enlever le défilement horizontal de la page */
-        margin-left: 50%;
-        transform: translateX(-50%);
-    }
-    .student-card { flex: 0 0 220px; min-width: 220px; }
-    
-    /* --- SHOP FIX --- */
-    .shop-grid { grid-template-columns: 1fr; }
-
-    /* --- COURSE FIX --- */
-    .race-track { height: 150px; padding: 5px; }
-    .cat-lane img { width: 60px; height: 60px; }
-    .cat-lane .cat-name { font-size: 0.7em; }
-    
-    /* --- CHAT/AUTH INPUT FIX --- */
-    .chat-input-area { flex-direction: column; gap: 5px; }
-    .chat-input-area .auth-input { max-width: 100%; }
-    .chat-input-area .send-btn { min-width: 100%; }
+/* RESULT OVERLAY */
+#result-overlay {
+    position: absolute;
+    top:0; left:0; right:0; bottom:0;
+    background: rgba(15, 25, 35, 0.95);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+#result-title {
+    font-family: var(--font-head);
+    font-size: 6rem;
+    color: var(--val-red);
+    text-transform: uppercase;
+    letter-spacing: 10px;
+    margin-bottom: 20px;
 }
