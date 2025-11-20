@@ -1,338 +1,197 @@
 /* ================================================= */
-/* 🧠 GAME ENGINE : CLASSROOM CONQUEST (V3) */
+/* 🧠 ENGINE V2: CLASSROOM PROTOCOL + BEREADY DATA */
 /* ================================================= */
 
-// --- CONFIG ---
-const SUPABASE_URL = 'https://dxiefxcfnggezuiifeqf.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_wAZG8NaYrZux3loetrNbmg_6QOuyBz5'; // Ta clé publique
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// --- CONFIGURATION ---
+const GAME_DURATION = 60; // 60 secondes
+const QUESTIONS_BEREADY = [
+    // Questions inspirées de vos fichiers BeReady (app_elec, archi1, etc.)
+    { theme: "ARCHI", q: "Que signifie CPU ?", options: ["Central Processing Unit", "Computer Power Unit", "Core Process Utility", "Central Power User"], correct: 0 },
+    { theme: "ELEC", q: "Loi d'Ohm : U = ?", options: ["R × I", "R / I", "R + I", "I² × R"], correct: 0 },
+    { theme: "SIGNAL", q: "L'unité de la fréquence ?", options: ["Hertz", "Watt", "Joule", "Volt"], correct: 0 },
+    { theme: "INFO", q: "En binaire, 101 vaut ?", options: ["5", "3", "6", "9"], correct: 0 },
+    { theme: "MATH", q: "Dérivée de x² ?", options: ["2x", "x", "2", "x²"], correct: 0 },
+    { theme: "CULTURE", q: "Capitale du Japon ?", options: ["Tokyo", "Kyoto", "Osaka", "Seoul"], correct: 0 },
+    { theme: "ARCHI", q: "1 Octet = ? bits", options: ["8", "16", "32", "4"], correct: 0 },
+    { theme: "WEB", q: "Balise pour un lien ?", options: ["<a>", "<link>", "<href>", "<p>"], correct: 0 },
+];
 
-// --- ETAT DU JEU ---
-let currentUser = null;
-let selectedAgent = null;
-let gameInterval = null;
-let timerInterval = null;
+// Simulation de la classe (Nom + Seed pour l'avatar)
+const CLASS_ROSTER = [
+    { id: 1, name: "Lucas M.", seed: "Lucas" },
+    { id: 2, name: "Sarah B.", seed: "Sarah" },
+    { id: 3, name: "Enzo D.", seed: "Enzo" },
+    { id: 4, name: "Ines L.", seed: "Ines" },
+    { id: 5, name: "Thomas P.", seed: "Thomas" },
+    { id: 6, name: "Léa F.", seed: "Lea" },
+    { id: 7, name: "Karim S.", seed: "Karim" },
+    { id: 8, name: "Julie A.", seed: "Julie" }
+];
 
-let gameState = {
-    playerPos: 0, // Pourcentage 0-100
-    opponentPos: 0,
-    timeLeft: 30,
+// Mock Leaderboard (Données fictives pour l'instant)
+let leaderboardData = [
+    { name: "Sarah B.", score: 2400 },
+    { name: "Karim S.", score: 2150 },
+    { name: "Lucas M.", score: 1900 },
+    { name: "Enzo D.", score: 1850 },
+    { name: "Moi", score: 0 } // Sera mis à jour
+];
+
+let state = {
+    player: null,
     score: 0,
-    consecutiveCorrect: 0, // Pour le combo feu
-    lastAnswerTime: 0,
-    currentQuestion: null
+    timer: GAME_DURATION,
+    playerPos: 0, // %
+    botPos: 0,    // %
+    gameActive: false,
+    combo: 0
 };
 
-const MAX_DISTANCE = 90; // La ligne d'arrivée est visuellement à ~90%
-const SPEED_BOOST_PER_ANSWER = 12; // On avance de 12% par bonne réponse
-const OPPONENT_SPEED_MPS = 2.8; // L'adversaire avance de 2.8% par seconde (constant)
+// --- INITIALISATION ---
+document.addEventListener('DOMContentLoaded', () => {
+    initLobby();
+    updateLeaderboard();
+});
 
-// --- DONNÉES (MOCK) ---
-// Pour la prod, on peut charger un fichier JSON externe ici
-const HARDCODED_QUESTIONS = [
-    { cat: "CULTURE", q: "Quelle est la capitale du Japon ?", a: ["Tokyo", "Kyoto", "Osaka", "Seoul"], ok: 0 },
-    { cat: "CODE", q: "Que signifie HTML ?", a: ["HyperText Markup Language", "HighTech Modern Language", "HyperTransfer Make Link", "Home Tool Markup"], ok: 0 },
-    { cat: "CINÉMA", q: "Qui a réalisé Interstellar ?", a: ["Christopher Nolan", "Steven Spielberg", "Quentin Tarantino", "James Cameron"], ok: 0 },
-    { cat: "SCIENCE", q: "Quel est le symbole chimique de l'Or ?", a: ["Au", "Ag", "Or", "Fe"], ok: 0 },
-    { cat: "HISTOIRE", q: "En quelle année a eu lieu la Révolution Française ?", a: ["1789", "1799", "1815", "1515"], ok: 0 },
-];
+function initLobby() {
+    const select = document.getElementById('student-select');
+    const imgPreview = document.getElementById('avatar-display');
+    const startBtn = document.getElementById('start-btn');
 
-// Liste fictive des élèves/avatars
-const CLASSMATES = [
-    { name: "Lucas", seed: "Lucas" },
-    { name: "Sarah", seed: "Sarah" },
-    { name: "Tom", seed: "Tom" },
-    { name: "Ines", seed: "Ines" },
-    { name: "Enzo", seed: "Enzo" },
-    { name: "Léa", seed: "Lea" },
-    { name: "Bot Alpha", seed: "Bot1" },
-    { name: "Bot Beta", seed: "Bot2" }
-];
+    // Remplir le menu déroulant
+    CLASS_ROSTER.forEach(student => {
+        const opt = document.createElement('option');
+        opt.value = student.id;
+        opt.textContent = student.name;
+        select.appendChild(opt);
+    });
 
-// =================================================
-// 1. AUTH & LOBBY
-// =================================================
-
-function init() {
-    renderAgentSelection();
-    
-    // Listeners Auth
-    document.getElementById('signin-btn').addEventListener('click', async () => {
-        const email = document.getElementById('auth-email').value;
-        const password = document.getElementById('auth-password').value;
-        // Simulation Auth pour la démo (remplacer par supabase.auth.signInWithPassword)
-        if(email) {
-            currentUser = { email: email };
-            unlockLobby();
+    // Changement Avatar au changement de sélection
+    select.addEventListener('change', (e) => {
+        const studentId = e.target.value;
+        const student = CLASS_ROSTER.find(s => s.id == studentId);
+        if(student) {
+            // Utilisation de l'API DiceBear sans photos réelles
+            imgPreview.src = `https://api.dicebear.com/9.x/avataaars/svg?seed=${student.seed}`;
+            state.player = student;
+            startBtn.disabled = false;
         }
     });
 
-    document.getElementById('confirm-agent-btn').addEventListener('click', launchGame);
-    document.getElementById('restart-btn').addEventListener('click', resetGame);
+    startBtn.addEventListener('click', startGame);
 }
 
-function renderAgentSelection() {
-    const grid = document.getElementById('agents-grid');
-    grid.innerHTML = '';
-    CLASSMATES.forEach(student => {
-        const div = document.createElement('div');
-        div.className = 'agent-choice';
-        div.innerHTML = `
-            <img src="https://api.dicebear.com/8.x/avataaars/svg?seed=${student.seed}" alt="${student.name}">
-            <div>${student.name}</div>
-        `;
-        div.onclick = () => selectAgent(div, student);
-        grid.appendChild(div);
+function updateLeaderboard() {
+    const list = document.getElementById('leaderboard-list');
+    list.innerHTML = '';
+    
+    // Trier par score décroissant
+    leaderboardData.sort((a,b) => b.score - a.score);
+    
+    // Afficher Top 5
+    leaderboardData.slice(0, 5).forEach((entry, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `<span>#${index+1} ${entry.name}</span> <span>${entry.score} pts</span>`;
+        list.appendChild(li);
     });
 }
 
-function selectAgent(element, student) {
-    document.querySelectorAll('.agent-choice').forEach(el => el.classList.remove('selected'));
-    element.classList.add('selected');
-    selectedAgent = student;
-    document.getElementById('confirm-agent-btn').disabled = false;
-}
-
-function unlockLobby() {
-    document.getElementById('auth-msg').textContent = "ACCESS GRANTED.";
-    document.getElementById('auth-msg').style.color = "#10b981";
-    document.querySelector('.auth-panel').style.opacity = "0.5";
-    document.querySelector('.auth-panel').style.pointerEvents = "none";
-    
-    const agentPanel = document.getElementById('agent-selection');
-    agentPanel.style.opacity = "1";
-    agentPanel.style.pointerEvents = "all";
-    document.getElementById('user-status-display').textContent = `AGENT: ${currentUser.email.split('@')[0].toUpperCase()}`;
-}
-
-// =================================================
-// 2. MOTEUR DE QUESTIONS (HYBRIDE)
-// =================================================
-
-function generateMathQuestion() {
-    // Générateur de calcul mental infini
-    const ops = ['+', '-', '*'];
-    const op = ops[Math.floor(Math.random() * ops.length)];
-    let a, b, res;
-
-    if (op === '+') {
-        a = Math.floor(Math.random() * 50) + 10;
-        b = Math.floor(Math.random() * 50) + 10;
-        res = a + b;
-    } else if (op === '-') {
-        a = Math.floor(Math.random() * 50) + 20;
-        b = Math.floor(Math.random() * a); // Pas de négatif
-        res = a - b;
-    } else {
-        a = Math.floor(Math.random() * 12) + 2;
-        b = Math.floor(Math.random() * 10) + 2;
-        res = a * b;
-    }
-
-    // Générer fausses réponses proches
-    let answers = [res];
-    while (answers.length < 4) {
-        let fake = res + Math.floor(Math.random() * 10) - 5;
-        if (fake !== res && !answers.includes(fake)) answers.push(fake);
-    }
-    
-    return {
-        cat: "CALCUL MENTAL",
-        q: `${a} ${op} ${b} = ?`,
-        a: shuffleArray(answers),
-        correctVal: res // On stocke la valeur pour vérifier
-    };
-}
-
-function getNextQuestion() {
-    // 50% de chance d'avoir des maths (infini), 50% culture
-    if (Math.random() > 0.5) {
-        return generateMathQuestion();
-    } else {
-        const q = HARDCODED_QUESTIONS[Math.floor(Math.random() * HARDCODED_QUESTIONS.length)];
-        // Copie pour ne pas modifier l'original lors du shuffle
-        const answers = [...q.a]; 
-        const correctAnswerText = q.a[q.ok];
-        const shuffled = shuffleArray(answers);
-        return {
-            cat: q.cat,
-            q: q.q,
-            a: shuffled,
-            correctVal: correctAnswerText
-        };
-    }
-}
-
-function shuffleArray(array) {
-    return array.sort(() => Math.random() - 0.5);
-}
-
-// =================================================
-// 3. GAMEPLAY LOOP
-// =================================================
-
-function launchGame() {
+// --- GAME LOOP ---
+function startGame() {
     document.getElementById('lobby-screen').classList.add('hidden-screen');
     document.getElementById('game-screen').classList.remove('hidden-screen');
     
-    // Setup Avatar
-    const playerImg = document.querySelector('#player-avatar-display img');
-    playerImg.src = `https://api.dicebear.com/8.x/avataaars/svg?seed=${selectedAgent.seed}`;
+    // Setup Avatar Jeu
+    document.getElementById('game-avatar').src = `https://api.dicebear.com/9.x/avataaars/svg?seed=${state.player.seed}`;
+    document.getElementById('status-name').textContent = state.player.name;
     
-    resetGameState();
-    startGameLoop();
-    displayNewQuestion();
-}
-
-function resetGameState() {
-    gameState = {
-        playerPos: 0,
-        opponentPos: 0,
-        timeLeft: 30,
-        score: 0,
-        consecutiveCorrect: 0,
-        lastAnswerTime: Date.now(),
-        currentQuestion: null
-    };
-    updatePositionsDOM();
-    document.getElementById('result-overlay').classList.add('hidden');
-    document.querySelector('.fire-effect').classList.add('hidden');
-}
-
-function startGameLoop() {
-    // Boucle de temps (Timer + Mouvement adversaire)
-    timerInterval = setInterval(() => {
-        gameState.timeLeft -= 0.1;
+    state.gameActive = true;
+    state.timer = GAME_DURATION;
+    
+    nextQuestion();
+    
+    // Timer Loop
+    const timerInt = setInterval(() => {
+        if(!state.gameActive) { clearInterval(timerInt); return; }
         
-        // Mouvement adversaire (linéaire)
-        gameState.opponentPos += (OPPONENT_SPEED_MPS / 10); 
+        state.timer--;
+        document.getElementById('timer').textContent = state.timer;
         
-        updateUI();
+        // Mouvement Bot (Avance régulière)
+        state.botPos += 1.2; // Vitesse ajustée pour 60s
+        updatePositions();
 
-        // Vérification Fin de jeu
-        if (gameState.timeLeft <= 0 || gameState.playerPos >= MAX_DISTANCE || gameState.opponentPos >= MAX_DISTANCE) {
-            endGame();
-        }
-    }, 100);
+        if(state.timer <= 0 || state.playerPos >= 90) endGame();
+    }, 1000);
 }
 
-function updateUI() {
-    document.getElementById('game-timer').textContent = gameState.timeLeft.toFixed(1);
-    document.getElementById('score-display').textContent = gameState.score;
-    updatePositionsDOM();
+function updatePositions() {
+    const playerEl = document.getElementById('player-racer');
+    const botEl = document.getElementById('bot-racer');
+    const pBar = document.getElementById('p-bar');
+
+    playerEl.style.left = Math.min(state.playerPos, 90) + '%';
+    botEl.style.left = Math.min(state.botPos, 90) + '%';
+    pBar.style.width = (state.timer / GAME_DURATION * 100) + '%';
 }
 
-function updatePositionsDOM() {
-    const playerEl = document.querySelector('#player-lane .avatar-wrapper');
-    const oppEl = document.querySelector('#opponent-lane .avatar-wrapper');
+// --- QUIZ LOGIC ---
+function nextQuestion() {
+    // Prendre une question au hasard
+    const q = QUESTIONS_BEREADY[Math.floor(Math.random() * QUESTIONS_BEREADY.length)];
     
-    playerEl.style.left = Math.min(gameState.playerPos, 100) + '%';
-    oppEl.style.left = Math.min(gameState.opponentPos, 100) + '%';
-}
-
-// =================================================
-// 4. INTERACTION QUIZ
-// =================================================
-
-function displayNewQuestion() {
-    const qData = getNextQuestion();
-    gameState.currentQuestion = qData;
+    document.getElementById('q-theme').textContent = q.theme;
+    document.getElementById('q-text').textContent = q.q;
     
-    document.getElementById('q-category').textContent = qData.cat;
-    document.getElementById('q-text').textContent = qData.q;
+    const container = document.getElementById('options-box');
+    container.innerHTML = '';
     
-    const buttons = document.querySelectorAll('.answer-btn');
-    buttons.forEach((btn, index) => {
-        btn.textContent = qData.a[index];
-        btn.className = 'answer-btn'; // Reset classes
-        btn.disabled = false;
-        
-        // Nettoyage anciens listeners via clonage ou gestionnaire unique (ici simple re-assign)
-        btn.onclick = () => handleAnswer(qData.a[index], btn);
+    q.options.forEach((opt, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt-btn';
+        btn.textContent = opt;
+        btn.onclick = () => handleAnswer(index === q.correct, btn);
+        container.appendChild(btn);
     });
 }
 
-function handleAnswer(value, btnElement) {
-    // Désactiver boutons pour éviter double clic
-    document.querySelectorAll('.answer-btn').forEach(b => b.disabled = true);
-    
-    const isCorrect = (value == gameState.currentQuestion.correctVal);
-    const now = Date.now();
-    
-    if (isCorrect) {
-        btnElement.classList.add('correct');
-        gameState.playerPos += SPEED_BOOST_PER_ANSWER;
-        gameState.score += 100;
+function handleAnswer(isCorrect, btn) {
+    if(isCorrect) {
+        btn.style.background = '#10b981'; // Vert
+        state.playerPos += 8; // Avance
+        state.score += 100 + (state.combo * 20);
+        state.combo++;
         
-        // Logique COMBO / FEU
-        const timeDiff = (now - gameState.lastAnswerTime) / 1000;
-        if (timeDiff < 15) {
-            gameState.consecutiveCorrect++;
-        } else {
-            gameState.consecutiveCorrect = 1;
-        }
-        
-        if (gameState.consecutiveCorrect >= 2) {
-            activateFireMode();
-        }
-
+        // Effet Feu si combo > 2
+        if(state.combo > 2) document.querySelector('.fire-fx').classList.remove('hidden');
     } else {
-        btnElement.classList.add('wrong');
-        gameState.consecutiveCorrect = 0;
-        deactivateFireMode();
-        // Pénalité légère ?
-        gameState.playerPos = Math.max(0, gameState.playerPos - 2);
+        btn.style.background = '#ff4655'; // Rouge
+        state.combo = 0;
+        document.querySelector('.fire-fx').classList.add('hidden');
     }
-
-    gameState.lastAnswerTime = now;
     
-    // Prochaine question après délai court
-    setTimeout(() => {
-        if (gameState.timeLeft > 0) displayNewQuestion();
-    }, 500);
+    updatePositions();
+    
+    // Délai avant la prochaine question
+    setTimeout(nextQuestion, 400);
 }
-
-function activateFireMode() {
-    const fire = document.querySelector('.fire-effect');
-    fire.classList.remove('hidden');
-    // On pourrait ajouter un boost de vitesse x1.5 ici
-}
-
-function deactivateFireMode() {
-    document.querySelector('.fire-effect').classList.add('hidden');
-}
-
-// =================================================
-// 5. FIN DE JEU
-// =================================================
 
 function endGame() {
-    clearInterval(timerInterval);
-    
+    state.gameActive = false;
     const overlay = document.getElementById('result-overlay');
-    const title = document.getElementById('result-title');
-    
     overlay.classList.remove('hidden');
     
-    if (gameState.playerPos >= MAX_DISTANCE && gameState.playerPos > gameState.opponentPos) {
-        title.textContent = "VICTOIRE";
-        title.style.color = "#10b981"; // Green
-        playAudio('win');
+    document.getElementById('res-score').textContent = `Score Final: ${state.score}`;
+    
+    if(state.playerPos > state.botPos) {
+        document.getElementById('res-title').textContent = "VICTOIRE ÉCLATANTE";
+        document.getElementById('res-title').style.color = "#10b981";
     } else {
-        title.textContent = "ECHEC";
-        title.style.color = "#ff4655"; // Red
+        document.getElementById('res-title').textContent = "ÉCHEC MISSION";
+        document.getElementById('res-title').style.color = "#ff4655";
     }
-}
 
-function resetGame() {
-    document.getElementById('lobby-screen').classList.remove('hidden-screen');
-    document.getElementById('game-screen').classList.add('hidden-screen');
+    // Mise à jour du leaderboard local (simulation)
+    leaderboardData.push({ name: state.player.name, score: state.score });
+    updateLeaderboard();
 }
-
-function playAudio(type) {
-    // Placeholder pour le son
-    console.log(`Playing sound: ${type}`);
-}
-
-// Start
-init();
