@@ -1,279 +1,221 @@
-/* ================= VALORANT THEME VARIABLES ================= */
 :root {
-    --val-red: #ff4655;
-    --val-black: #0f1923;
-    --val-white: #ece8e1;
-    --val-gray: #8b9bb4;
-    --font-head: 'Oswald', sans-serif;
-    --font-body: 'Rajdhani', sans-serif;
+    --red: #ff4655;
+    --dark: #0f1923;
+    --light: #ece8e1;
+    --gray: #5f6e80;
 }
+
+* { box-sizing: border-box; }
 
 body {
     margin: 0;
-    background-color: var(--val-black);
-    color: var(--val-white);
-    font-family: var(--font-body);
-    overflow: hidden; /* Pas de scroll pendant le jeu */
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background-image: radial-gradient(circle at 50% 50%, #1f2731 0%, #0f1923 100%);
+    background-color: var(--dark);
+    color: var(--light);
+    font-family: 'Rajdhani', sans-serif;
+    overflow-x: hidden;
 }
 
-/* --- UI ELEMENTS GENERIC --- */
+h1, h2, h3, .val-btn { font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+
+/* --- LANDING PAGE --- */
+.landing-nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background: rgba(15,25,35,0.95);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.nav-links { list-style: none; display: flex; gap: 20px; margin: 0; padding: 0; }
+.nav-links a { color: var(--light); text-decoration: none; font-weight: bold; }
+.nav-links .tag { background: var(--red); padding: 2px 5px; font-size: 0.7em; border-radius: 3px;}
+
+.hero-section {
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: radial-gradient(circle, #1f2731 0%, #0f1923 100%);
+    padding: 20px;
+}
+.hero-content h1 { font-size: 3.5rem; margin: 0; line-height: 1; }
+.accent { color: var(--red); }
+
+/* --- PUB BEREADY --- */
+.ad-banner {
+    background: linear-gradient(45deg, #2c3e50, #000);
+    padding: 30px;
+    margin: 20px;
+    border-left: 5px solid var(--red);
+    display: flex;
+    justify-content: center;
+}
+.ad-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 800px;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.ad-btn {
+    background: var(--light);
+    color: var(--dark);
+    padding: 10px 20px;
+    text-decoration: none;
+    font-weight: bold;
+    clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
+}
+
+/* --- GAME UI --- */
+.active-screen { display: block; }
+.hidden-screen { display: none !important; }
+
+.lobby-wrapper {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 0 15px;
+}
+
+.lobby-card {
+    background: rgba(255,255,255,0.05);
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+}
+/* Decor Coins */
+.lobby-card::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 10px; height: 10px;
+    border-top: 2px solid var(--red); border-left: 2px solid var(--red);
+}
+
+.avatar-preview-box img {
+    width: 120px; height: 120px;
+    background: #000;
+    border: 2px solid var(--gray);
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto 20px;
+}
+
+.val-select {
+    width: 100%;
+    padding: 15px;
+    background: #000;
+    color: white;
+    border: 1px solid var(--gray);
+    font-family: 'Rajdhani';
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
 .val-btn {
-    background-color: var(--val-red);
+    background: var(--red);
     color: white;
     border: none;
     padding: 15px 30px;
-    font-family: var(--font-head);
-    font-size: 1.2rem;
-    text-transform: uppercase;
     cursor: pointer;
-    position: relative;
-    /* Le fameux angle coupé Valorant */
+    font-weight: bold;
+    text-transform: uppercase;
     clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
-    transition: all 0.2s ease;
+    transition: transform 0.2s;
 }
+.val-btn:active { transform: scale(0.98); }
+.val-btn.full-width { width: 100%; }
+.val-btn:disabled { background: #333; color: #666; }
 
-.val-btn:hover {
-    background-color: white;
-    color: var(--val-black);
-    transform: translateY(-2px);
-}
-
-.val-btn:disabled {
-    background-color: #333;
-    color: #666;
-    cursor: not-allowed;
-}
-
-.val-btn.secondary {
-    background-color: transparent;
-    border: 1px solid var(--val-white);
-    color: var(--val-white);
-}
-
-.val-input {
-    background: rgba(255,255,255,0.1);
-    border: 1px solid transparent;
-    border-bottom: 2px solid var(--val-gray);
-    color: white;
+/* LEADERBOARD */
+.rank-list { list-style: none; padding: 0; margin: 0; }
+.rank-list li {
+    display: flex; justify-content: space-between;
     padding: 10px;
-    width: 100%;
-    margin-bottom: 15px;
-    font-family: var(--font-body);
-    font-size: 1.1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
 }
-.val-input:focus {
-    outline: none;
-    border-bottom-color: var(--val-red);
-}
+.rank-list li:first-child { color: #ffd700; font-weight: bold; }
 
-/* --- LAYOUT --- */
-.val-header {
-    padding: 20px 40px;
+/* --- GAMEPLAY AREA --- */
+.hud-top {
+    padding: 15px;
     display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    background: rgba(15, 25, 35, 0.9);
+    align-items: center;
+    gap: 15px;
 }
-.brand-logo {
-    font-family: var(--font-head);
+.timer-display {
     font-size: 2rem;
     font-weight: bold;
+    color: var(--red);
+    min-width: 60px;
 }
-.brand-logo .accent { color: var(--val-red); }
-
-.hidden-screen { display: none !important; }
-
-/* --- LOBBY --- */
-.lobby-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 50px;
-    padding: 50px;
-    height: 100%;
-}
-.val-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 30px;
-    position: relative;
-}
-/* Lignes décoratives aux coins */
-.val-card::before {
-    content: '';
-    position: absolute;
-    top: -1px; left: -1px;
-    width: 20px; height: 20px;
-    border-top: 2px solid var(--val-red);
-    border-left: 2px solid var(--val-red);
-}
-
-.agents-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-    margin: 20px 0;
-    max-height: 40vh;
-    overflow-y: auto;
-}
-.agent-choice {
-    border: 2px solid rgba(255,255,255,0.1);
-    cursor: pointer;
-    transition: 0.3s;
-    text-align: center;
-    padding: 10px;
-}
-.agent-choice img { width: 60px; height: 60px; }
-.agent-choice:hover, .agent-choice.selected {
-    border-color: var(--val-red);
-    background: rgba(255, 70, 85, 0.1);
-}
-
-/* --- GAME AREA --- */
-#game-screen {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    padding: 0 5%;
-}
-
-.game-hud {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-bottom: 20px;
-}
-.timer-box, .score-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.timer-val {
-    font-family: var(--font-head);
-    font-size: 3rem;
-    color: var(--val-red);
-}
-
-/* --- RACE TRACK --- */
-.race-container {
-    width: 100%;
-    height: 200px;
-    background: rgba(0,0,0,0.3);
-    border: 1px solid rgba(255,255,255,0.1);
-    position: relative;
-    margin-bottom: 30px;
+.progress-bar-container {
+    flex-grow: 1;
+    height: 10px;
+    background: #333;
+    border-radius: 5px;
     overflow: hidden;
 }
-/* Ligne d'arrivée */
-.finish-line {
-    position: absolute;
-    right: 5%;
-    top: 0; bottom: 0;
-    width: 4px;
-    background: repeating-linear-gradient(0deg, var(--val-red), var(--val-red) 10px, transparent 10px, transparent 20px);
-    z-index: 0;
+.p-bar-fill {
+    height: 100%; width: 0%;
+    background: var(--red);
+    transition: width 0.3s;
 }
 
-.racer-lane {
+.race-track {
+    height: 120px;
+    background: rgba(0,0,0,0.3);
     position: relative;
-    height: 50%;
-    width: 100%;
-    border-bottom: 1px dashed rgba(255,255,255,0.05);
+    margin: 10px 0 30px 0;
+    border-top: 1px solid var(--gray);
+    border-bottom: 1px solid var(--gray);
+    overflow: hidden;
 }
+.finish-line {
+    position: absolute; right: 10%; top: 0; bottom: 0;
+    width: 4px; background: repeating-linear-gradient(0deg, #fff, #fff 10px, transparent 10px, transparent 20px);
+}
+.racer {
+    position: absolute; left: 0;
+    width: 60px; height: 60px;
+    transition: left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.racer img { width: 100%; border-radius: 50%; border: 2px solid white; }
+#player-racer { top: 10px; z-index: 10; }
+#bot-racer { bottom: 10px; opacity: 0.6; filter: grayscale(100%); }
 
-.avatar-wrapper {
-    position: absolute;
-    left: 0; /* C'est ça qu'on va animer en JS */
-    bottom: 10px;
-    width: 80px;
-    height: 80px;
-    transition: left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Animation fluide */
-    z-index: 10;
-}
-.avatar-wrapper img {
-    width: 100%;
-    height: 100%;
-    border: 2px solid white;
-    background: black;
-}
-
-/* FIRE EFFECT (COMBO) */
-.fire-effect {
-    position: absolute;
-    top: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 2rem;
-    animation: bounce 0.5s infinite;
-    text-shadow: 0 0 10px orange;
-}
-.hidden { display: none !important; }
-
-/* --- QUIZ UI --- */
-.quiz-interface {
-    width: 100%;
-    max-width: 800px;
-    text-align: center;
-}
-.category-tag {
-    display: inline-block;
-    background: var(--val-gray);
-    color: var(--val-black);
-    padding: 2px 8px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-.question-header h2 {
-    font-size: 1.5rem;
-    margin: 0 0 20px 0;
-}
-
-.answers-grid {
+/* QUIZ */
+.quiz-container { padding: 15px; text-align: center; }
+.options-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
+    grid-template-columns: 1fr 1fr; /* 2 colonnes sur mobile */
+    gap: 10px;
+    margin-top: 20px;
 }
-.answer-btn {
-    background: rgba(255,255,255,0.05);
+.opt-btn {
+    background: rgba(255,255,255,0.1);
     border: 1px solid rgba(255,255,255,0.2);
+    padding: 20px 10px;
     color: white;
-    padding: 20px;
-    font-size: 1.1rem;
+    font-size: 1rem;
     cursor: pointer;
-    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
-    transition: all 0.1s;
 }
-.answer-btn:hover { background: rgba(255,255,255,0.1); }
-.answer-btn:active { transform: scale(0.98); }
 
-/* Feedbacks réponses */
-.answer-btn.correct { background: #10b981; border-color: #10b981; }
-.answer-btn.wrong { background: var(--val-red); border-color: var(--val-red); }
-
-/* RESULT OVERLAY */
-#result-overlay {
-    position: absolute;
-    top:0; left:0; right:0; bottom:0;
-    background: rgba(15, 25, 35, 0.95);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
+/* ANIMATIONS */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
-#result-title {
-    font-family: var(--font-head);
-    font-size: 6rem;
-    color: var(--val-red);
-    text-transform: uppercase;
-    letter-spacing: 10px;
-    margin-bottom: 20px;
+.slide-up { animation: slideUp 0.8s ease forwards; }
+.delay-1 { animation-delay: 0.2s; }
+
+/* MOBILE MEDIA QUERY */
+@media (max-width: 600px) {
+    .hero-content h1 { font-size: 2.5rem; }
+    .options-grid { grid-template-columns: 1fr; } /* 1 colonne boutons si très petit */
+    .race-track { height: 100px; }
+    .racer { width: 50px; height: 50px; }
+    .landing-nav .nav-links { display: none; } /* Menu simplifié pour demo */
 }
