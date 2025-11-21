@@ -1272,6 +1272,71 @@ html, body {
     .combat-arena {
         padding: 0.5rem;
     }
+    /* ZONE CLICKABLE ÉLARGIE */
+    .zone-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .zone {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 100;
+    }
+    
+    .zone-click-area {
+        position: absolute;
+        top: -30px;
+        left: -30px;
+        right: -30px;
+        bottom: -30px;
+        z-index: 101;
+        pointer-events: auto;
+    }
+    
+    .zone-marker {
+        width: 70px;
+        height: 70px;
+        background: radial-gradient(circle, #ffd700, #ff6b6b);
+        border-radius: 50%;
+        border: 3px solid white;
+        box-shadow: 0 0 30px #ffd700;
+        animation: zonePulse 2s infinite;
+        position: relative;
+        z-index: 102;
+        pointer-events: none;
+    }
+    
+    /* FEEDBACK VISUEL AU SURVOL */
+    .zone:hover .zone-marker {
+        transform: scale(1.2);
+        box-shadow: 0 0 40px #ffd700, 0 0 60px #ff6b6b;
+    }
+    
+    /* STYLE SPÉCIFIQUE VALLÉE */
+    .vallee-zone .zone-marker {
+        background: radial-gradient(circle, #4ecdc4, #ffd700);
+        border-color: #4ecdc4;
+    }
+    
+    .vallee-zone:hover .zone-marker {
+        box-shadow: 0 0 40px #4ecdc4, 0 0 60px #ffd700;
+    }
+    
+    /* BOUTON DE SECOURS */
+    #force-vallee-btn {
+        background: rgba(76, 205, 196, 0.2);
+        border: 1px solid #4ecdc4;
+        color: #4ecdc4;
+    }
+    
+    #force-vallee-btn:hover {
+        background: rgba(76, 205, 196, 0.4);
+        transform: translateY(-2px);
+    }
 }
 
 /* Scrollbar personnalisée */
