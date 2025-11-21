@@ -141,9 +141,72 @@ class KahinaGame {
         document.querySelectorAll('.menu-item').forEach(item => {
             item.addEventListener('click', (e) => {
                 const section = e.currentTarget.dataset.section;
-                this.showMenuSection(section);
+                this.setupZoneInteractions();
             });
         });
+
+        setupZoneInteractions() {
+            const zones = document.querySelectorAll('.zone');
+            
+            zones.forEach(zone => {
+                // Utiliser click ET touchstart pour mobile
+                zone.addEventListener('click', (e) => {
+                    this.handleZoneClick(e, zone);
+                });
+                
+                zone.addEventListener('touchstart', (e) => {
+                    this.handleZoneClick(e, zone);
+                });
+            });
+        }
+    
+        handleZoneClick(event, zone) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            // Empêcher les doubles déclenchements
+            if (this.isProcessingZoneClick) return;
+            this.isProcessingZoneClick = true;
+            
+            setTimeout(() => {
+                this.isProcessingZoneClick = false;
+            }, 500);
+    
+            const zoneType = zone.dataset.zone;
+            
+            if (zone.classList.contains('locked-zone')) {
+                this.showMessage("🔒 Cette zone est verrouillée. Atteignez le niveau requis!");
+                return;
+            }
+    
+            console.log("Zone cliquée:", zoneType); // Debug
+            
+            if (zoneType === "vallee") {
+                this.selectValleeZone();
+            } else {
+                this.selectZone(zoneType);
+            }
+        }
+    
+        selectValleeZone() {
+            console.log("Sélection de la Vallée des Larmes"); // Debug
+            
+            this.currentZone = "vallee";
+            
+            // Mettre à jour l'interface
+            document.getElementById('zone-name').textContent = "🌿 VALLÉE DES LARMES";
+            
+            // Charger les ennemis
+            this.loadEnemies();
+            
+            // Transition vers l'écran de sélection
+            this.switchScreen('enemy-select');
+            
+            // Activer la pluie
+            this.createRain();
+            
+            this.showMessage("🌿 Bienvenue dans la Vallée des Larmes");
+        }
 
         // Compétences de combat
         document.querySelectorAll('.skill-btn').forEach(btn => {
@@ -1154,4 +1217,82 @@ style.textContent = `
         border: 1px solid #ffd700;
     }
 `;
+const fixCSS = `
+    /* Assurer que les zones sont bien cliquables */
+    .zone {
+        cursor: pointer;
+        z-index: 100;
+        pointer-events: auto !important;
+    }
+    
+    .zone-marker {
+        pointer-events: auto !important;
+    }
+    
+    .zone-info {
+        pointer-events: none !important;
+    }
+    
+    /* Améliorer la visibilité des zones */
+    .active-zone {
+        filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8));
+    }
+    
+    .active-zone .zone-marker {
+        animation: zonePulse 1.5s infinite;
+    }
+    
+    @keyframes zonePulse {
+        0%, 100% { 
+            transform: scale(1);
+            box-shadow: 0 0 20px #ffd700;
+        }
+        50% { 
+            transform: scale(1.15);
+            box-shadow: 0 0 30px #ffd700, 0 0 40px #ff6b6b;
+        }
+    }
+    
+    /* Feedback visuel au clic */
+    .zone:active .zone-marker {
+        transform: scale(0.95);
+        transition: transform 0.1s;
+    }
+    
+    /* Zone spécifique Vallée des Larmes */
+    .zone[data-zone="vallee"] .zone-marker {
+        background: radial-gradient(circle, #4ecdc4, #ffd700);
+    }
+    
+    .zone[data-zone="vallee"] .zone-glow {
+        background: radial-gradient(circle, transparent 30%, #4ecdc4 70%);
+    }
+`;
+
+// Ajouter les corrections CSS
+document.head.insertAdjacentHTML('beforeend', `<style>${fixCSS}</style>`);
+
+// FONCTION DE DÉBOGAGE POUR TESTER LES CLICS
+function debugZoneClicks() {
+    const zones = document.querySelectorAll('.zone');
+    
+    zones.forEach((zone, index) => {
+        zone.addEventListener('click', (e) => {
+            console.log(`Zone ${index + 1} cliquée:`, {
+                zone: zone.dataset.zone,
+                position: zone.style.top + ' ' + zone.style.left,
+                classList: zone.classList.toString()
+            });
+        });
+        
+        zone.addEventListener('touchstart', (e) => {
+            console.log(`Zone ${index + 1} touchée:`, zone.dataset.zone);
+        });
+    });
+}
+
+// Initialiser le debug au chargement
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(debugZoneClicks, 1000);
+});
 document.head.appendChild(style);
