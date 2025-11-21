@@ -1,3 +1,5 @@
+// ===== KAHINA: L'ASCENSION ROYALE - MOTEUR DE JEU ULTIME =====
+
 class KahinaGame {
     constructor() {
         this.supabase = null;
@@ -22,7 +24,15 @@ class KahinaGame {
             },
             skills: ['attack', 'fireball', 'heal', 'lightning'],
             inventory: [],
-            achievements: []
+            achievements: [],
+            currentQuest: {
+                id: 1,
+                name: "Purification de la Vallée",
+                description: "Vaincre 3 Gobelins Corrompus",
+                current: 1,
+                target: 3,
+                reward: { xp: 150, essence: 75, gold: 50 }
+            }
         };
 
         this.currentEnemy = null;
@@ -32,32 +42,33 @@ class KahinaGame {
         this.soundEnabled = true;
         this.musicEnabled = true;
         this.vibrationEnabled = true;
+        this.tutorialStep = 0;
 
         this.initializeSupabase();
         this.initializeGame();
     }
 
     async initializeSupabase() {
-        // Configuration Supabase
         this.supabase = supabase.createClient(
             'https://dxiefxcfnggezuiifeqf.supabase.co',
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4aWVmeGNmbmdnZXp1aWlmZXFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQ2ODg2MzQsImV4cCI6MjAyMDI2NDYzNH0.3kPr5Ydqc-Nd2lZdR1d1VtYVYAOUc7mA0U3VcTGTbR8'
         );
-
         console.log("Supabase initialisé");
     }
 
     initializeGame() {
         this.createLeaves();
+        this.createBirds();
         this.bindEvents();
         this.loadGame();
         this.updateUI();
         this.loadEnemies();
+        this.startBackgroundMusic();
     }
 
     createLeaves() {
         const container = document.getElementById('leaves-container');
-        for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < 20; i++) {
             const leaf = document.createElement('div');
             leaf.className = 'leaf';
             leaf.style.left = Math.random() * 100 + '%';
@@ -67,13 +78,60 @@ class KahinaGame {
         }
     }
 
+    createBirds() {
+        const container = document.getElementById('birds-container');
+        for (let i = 0; i < 3; i++) {
+            const bird = document.createElement('div');
+            bird.className = 'bird';
+            bird.textContent = '🐦';
+            bird.style.left = Math.random() * 100 + '%';
+            bird.style.top = Math.random() * 50 + '%';
+            bird.style.animationDuration = (Math.random() * 20 + 10) + 's';
+            bird.style.animationDelay = Math.random() * 5 + 's';
+            container.appendChild(bird);
+        }
+    }
+
+    createRain() {
+        const container = document.getElementById('rain-container');
+        container.style.display = 'block';
+        
+        for (let i = 0; i < 50; i++) {
+            const drop = document.createElement('div');
+            drop.className = 'rain-drop';
+            drop.style.left = Math.random() * 100 + '%';
+            drop.style.animationDuration = (Math.random() * 1 + 0.5) + 's';
+            drop.style.animationDelay = Math.random() * 2 + 's';
+            container.appendChild(drop);
+        }
+    }
+
+    stopRain() {
+        const container = document.getElementById('rain-container');
+        container.style.display = 'none';
+        container.innerHTML = '';
+    }
+
+    startBackgroundMusic() {
+        if (this.musicEnabled) {
+            const music = document.getElementById('background-music');
+            music.volume = 0.3;
+            music.play().catch(e => console.log("Musique background:", e));
+        }
+    }
+
     bindEvents() {
-        // Navigation
+        // Navigation principale
         document.getElementById('start-btn').addEventListener('click', () => this.startGame());
-        document.getElementById('continue-btn').addEventListener('click', () => this.continueGame());
+        document.getElementById('tutorial-btn').addEventListener('click', () => this.showTutorial());
         document.getElementById('explore-btn').addEventListener('click', () => this.exploreZone());
         document.getElementById('flee-btn').addEventListener('click', () => this.fleeCombat());
         
+        // Tutoriel
+        document.getElementById('next-step').addEventListener('click', () => this.nextTutorialStep());
+        document.getElementById('prev-step').addEventListener('click', () => this.prevTutorialStep());
+        document.getElementById('start-adventure').addEventListener('click', () => this.startAdventure());
+
         // Menu
         document.getElementById('menu-toggle').addEventListener('click', () => this.toggleMenu());
         document.getElementById('close-menu').addEventListener('click', () => this.toggleMenu());
@@ -112,6 +170,13 @@ class KahinaGame {
             });
         });
 
+        // Effet d'eau sur la carte
+        document.getElementById('map-container').addEventListener('click', (e) => {
+            if (!e.target.closest('.zone') && !e.target.closest('.player-avatar')) {
+                this.createWaterEffect(e.clientX, e.clientY);
+            }
+        });
+
         // Entrée du nom
         document.getElementById('player-name-input').addEventListener('input', (e) => {
             this.player.name = e.target.value.toUpperCase() || "GARDIENNE";
@@ -125,6 +190,12 @@ class KahinaGame {
                     this.selectZone(zone.dataset.zone);
                 }
             });
+        });
+
+        // Bouton continuer après victoire
+        document.getElementById('continue-btn-popup').addEventListener('click', () => {
+            this.hideVictoryPopup();
+            this.switchScreen('enemy-select');
         });
 
         // Paramètres
@@ -149,9 +220,44 @@ class KahinaGame {
         });
     }
 
+    showTutorial() {
+        document.getElementById('tutorial-overlay').classList.add('active');
+        this.tutorialStep = 0;
+        this.updateTutorial();
+    }
+
+    updateTutorial() {
+        const steps = document.querySelectorAll('.tutorial-step');
+        steps.forEach((step, index) => {
+            step.classList.toggle('active', index === this.tutorialStep);
+        });
+
+        document.getElementById('prev-step').style.display = this.tutorialStep === 0 ? 'none' : 'flex';
+        document.getElementById('next-step').style.display = this.tutorialStep === steps.length - 1 ? 'none' : 'flex';
+        document.getElementById('start-adventure').style.display = this.tutorialStep === steps.length - 1 ? 'flex' : 'none';
+    }
+
+    nextTutorialStep() {
+        if (this.tutorialStep < 2) {
+            this.tutorialStep++;
+            this.updateTutorial();
+        }
+    }
+
+    prevTutorialStep() {
+        if (this.tutorialStep > 0) {
+            this.tutorialStep--;
+            this.updateTutorial();
+        }
+    }
+
+    startAdventure() {
+        document.getElementById('tutorial-overlay').classList.remove('active');
+        this.startGame();
+    }
+
     async loadEnemies() {
         try {
-            // Charger depuis Supabase
             const { data: enemies, error } = await this.supabase
                 .from('enemies')
                 .select('*')
@@ -163,49 +269,7 @@ class KahinaGame {
                 this.enemiesData = enemies;
                 this.updateEnemyGrid();
             } else {
-                // Données par défaut si Supabase vide
-                this.enemiesData = [
-                    {
-                        id: 1,
-                        name: "Gobelin Corrompu",
-                        type: "gobelin",
-                        image_url: "https://images.unsplash.com/photo-1570303345338-e1f0eddf4946?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-                        level: 2,
-                        hp: 80,
-                        max_hp: 80,
-                        attack: 12,
-                        defense: 5,
-                        xp_reward: 50,
-                        essence_reward: 25
-                    },
-                    {
-                        id: 2,
-                        name: "Orc Brute",
-                        type: "orc",
-                        image_url: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-                        level: 3,
-                        hp: 120,
-                        max_hp: 120,
-                        attack: 15,
-                        defense: 8,
-                        xp_reward: 80,
-                        essence_reward: 40
-                    },
-                    {
-                        id: 3,
-                        name: "Mage Noir",
-                        type: "mage",
-                        image_url: "https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-                        level: 4,
-                        hp: 70,
-                        max_hp: 70,
-                        attack: 25,
-                        defense: 3,
-                        xp_reward: 100,
-                        essence_reward: 50
-                    }
-                ];
-                this.updateEnemyGrid();
+                this.loadDefaultEnemies();
             }
         } catch (error) {
             console.error("Erreur chargement ennemis:", error);
@@ -219,14 +283,43 @@ class KahinaGame {
                 id: 1,
                 name: "Gobelin Corrompu",
                 type: "gobelin",
-                image_url: "https://images.unsplash.com/photo-1570303345338-e1f0eddf4946?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                image_url: "./images/2.png",
                 level: 2,
                 hp: 80,
                 max_hp: 80,
                 attack: 12,
                 defense: 5,
-                xp_reward: 50,
-                essence_reward: 25
+                xp_reward: 100,
+                essence_reward: 50,
+                gold_reward: 25
+            },
+            {
+                id: 2,
+                name: "Orc Brute",
+                type: "orc", 
+                image_url: "./images/3.png",
+                level: 3,
+                hp: 120,
+                max_hp: 120,
+                attack: 15,
+                defense: 8,
+                xp_reward: 150,
+                essence_reward: 75,
+                gold_reward: 40
+            },
+            {
+                id: 3,
+                name: "Mage Noir",
+                type: "mage",
+                image_url: "./images/4.png",
+                level: 4,
+                hp: 70,
+                max_hp: 70,
+                attack: 25,
+                defense: 3,
+                xp_reward: 200,
+                essence_reward: 100,
+                gold_reward: 60
             }
         ];
         this.updateEnemyGrid();
@@ -243,7 +336,8 @@ class KahinaGame {
             
             card.innerHTML = `
                 <div class="enemy-image">
-                    <img src="${enemy.image_url}" alt="${enemy.name}" onerror="this.src='https://images.unsplash.com/photo-1570303345338-e1f0eddf4946?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'">
+                    <img src="${enemy.image_url}" alt="${enemy.name}" 
+                         onerror="this.src='https://images.unsplash.com/photo-1570303345338-e1f0eddf4946?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'">
                     <div class="enemy-level">Niv. ${enemy.level}</div>
                 </div>
                 <div class="enemy-info">
@@ -270,7 +364,6 @@ class KahinaGame {
         this.player.name = name || "GARDIENNE";
         
         try {
-            // Sauvegarder le joueur dans Supabase
             const { data, error } = await this.supabase
                 .from('players')
                 .insert([
@@ -288,7 +381,7 @@ class KahinaGame {
 
             if (data && data[0]) {
                 this.player.id = data[0].id;
-                this.showMessage(`Bienvenue, ${this.player.name}! Votre aventure commence...`);
+                this.showMessage(`Bienvenue, ${this.player.name}! L'aventure commence...`);
                 this.switchScreen('world-map');
                 this.saveGame();
                 this.updateLeaderboard();
@@ -300,37 +393,25 @@ class KahinaGame {
         }
     }
 
-    async continueGame() {
-        try {
-            // Charger les données du joueur depuis Supabase
-            const { data: players, error } = await this.supabase
-                .from('players')
-                .select('*')
-                .eq('name', this.player.name)
-                .order('created_at', { ascending: false })
-                .limit(1);
-
-            if (error) throw error;
-
-            if (players && players[0]) {
-                const savedPlayer = players[0];
-                this.player.id = savedPlayer.id;
-                this.player.level = savedPlayer.level;
-                this.player.xp = savedPlayer.xp;
-                this.player.essence = savedPlayer.essence;
-                
-                this.showMessage(`Bienvenue de retour, ${this.player.name}!`);
-                this.switchScreen('world-map');
-                this.updateUI();
-            } else {
-                this.showMessage("Aucune sauvegarde trouvée. Démarrage d'une nouvelle aventure!");
-                this.startGame();
-            }
-        } catch (error) {
-            console.error("Erreur chargement joueur:", error);
-            this.showMessage("Mode hors ligne - Chargement local");
-            this.loadLocalGame();
-        }
+    createWaterEffect(x, y) {
+        const container = document.getElementById('map-container');
+        const effect = document.getElementById('water-effect');
+        
+        effect.style.left = (x - 25) + 'px';
+        effect.style.top = (y - 25) + 'px';
+        effect.style.opacity = '1';
+        effect.style.transform = 'scale(0)';
+        
+        this.playSound('water-sound');
+        
+        setTimeout(() => {
+            effect.style.transform = 'scale(3)';
+            effect.style.opacity = '0';
+        }, 10);
+        
+        setTimeout(() => {
+            effect.style.opacity = '0';
+        }, 1000);
     }
 
     selectZone(zone) {
@@ -338,6 +419,13 @@ class KahinaGame {
         document.getElementById('zone-name').textContent = this.getZoneName(zone);
         this.loadEnemies();
         this.switchScreen('enemy-select');
+        
+        // Activer la pluie pour la Vallée des Larmes
+        if (zone === 'vallee') {
+            this.createRain();
+        } else {
+            this.stopRain();
+        }
     }
 
     exploreZone() {
@@ -346,6 +434,8 @@ class KahinaGame {
     }
 
     startCombat(enemyType) {
+        this.stopRain(); // Arrêter la pluie pendant le combat
+        
         const enemyData = this.enemiesData.find(e => e.type === enemyType);
         if (!enemyData) return;
 
@@ -383,7 +473,7 @@ class KahinaGame {
             case 'attack':
                 manaCost = 0;
                 damage = this.calculateDamage(this.player.stats.attack, this.currentEnemy.defense);
-                message = `Vous attaquez et infligez ${damage} dégâts!`;
+                message = `⚔️ Vous attaquez et infligez ${damage} dégâts!`;
                 this.createProjectile('player', 'enemy', 'sword');
                 this.playSound('sword-sound');
                 break;
@@ -393,11 +483,11 @@ class KahinaGame {
                 if (this.player.mana >= manaCost) {
                     this.player.mana -= manaCost;
                     damage = this.calculateDamage(this.player.stats.magic + 10, this.currentEnemy.defense);
-                    message = `Boule de feu! ${damage} dégâts magiques!`;
+                    message = `🔥 Boule de feu! ${damage} dégâts magiques!`;
                     this.createProjectile('player', 'enemy', 'fire');
                     this.playSound('magic-sound');
                 } else {
-                    this.showCombatMessage("Pas assez de mana!");
+                    this.showCombatMessage("❌ Pas assez de mana!");
                     return;
                 }
                 break;
@@ -408,11 +498,11 @@ class KahinaGame {
                     this.player.mana -= manaCost;
                     const healAmount = 30;
                     this.player.hp = Math.min(this.player.hp + healAmount, this.player.maxHp);
-                    message = `Vous vous soignez de ${healAmount} PV!`;
+                    message = `💚 Vous vous soignez de ${healAmount} PV!`;
                     this.createHealEffect();
                     this.playSound('heal-sound');
                 } else {
-                    this.showCombatMessage("Pas assez de mana!");
+                    this.showCombatMessage("❌ Pas assez de mana!");
                     return;
                 }
                 break;
@@ -422,11 +512,11 @@ class KahinaGame {
                 if (this.player.mana >= manaCost) {
                     this.player.mana -= manaCost;
                     damage = this.calculateDamage(this.player.stats.magic + 20, this.currentEnemy.defense);
-                    message = `Foudre! ${damage} dégâts électriques!`;
+                    message = `⚡ Foudre! ${damage} dégâts électriques!`;
                     this.createLightningEffect();
                     this.playSound('lightning-sound');
                 } else {
-                    this.showCombatMessage("Pas assez de mana!");
+                    this.showCombatMessage("❌ Pas assez de mana!");
                     return;
                 }
                 break;
@@ -458,7 +548,7 @@ class KahinaGame {
         const damage = this.calculateDamage(this.currentEnemy.attack, this.player.stats.defense);
         this.player.hp -= damage;
         
-        this.showCombatMessage(`${this.currentEnemy.name} vous attaque et inflige ${damage} dégâts!`);
+        this.showCombatMessage(`💀 ${this.currentEnemy.name} vous attaque et inflige ${damage} dégâts!`);
         this.showDamageNumber('player', damage);
         this.createProjectile('enemy', 'player', 'dark');
         this.shakeElement('.player-combatant');
@@ -485,29 +575,87 @@ class KahinaGame {
         if (victory) {
             const xpGained = this.currentEnemy.xp_reward;
             const essenceGained = this.currentEnemy.essence_reward;
+            const goldGained = this.currentEnemy.gold_reward;
             
             this.player.xp += xpGained;
             this.player.essence += essenceGained;
+            this.player.gold += goldGained;
             
-            this.showCombatMessage(`Victoire! +${xpGained} XP et +${essenceGained} Essence!`);
+            // Mettre à jour la quête
+            if (this.player.currentQuest && this.currentEnemy.type === 'gobelin') {
+                this.player.currentQuest.current++;
+                if (this.player.currentQuest.current >= this.player.currentQuest.target) {
+                    this.completeQuest();
+                }
+            }
+            
+            this.showVictoryPopup(xpGained, essenceGained, goldGained);
             this.playSound('victory-sound');
             this.createVictoryEffect();
             
-            // Sauvegarder les récompenses
             await this.savePlayerProgress();
             this.checkLevelUp();
         } else {
-            this.showCombatMessage("Défaite... Vous perdez de l'essence.");
+            this.showCombatMessage("💔 Défaite... Vous perdez de l'essence.");
             this.player.essence = Math.max(0, this.player.essence - 20);
             this.player.hp = this.player.maxHp;
+            this.player.mana = this.player.maxMana;
             this.playSound('defeat-sound');
+            
+            setTimeout(() => {
+                this.switchScreen('enemy-select');
+                this.createRain(); // Remettre la pluie
+            }, 3000);
         }
 
         this.saveGame();
+    }
+
+    showVictoryPopup(xp, essence, gold) {
+        const popup = document.getElementById('victory-popup');
+        const rewards = popup.querySelector('.rewards');
         
-        setTimeout(() => {
-            this.switchScreen('enemy-select');
-        }, 3000);
+        rewards.innerHTML = `
+            <div class="reward-item">
+                <span class="reward-icon">⭐</span>
+                <span class="reward-text">+${xp} XP</span>
+            </div>
+            <div class="reward-item">
+                <span class="reward-icon">✨</span>
+                <span class="reward-text">+${essence} Essence</span>
+            </div>
+            <div class="reward-item">
+                <span class="reward-icon">💰</span>
+                <span class="reward-text">+${gold} Or</span>
+            </div>
+        `;
+        
+        popup.querySelector('p').textContent = `Vous avez vaincu le ${this.currentEnemy.name}!`;
+        popup.classList.add('active');
+    }
+
+    hideVictoryPopup() {
+        document.getElementById('victory-popup').classList.remove('active');
+        this.createRain(); // Remettre la pluie
+    }
+
+    completeQuest() {
+        const quest = this.player.currentQuest;
+        this.player.xp += quest.reward.xp;
+        this.player.essence += quest.reward.essence;
+        this.player.gold += quest.reward.gold;
+        
+        this.showMessage(`🎉 Quête "${quest.name}" terminée! Récompenses: +${quest.reward.xp} XP, +${quest.reward.essence} Essence, +${quest.reward.gold} Or`);
+        
+        // Nouvelle quête
+        this.player.currentQuest = {
+            id: 2,
+            name: "Maîtrise des Armes",
+            description: "Utiliser Frappe 10 fois",
+            current: 0,
+            target: 10,
+            reward: { xp: 200, essence: 100, gold: 75 }
+        };
     }
 
     async savePlayerProgress() {
@@ -532,11 +680,14 @@ class KahinaGame {
 
     fleeCombat() {
         if (Math.random() > 0.3) {
-            this.showCombatMessage("Vous fuyez le combat!");
+            this.showCombatMessage("🏃 Vous fuyez le combat!");
             this.combatActive = false;
-            setTimeout(() => this.switchScreen('enemy-select'), 1000);
+            setTimeout(() => {
+                this.switchScreen('enemy-select');
+                this.createRain(); // Remettre la pluie
+            }, 1000);
         } else {
-            this.showCombatMessage("Fuite échouée!");
+            this.showCombatMessage("❌ Fuite échouée!");
             this.enemyTurn();
         }
     }
@@ -561,12 +712,11 @@ class KahinaGame {
             this.showMessage(`🎉 NIVEAU ${this.player.level} ATTEINT!`);
             this.updateUI();
             
-            // Sauvegarder le niveau
             this.savePlayerProgress();
         }
     }
 
-    // EFFETS VISUELS ET SONORES
+    // EFFETS VISUELS ET SONORES AMÉLIORÉS
     createProjectile(from, to, type) {
         const container = document.getElementById('projectile-container');
         const projectile = document.createElement('div');
@@ -637,7 +787,7 @@ class KahinaGame {
 
     createVictoryEffect() {
         const container = document.getElementById('effect-overlay');
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 15; i++) {
             setTimeout(() => {
                 const sparkle = document.createElement('div');
                 sparkle.className = 'victory-sparkle';
@@ -647,7 +797,7 @@ class KahinaGame {
                 container.appendChild(sparkle);
                 
                 setTimeout(() => sparkle.remove(), 2000);
-            }, i * 200);
+            }, i * 150);
         }
     }
 
@@ -688,7 +838,7 @@ class KahinaGame {
         }
     }
 
-    // INTERFACE UTILISATEUR
+    // INTERFACE UTILISATEUR AMÉLIORÉE
     switchScreen(screenId) {
         const transition = document.getElementById('screen-transition');
         transition.style.opacity = '1';
@@ -718,14 +868,12 @@ class KahinaGame {
     }
 
     showMenuSection(section) {
-        // Mettre à jour les boutons actifs
         document.querySelectorAll('.menu-item').forEach(item => {
             item.classList.remove('active');
         });
         
         document.querySelector(`[data-section="${section}"]`).classList.add('active');
         
-        // Afficher la section correspondante
         document.querySelectorAll('.menu-section').forEach(sec => {
             sec.classList.remove('active');
         });
@@ -749,8 +897,9 @@ class KahinaGame {
                 leaderboard.innerHTML = '';
                 
                 players.forEach((player, index) => {
+                    const isYou = player.name === this.player.name;
                     const item = document.createElement('div');
-                    item.className = 'leaderboard-item';
+                    item.className = `leaderboard-item ${isYou ? 'you' : ''}`;
                     item.innerHTML = `
                         <div class="leaderboard-rank">#${index + 1}</div>
                         <div class="leaderboard-name">${player.name}</div>
@@ -773,6 +922,7 @@ class KahinaGame {
         document.getElementById('menu-level').textContent = this.player.level;
         document.getElementById('menu-xp').textContent = `${this.player.xp}/${this.player.xpToNextLevel}`;
         document.getElementById('menu-essence').textContent = this.player.essence;
+        document.getElementById('avatar-level').textContent = this.player.level;
     }
 
     updateCombatUI() {
@@ -813,6 +963,7 @@ class KahinaGame {
             text-align: center;
             max-width: 90%;
             box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            font-family: 'Cinzel', serif;
         `;
         
         document.body.appendChild(notification);
@@ -876,15 +1027,10 @@ class KahinaGame {
                 document.getElementById('vibration-toggle').checked = this.vibrationEnabled;
                 
                 if (this.musicEnabled) {
-                    document.getElementById('background-music').play();
+                    this.startBackgroundMusic();
                 }
             }
         }
-    }
-
-    loadLocalGame() {
-        this.loadGame();
-        this.switchScreen('world-map');
     }
 
     saveSettings() {
@@ -1003,8 +1149,9 @@ style.textContent = `
         20%, 80% { opacity: 1; transform: translateX(-50%) translateY(0); }
     }
     
-    .notification {
-        font-family: 'Cinzel', serif;
+    .leaderboard-item.you {
+        background: rgba(255, 215, 0, 0.2) !important;
+        border: 1px solid #ffd700;
     }
 `;
 document.head.appendChild(style);
