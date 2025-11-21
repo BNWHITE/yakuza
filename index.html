@@ -10,10 +10,11 @@
 <body>
 
     <div class="leaves-container" id="leaves-container"></div>
-    <div class="combat-effects" id="combat-effects"></div> <div class="screen-transition" id="screen-transition"></div>
+    <div class="combat-effects" id="combat-effects"></div> 
+    <div class="screen-transition" id="screen-transition"></div>
 
     <div class="victory-popup" id="victory-popup">
-        <div class="popup-content">
+        <div class="popup-content glass-panel">
             <div class="victory-icon">🏆</div>
             <h2>TEMPS ÉCOULÉ!</h2>
             <div class="rewards" id="victory-rewards">
@@ -38,7 +39,7 @@
         </div>
     </div>
 
-    <section id="auth-screen" class="screen active" style="background-image: url('jpg(4).png'); background-size: cover; background-position: center;">
+    <section id="auth-screen" class="screen active" style="background-image: url('images/bd-new2.jpg');">
         <div class="background-overlay"></div>
         <div class="content-center">
             <div class="logo-container">
@@ -81,7 +82,7 @@
         </div>
     </section>
 
-    <section id="quiz-screen" class="screen" style="background-image: url('image-general.png'); background-size: cover; background-position: center;">
+    <section id="quiz-screen" class="screen" style="background-image: url('images/bg-combat.jpg');">
         
         <div class="combat-background-overlay"></div>
         
@@ -97,7 +98,7 @@
             
             <div class="enemy-combatant-quiz">
                 <div class="character-model-quiz enemy-char-model">
-                    <img id="enemy-img" src="images/Sans titre.jpg" class="character-img enemy-char" alt="Ennemi">
+                    <img id="enemy-img" src="images/8.jpg" class="character-img enemy-char" alt="Ennemi">
                     <div class="health-bar combat-hp-bar">
                         <div class="health-fill enemy-health" id="enemy-hp-fill" style="width: 100%"></div>
                     </div>
@@ -111,7 +112,7 @@
 
             <div class="player-combatant-quiz">
                 <div class="character-model-quiz player-char-model">
-                    <img id="player-img" src="princess.avif" class="character-img player-char" alt="Joueur">
+                    <img id="player-img" src="images/4.jpg" class="character-img player-char" alt="Joueur">
                     <div class="health-bar combat-hp-bar">
                         <div class="health-fill player-health" id="player-hp-fill" style="width: 100%"></div>
                     </div>
@@ -170,14 +171,14 @@
                         <span class="rule-icon">✅</span>
                         <div class="rule-text">
                             <strong>Bonne réponse = Attaque!</strong>
-                            <p>Vous lancez un sort ou une attaque sur l'ennemi (visuel : Feu, Eau, Foudre, Pierre).</p>
+                            <p>Vous lancez un sort ou une attaque sur l'ennemi (Feu, Eau, Foudre, Pierre).</p>
                         </div>
                     </div>
                     <div class="rule-item">
                         <span class="rule-icon">❌</span>
                         <div class="rule-text">
                             <strong>Mauvaise réponse = Contrecoup</strong>
-                            <p>L'ennemi vous inflige un contrecoup (visuel) et vous perdez du temps.</p>
+                            <p>L'ennemi vous inflige un contrecoup (pénalité de temps : -5s).</p>
                         </div>
                     </div>
                     <div class="rule-item">
