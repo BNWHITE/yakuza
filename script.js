@@ -1295,4 +1295,47 @@ function debugZoneClicks() {
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(debugZoneClicks, 1000);
 });
+// BOUTON DE SECOURS DANS bindEvents()
+document.getElementById('force-vallee-btn').addEventListener('click', () => {
+    console.log("Bouton secours Vallée cliqué");
+    this.selectValleeZone();
+});
+
+// FONCTION DE RÉINITIALISATION DES ZONES
+function resetZoneInteractions() {
+    const zones = document.querySelectorAll('.zone');
+    
+    zones.forEach(zone => {
+        // Supprimer tous les écouteurs existants
+        const newZone = zone.cloneNode(true);
+        zone.parentNode.replaceChild(newZone, zone);
+    });
+    
+    // Réinitialiser
+    setTimeout(() => {
+        window.game.setupZoneInteractions();
+        console.log("Zones réinitialisées");
+    }, 100);
+}
+
+// Commande de debug dans la console
+window.debugZones = function() {
+    console.log("=== DEBUG ZONES ===");
+    const zones = document.querySelectorAll('.zone');
+    zones.forEach((zone, i) => {
+        console.log(`Zone ${i}:`, {
+            dataset: zone.dataset,
+            position: zone.style.top + ' ' + zone.style.left,
+            isVisible: zone.offsetParent !== null,
+            isActive: zone.classList.contains('active-zone')
+        });
+    });
+    
+    // Tester le clic programmatique
+    const vallee = document.querySelector('[data-zone="vallee"]');
+    if (vallee) {
+        console.log("Test clic programmatique sur Vallée...");
+        vallee.click();
+    }
+};
 document.head.appendChild(style);
