@@ -159,6 +159,7 @@
     </section>
 
     <!-- ÉCRAN DE LA CARTE MONDE -->
+    <!-- Version corrigée de la section carte -->
     <section id="world-map" class="screen">
         <div class="screen-header">
             <button class="nav-btn back-btn" data-target="auth-screen">
@@ -169,67 +170,80 @@
                 <span class="btn-icon">☰</span>
             </button>
         </div>
-
+    
         <div class="map-container" id="map-container">
             <!-- Effet d'eau au clic -->
             <div class="water-effect" id="water-effect"></div>
             
-            <div class="zone active-zone" data-zone="vallee" style="top: 70%; left: 25%;">
-                <div class="zone-marker pulse">
-                    <div class="zone-glow"></div>
-                </div>
-                <div class="zone-info">
-                    <h3>🌿 Vallée des Larmes</h3>
-                    <p>Niveau 1-5 • Ennemis faciles</p>
-                    <div class="zone-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 30%"></div>
+            <!-- ZONES AVEC MEILLEURE STRUCTURE -->
+            <div class="zone-container">
+                <div class="zone active-zone vallee-zone" data-zone="vallee" style="top: 70%; left: 25%;">
+                    <div class="zone-marker pulse">
+                        <div class="zone-glow"></div>
+                        <div class="zone-click-area"></div>
+                    </div>
+                    <div class="zone-info">
+                        <h3>🌿 Vallée des Larmes</h3>
+                        <p>Niveau 1-5 • Ennemis faciles</p>
+                        <div class="zone-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 30%"></div>
+                            </div>
+                            <span>30% complété</span>
                         </div>
-                        <span>30% complété</span>
+                    </div>
+                </div>
+                
+                <div class="zone locked-zone" data-zone="foret" style="top: 45%; left: 65%;">
+                    <div class="zone-marker">
+                        <div class="zone-glow"></div>
+                        <div class="zone-click-area"></div>
+                    </div>
+                    <div class="zone-info">
+                        <h3>🌳 Forêt Hurlante</h3>
+                        <p>Niveau 5+ • Débloquer au niveau 5</p>
+                    </div>
+                </div>
+                
+                <div class="zone locked-zone" data-zone="montagnes" style="top: 25%; left: 45%;">
+                    <div class="zone-marker">
+                        <div class="zone-glow"></div>
+                        <div class="zone-click-area"></div>
+                    </div>
+                    <div class="zone-info">
+                        <h3>🏔️ Montagnes Maudites</h3>
+                        <p>Niveau 10+ • Débloquer au niveau 10</p>
                     </div>
                 </div>
             </div>
-            
-            <div class="zone locked-zone" data-zone="foret" style="top: 45%; left: 65%;">
-                <div class="zone-marker">
-                    <div class="zone-glow"></div>
-                </div>
-                <div class="zone-info">
-                    <h3>🌳 Forêt Hurlante</h3>
-                    <p>Niveau 5+ • Débloquer au niveau 5</p>
-                </div>
-            </div>
-            
-            <div class="zone locked-zone" data-zone="montagnes" style="top: 25%; left: 45%;">
-                <div class="zone-marker">
-                    <div class="zone-glow"></div>
-                </div>
-                <div class="zone-info">
-                    <h3>🏔️ Montagnes Maudites</h3>
-                    <p>Niveau 10+ • Débloquer au niveau 10</p>
-                </div>
-            </div>
-
+    
             <div class="player-avatar">
                 <img src="./images/princess.avif" alt="Kahina">
                 <div class="avatar-glow"></div>
                 <div class="avatar-level">Niv. <span id="avatar-level">1</span></div>
             </div>
-
+    
             <!-- Éléments décoratifs -->
             <div class="map-decoration tree" style="top: 60%; left: 15%;"></div>
             <div class="map-decoration rock" style="top: 80%; left: 80%;"></div>
             <div class="map-decoration ruins" style="top: 30%; left: 20%;"></div>
         </div>
-
+    
         <div class="action-bar">
             <button class="action-btn large" id="explore-btn">
                 <span class="btn-icon">🗺️</span>
                 EXPLORER LA VALLÉE
             </button>
+            
+            <!-- BOUTON DE SECOURS POUR ACCÉDER À LA VALLÉE -->
+            <button class="action-btn secondary" id="force-vallee-btn" style="margin-top: 10px;">
+                <span class="btn-icon">🌿</span>
+                ACCÉDER À LA VALLÉE (SECOURS)
+            </button>
         </div>
     </section>
 
+    
     <!-- ÉCRAN DE SÉLECTION D'ENNEMIS -->
     <section id="enemy-select" class="screen">
         <div class="screen-header">
