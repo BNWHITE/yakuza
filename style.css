@@ -285,7 +285,7 @@ html, body {
 
 /* CARTE MONDE */
 #world-map {
-    background: url('https://images.unsplash.com/photo-1542736667-069246bdbc6d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80') center/cover no-repeat;
+    background: url('/images/bd-new1.jpg') center/cover no-repeat;
 }
 
 .screen-header {
@@ -484,7 +484,7 @@ html, body {
 
 /* VALLÉE DES LARMES - SÉLECTION ENNEMIS */
 #enemy-select {
-    background: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80') center/cover no-repeat;
+    background: url('/images/bd-new5.jpg') center/cover no-repeat;
 }
 
 .zone-description {
@@ -681,7 +681,7 @@ html, body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80') center/cover no-repeat;
+    background: url('/images/bd-new2.jpg') center/cover no-repeat;
     opacity: 0.4;
 }
 
