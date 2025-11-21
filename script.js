@@ -15,6 +15,7 @@ class KahinaGame {
             maxMana: 50,
             essence: 0,
             gold: 0,
+            victories: 0,
             stats: {
                 attack: 15,
                 defense: 8,
@@ -49,120 +50,7 @@ class KahinaGame {
         this.loadGame();
         this.updateUI();
         this.startBackgroundMusic();
-        // CHANGEMENT: Charger les ennemis au démarrage
-        this.loadEnemies();
     }
-
-    // NOUVELLE MÉTHODE: Afficher les ennemis dans la vallée
-    showValleeEnemies() {
-        console.log("🔄 Affichage des ennemis de la Vallée des Larmes");
-        
-        const grid = document.getElementById('enemy-grid');
-        if (!grid) {
-            console.error("❌ Element enemy-grid non trouvé");
-            return;
-        }
-        // Vider la grille
-        grid.innerHTML = '';
-
-        // Ennemis pour la Vallée des Larmes
-        const valleeEnemies = [
-            {
-                id: 1,
-                name: "Gobelin Corrompu",
-                type: "gobelin",
-                image_url: "./images/2.png",
-                level: 2,
-                hp: 80,
-                max_hp: 80,
-                attack: 12,
-                defense: 5,
-                xp_reward: 100,
-                essence_reward: 50,
-                gold_reward: 25
-            },
-            {
-                id: 2,
-                name: "Loup Spectral", 
-                type: "loup",
-                image_url: "./images/3.png",
-                level: 3,
-                hp: 100,
-                max_hp: 100,
-                attack: 15,
-                defense: 6,
-                xp_reward: 120,
-                essence_reward: 60,
-                gold_reward: 30
-            },
-            {
-                id: 3,
-                name: "Esprit Tourmenté",
-                type: "esprit",
-                image_url: "./images/4.png",
-                level: 4,
-                hp: 70,
-                max_hp: 70,
-                attack: 20,
-                defense: 3,
-                xp_reward: 150,
-                essence_reward: 75,
-                gold_reward: 40
-            }
-        ];
-
-        valleeEnemies.forEach(enemy => {
-            const card = this.createEnemyCard(enemy);
-            grid.appendChild(card);
-        });
-
-        console.log(`✅ ${valleeEnemies.length} ennemis affichés`);
-    }
-
-    // NOUVELLE MÉTHODE: Créer une carte ennemi
-    createEnemyCard(enemy) {
-        const card = document.createElement('div');
-        card.className = 'enemy-card';
-        card.dataset.enemy = enemy.type;
-        
-        card.innerHTML = `
-            <div class="enemy-image">
-                <img src="${enemy.image_url}" alt="${enemy.name}" 
-                     onerror="this.src='https://images.unsplash.com/photo-1570303345338-e1f0eddf4946?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'">
-                <div class="enemy-level">Niv. ${enemy.level}</div>
-            </div>
-            <div class="enemy-info">
-                <h3>${enemy.name}</h3>
-                <div class="enemy-stats">
-                    <span class="stat">❤️ ${enemy.hp}</span>
-                    <span class="stat">⚔️ ${enemy.attack}</span>
-                    <span class="stat">🛡️ ${enemy.defense}</span>
-                </div>
-                <div class="enemy-rewards">
-                    <small>Récompenses: ✨${enemy.essence_reward} ⭐${enemy.xp_reward}</small>
-                </div>
-            </div>
-            <div class="select-overlay">
-                <div class="combat-prompt">
-                    <button class="action-btn primary combat-btn" data-enemy="${enemy.type}">
-                        <span class="btn-icon">⚔️</span>
-                        COMBATTRE
-                    </button>
-                    <p class="combat-hint">Cliquez pour affronter cet ennemi</p>
-                </div>
-            </div>
-        `;
-        
-        // Ajouter l'écouteur d'événement
-        card.addEventListener('click', (e) => {
-            e.stopPropagation();
-            console.log(`🎯 Début combat contre: ${enemy.name}`);
-            this.startCombat(enemy);
-        });
-
-        return card;
-    }
-
 
     async initializeSupabase() {
         try {
@@ -250,7 +138,7 @@ class KahinaGame {
             });
         });
 
-        // Zones interactives - SOLUTION AMÉLIORÉE
+        // Zones interactives
         this.setupZoneInteractions();
 
         // Entrée nom joueur
@@ -263,6 +151,11 @@ class KahinaGame {
         document.getElementById('continue-btn-popup').addEventListener('click', () => {
             this.hideVictoryPopup();
             this.switchScreen('enemy-select');
+        });
+
+        // Bouton rafraîchir ennemis
+        document.getElementById('refresh-enemies-btn').addEventListener('click', () => {
+            this.refreshEnemies();
         });
 
         // Paramètres
@@ -281,10 +174,17 @@ class KahinaGame {
             }
         });
 
+        document.getElementById('vibration-toggle').addEventListener('change', (e) => {
+            this.vibrationEnabled = e.target.checked;
+            this.saveSettings();
+        });
+
         // Effet d'eau sur la carte
         document.getElementById('map-container').addEventListener('click', (e) => {
             this.createWaterEffect(e.clientX, e.clientY);
         });
+
+        console.log("✅ Tous les événements liés");
     }
 
     setupZoneInteractions() {
@@ -330,105 +230,28 @@ class KahinaGame {
         }
     }
 
-    // MODIFICATION: Sélection de la vallée
     selectValleeZone() {
-        console.log("🌿 Accès à la Vallée des Larmes");
         this.currentZone = "vallee";
-        
-        // Mettre à jour le titre de la zone
-        const zoneTitle = document.getElementById('zone-name');
-        if (zoneTitle) {
-            zoneTitle.textContent = "🌿 VALLÉE DES LARMES";
-        }
-        
-        // Afficher les ennemis
-        this.showValleeEnemies();
-        
-        // Transition vers l'écran de sélection
         this.switchScreen('enemy-select');
-        
+        this.showValleeEnemies();
+        this.updateQuestProgress();
         this.showMessage("🌿 Bienvenue dans la Vallée des Larmes! Choisissez un ennemi à affronter.");
     }
 
-    showTutorial() {
-        document.getElementById('tutorial-overlay').classList.add('active');
-        this.tutorialStep = 0;
-        this.updateTutorial();
-    }
-
-    updateTutorial() {
-        const steps = document.querySelectorAll('.tutorial-step');
-        steps.forEach((step, index) => {
-            step.classList.toggle('active', index === this.tutorialStep);
-        });
-
-        const prevBtn = document.getElementById('prev-step');
-        const nextBtn = document.getElementById('next-step');
-        const startBtn = document.getElementById('start-adventure');
-
-        prevBtn.style.display = this.tutorialStep === 0 ? 'none' : 'flex';
-        nextBtn.style.display = this.tutorialStep === steps.length - 1 ? 'none' : 'flex';
-        startBtn.style.display = this.tutorialStep === steps.length - 1 ? 'flex' : 'none';
-    }
-
-    nextTutorialStep() {
-        if (this.tutorialStep < 2) {
-            this.tutorialStep++;
-            this.updateTutorial();
-        }
-    }
-
-    prevTutorialStep() {
-        if (this.tutorialStep > 0) {
-            this.tutorialStep--;
-            this.updateTutorial();
-        }
-    }
-
-    startAdventure() {
-        document.getElementById('tutorial-overlay').classList.remove('active');
-        this.startGame();
-    }
-
-    async startGame() {
-        const name = document.getElementById('player-name-input').value.trim();
-        this.player.name = name || "GARDIENNE";
+    showValleeEnemies() {
+        console.log("🔄 Affichage des ennemis de la Vallée des Larmes");
         
-        try {
-            if (this.supabase) {
-                const { data, error } = await this.supabase
-                    .from('players')
-                    .insert([{
-                        name: this.player.name,
-                        level: this.player.level,
-                        xp: this.player.xp,
-                        essence: this.player.essence,
-                        created_at: new Date()
-                    }])
-                    .select();
-
-                if (data && data[0]) {
-                    this.player.id = data[0].id;
-                }
-            }
-        } catch (error) {
-            console.log("Mode hors ligne activé");
+        const grid = document.getElementById('enemy-grid');
+        if (!grid) {
+            console.error("❌ Element enemy-grid non trouvé");
+            return;
         }
 
-        this.showMessage(`✨ Bienvenue, ${this.player.name}!`);
-        this.switchScreen('world-map');
-        this.saveGame();
-    }
+        // Vider la grille
+        grid.innerHTML = '';
 
-    // MODIFICATION: Exploration de la zone
-    exploreZone() {
-        const zoneName = this.getZoneName(this.currentZone);
-        this.showMessage(`🗺️ Vous explorez la ${zoneName}... Découvrez de nouveaux ennemis!`);
-        
-
-    loadEnemies() {
-        // Ennemis par défaut
-        this.enemiesData = [
+        // Ennemis pour la Vallée des Larmes
+        const valleeEnemies = [
             {
                 id: 1,
                 name: "Gobelin Corrompu",
@@ -445,75 +268,83 @@ class KahinaGame {
             },
             {
                 id: 2,
-                name: "Orc Brute", 
-                type: "orc",
+                name: "Loup Spectral", 
+                type: "loup",
                 image_url: "./images/3.png",
                 level: 3,
-                hp: 120,
-                max_hp: 120,
+                hp: 100,
+                max_hp: 100,
                 attack: 15,
-                defense: 8,
-                xp_reward: 150,
-                essence_reward: 75,
-                gold_reward: 40
+                defense: 6,
+                xp_reward: 120,
+                essence_reward: 60,
+                gold_reward: 30
             },
             {
                 id: 3,
-                name: "Mage Noir",
-                type: "mage",
+                name: "Esprit Tourmenté",
+                type: "esprit",
                 image_url: "./images/4.png",
                 level: 4,
                 hp: 70,
                 max_hp: 70,
-                attack: 25,
+                attack: 20,
                 defense: 3,
-                xp_reward: 200,
-                essence_reward: 100,
-                gold_reward: 60
+                xp_reward: 150,
+                essence_reward: 75,
+                gold_reward: 40
             }
         ];
-        
-        this.updateEnemyGrid();
-    }
 
-    updateEnemyGrid() {
-        const grid = document.getElementById('enemy-grid');
-        grid.innerHTML = '';
-
-        this.enemiesData.forEach(enemy => {
-            const card = document.createElement('div');
-            card.className = 'enemy-card';
-            card.dataset.enemy = enemy.type;
-            
-            card.innerHTML = `
-                <div class="enemy-image">
-                    <img src="${enemy.image_url}" alt="${enemy.name}" 
-                         onerror="this.src='https://images.unsplash.com/photo-1570303345338-e1f0eddf4946?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'">
-                    <div class="enemy-level">Niv. ${enemy.level}</div>
-                </div>
-                <div class="enemy-info">
-                    <h3>${enemy.name}</h3>
-                    <div class="enemy-stats">
-                        <span class="stat">❤️ ${enemy.hp}</span>
-                        <span class="stat">⚔️ ${enemy.attack}</span>
-                        <span class="stat">🛡️ ${enemy.defense}</span>
-                    </div>
-                </div>
-                <div class="select-overlay">
-                    <button class="action-btn small combat-btn" data-enemy="${enemy.type}">
-                        COMBATTRE
-                    </button>
-                </div>
-            `;
-            
-            // Ajouter l'écouteur d'événement
-            card.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.startCombat(enemy.type);
-            });
-            
+        valleeEnemies.forEach(enemy => {
+            const card = this.createEnemyCard(enemy);
             grid.appendChild(card);
         });
+
+        console.log(`✅ ${valleeEnemies.length} ennemis affichés`);
+    }
+
+    createEnemyCard(enemy) {
+        const card = document.createElement('div');
+        card.className = 'enemy-card';
+        card.dataset.enemy = enemy.type;
+        
+        card.innerHTML = `
+            <div class="enemy-image">
+                <img src="${enemy.image_url}" alt="${enemy.name}" 
+                     onerror="this.src='https://images.unsplash.com/photo-1570303345338-e1f0eddf4946?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'">
+                <div class="enemy-level">Niv. ${enemy.level}</div>
+            </div>
+            <div class="enemy-info">
+                <h3>${enemy.name}</h3>
+                <div class="enemy-stats">
+                    <span class="stat">❤️ ${enemy.hp}</span>
+                    <span class="stat">⚔️ ${enemy.attack}</span>
+                    <span class="stat">🛡️ ${enemy.defense}</span>
+                </div>
+                <div class="enemy-rewards">
+                    <small>Récompenses: ✨${enemy.essence_reward} ⭐${enemy.xp_reward}</small>
+                </div>
+            </div>
+            <div class="select-overlay">
+                <div class="combat-prompt">
+                    <button class="action-btn primary combat-btn" data-enemy="${enemy.type}">
+                        <span class="btn-icon">⚔️</span>
+                        COMBATTRE
+                    </button>
+                    <p class="combat-hint">Cliquez pour affronter cet ennemi</p>
+                </div>
+            </div>
+        `;
+        
+        // Ajouter l'écouteur d'événement
+        card.addEventListener('click', (e) => {
+            e.stopPropagation();
+            console.log(`🎯 Début combat contre: ${enemy.name}`);
+            this.startCombat(enemy);
+        });
+
+        return card;
     }
 
     startCombat(enemyData) {
@@ -631,31 +462,7 @@ class KahinaGame {
             return;
         }
 
-        // Recharger les ennemis pour variété
-        setTimeout(() => {
-            this.showValleeEnemies();
-            this.showMessage("🎯 De nouveaux ennemis sont apparus!");
-        }, 1500);
-    }
-    // AJOUT: Instructions pour la vallée
-    showValleeInstructions() {
-        const instructions = `
-            <div class="vallee-instructions">
-                <h3>🎯 COMMENT JOUER :</h3>
-                <ol>
-                    <li>👉 <strong>Choisissez un ennemi</strong> en cliquant dessus</li>
-                    <li>⚔️ <strong>Combattez</strong> en utilisant vos compétences</li>
-                    <li>🎯 <strong>Vainquez</strong> l'ennemi pour gagner des récompenses</li>
-                    <li>🔄 <strong>Continuez</strong> pour progresser dans l'aventure</li>
-                </ol>
-                <p class="hint">💡 <em>Commencez par le Gobelin Corrompu pour vous échauffer!</em></p>
-            </div>
-        `;
-        
-        const container = document.querySelector('#enemy-select .zone-description');
-        if (container) {
-            container.innerHTML += instructions;
-        }
+        setTimeout(() => this.enemyTurn(), 1500);
     }
 
     enemyTurn() {
@@ -695,6 +502,7 @@ class KahinaGame {
             this.player.xp += xpGained;
             this.player.essence += essenceGained;
             this.player.gold += goldGained;
+            this.player.victories++;
             
             // Mise à jour quête
             if (this.player.currentQuest && this.currentEnemy.type === 'gobelin') {
@@ -706,6 +514,7 @@ class KahinaGame {
             this.createVictoryEffect();
             
             this.checkLevelUp();
+            this.updateQuestProgress();
         } else {
             this.showCombatMessage("💔 Défaite...");
             this.player.hp = this.player.maxHp;
@@ -722,7 +531,8 @@ class KahinaGame {
 
     showVictoryPopup(xp, essence, gold) {
         const popup = document.getElementById('victory-popup');
-        const rewards = popup.querySelector('.rewards');
+        const rewards = document.getElementById('victory-rewards');
+        const message = document.getElementById('victory-message');
         
         rewards.innerHTML = `
             <div class="reward-item">
@@ -738,6 +548,10 @@ class KahinaGame {
                 <span class="reward-text">+${gold} Or</span>
             </div>
         `;
+        
+        if (message) {
+            message.textContent = `Vous avez vaincu le ${this.currentEnemy.name}!`;
+        }
         
         popup.classList.add('active');
     }
@@ -774,6 +588,41 @@ class KahinaGame {
         } else {
             this.showCombatMessage("❌ Fuite échouée!");
             this.enemyTurn();
+        }
+    }
+
+    exploreZone() {
+        const zoneName = this.getZoneName(this.currentZone);
+        this.showMessage(`🗺️ Vous explorez la ${zoneName}... Découvrez de nouveaux ennemis!`);
+    }
+
+    refreshEnemies() {
+        this.showMessage("🔄 Appel de renforts ennemis...");
+        setTimeout(() => {
+            this.showValleeEnemies();
+            this.showMessage("🎯 De nouveaux adversaires arrivent!");
+        }, 1000);
+    }
+
+    updateQuestProgress() {
+        const progress = this.player.currentQuest.current;
+        const target = this.player.currentQuest.target;
+        const percent = (progress / target) * 100;
+        
+        const progressText = document.getElementById('quest-progress');
+        const progressBar = document.getElementById('quest-progress-bar');
+        const menuProgress = document.getElementById('menu-quest-progress');
+        
+        if (progressText) {
+            progressText.textContent = `${progress}/${target} ennemis vaincus`;
+        }
+        
+        if (progressBar) {
+            progressBar.style.width = `${percent}%`;
+        }
+        
+        if (menuProgress) {
+            menuProgress.textContent = `${progress}/${target} complété`;
         }
     }
 
@@ -903,6 +752,47 @@ class KahinaGame {
         }
     }
 
+    // TUTORIEL
+    showTutorial() {
+        document.getElementById('tutorial-overlay').classList.add('active');
+        this.tutorialStep = 0;
+        this.updateTutorial();
+    }
+
+    updateTutorial() {
+        const steps = document.querySelectorAll('.tutorial-step');
+        steps.forEach((step, index) => {
+            step.classList.toggle('active', index === this.tutorialStep);
+        });
+
+        const prevBtn = document.getElementById('prev-step');
+        const nextBtn = document.getElementById('next-step');
+        const startBtn = document.getElementById('start-adventure');
+
+        prevBtn.style.display = this.tutorialStep === 0 ? 'none' : 'flex';
+        nextBtn.style.display = this.tutorialStep === steps.length - 1 ? 'none' : 'flex';
+        startBtn.style.display = this.tutorialStep === steps.length - 1 ? 'flex' : 'none';
+    }
+
+    nextTutorialStep() {
+        if (this.tutorialStep < 2) {
+            this.tutorialStep++;
+            this.updateTutorial();
+        }
+    }
+
+    prevTutorialStep() {
+        if (this.tutorialStep > 0) {
+            this.tutorialStep--;
+            this.updateTutorial();
+        }
+    }
+
+    startAdventure() {
+        document.getElementById('tutorial-overlay').classList.remove('active');
+        this.startGame();
+    }
+
     // AUDIO
     playSound(soundId) {
         if (!this.soundEnabled) return;
@@ -967,11 +857,14 @@ class KahinaGame {
         document.getElementById('display-username').textContent = this.player.name;
         document.getElementById('quick-essence').textContent = this.player.essence;
         document.getElementById('quick-level').textContent = this.player.level;
+        document.getElementById('quick-victories').textContent = this.player.victories;
         document.getElementById('menu-player-name').textContent = this.player.name;
         document.getElementById('menu-level').textContent = this.player.level;
         document.getElementById('menu-xp').textContent = `${this.player.xp}/${this.player.xpToNextLevel}`;
         document.getElementById('menu-essence').textContent = this.player.essence;
         document.getElementById('avatar-level').textContent = this.player.level;
+        
+        this.updateQuestProgress();
     }
 
     updateCombatUI() {
@@ -989,6 +882,9 @@ class KahinaGame {
         document.getElementById('player-max-mp').textContent = this.player.maxMana;
         document.getElementById('enemy-hp').textContent = this.currentEnemy.hp;
         document.getElementById('enemy-max-hp').textContent = this.currentEnemy.maxHp;
+        document.getElementById('current-hp').textContent = this.player.hp;
+        document.getElementById('current-mana').textContent = this.player.mana;
+        document.getElementById('combat-player-name').textContent = this.player.name;
     }
 
     showMessage(message) {
@@ -1068,11 +964,42 @@ class KahinaGame {
                 
                 document.getElementById('sound-toggle').checked = this.soundEnabled;
                 document.getElementById('music-toggle').checked = this.musicEnabled;
+                document.getElementById('vibration-toggle').checked = this.vibrationEnabled;
             }
         }
     }
 
     saveSettings() {
+        this.saveGame();
+    }
+
+    async startGame() {
+        const name = document.getElementById('player-name-input').value.trim();
+        this.player.name = name || "GARDIENNE";
+        
+        try {
+            if (this.supabase) {
+                const { data, error } = await this.supabase
+                    .from('players')
+                    .insert([{
+                        name: this.player.name,
+                        level: this.player.level,
+                        xp: this.player.xp,
+                        essence: this.player.essence,
+                        created_at: new Date()
+                    }])
+                    .select();
+
+                if (data && data[0]) {
+                    this.player.id = data[0].id;
+                }
+            }
+        } catch (error) {
+            console.log("Mode hors ligne activé");
+        }
+
+        this.showMessage(`✨ Bienvenue, ${this.player.name}!`);
+        this.switchScreen('world-map');
         this.saveGame();
     }
 }
@@ -1081,104 +1008,3 @@ class KahinaGame {
 document.addEventListener('DOMContentLoaded', () => {
     window.game = new KahinaGame();
 });
-// CSS additionnel pour améliorer l'interface
-const valleeCSS = `
-    /* Instructions Vallée des Larmes */
-    .vallee-instructions {
-        background: rgba(76, 205, 196, 0.1);
-        border: 1px solid #4ecdc4;
-        border-radius: 15px;
-        padding: 1.5rem;
-        margin: 1rem 0;
-        text-align: left;
-    }
-
-    .vallee-instructions h3 {
-        color: #4ecdc4;
-        margin-bottom: 1rem;
-        text-align: center;
-        font-family: 'Cinzel', serif;
-    }
-
-    .vallee-instructions ol {
-        margin-left: 1.5rem;
-        margin-bottom: 1rem;
-    }
-
-    .vallee-instructions li {
-        margin: 0.5rem 0;
-        padding: 0.5rem;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 8px;
-    }
-
-    .hint {
-        font-style: italic;
-        opacity: 0.8;
-        text-align: center;
-        margin-top: 1rem;
-    }
-
-    /* Amélioration des cartes ennemi */
-    .enemy-rewards {
-        margin-top: 0.5rem;
-        opacity: 0.7;
-        font-size: 0.8rem;
-    }
-
-    .combat-prompt {
-        text-align: center;
-    }
-
-    .combat-hint {
-        margin-top: 0.5rem;
-        font-size: 0.8rem;
-        opacity: 0.7;
-    }
-
-    /* Zone description améliorée */
-    .zone-description {
-        padding: 1rem;
-        background: rgba(0, 0, 0, 0.7);
-        border-bottom: 1px solid rgba(255, 215, 0, 0.3);
-        text-align: center;
-    }
-
-    .zone-description p {
-        max-width: 600px;
-        margin: 0 auto;
-        line-height: 1.5;
-        margin-bottom: 1rem;
-    }
-
-    /* Feedback visuel amélioré */
-    .enemy-card {
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .enemy-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
-        transition: left 0.5s;
-    }
-
-    .enemy-card:hover::before {
-        left: 100%;
-    }
-
-    /* Indicateur de sélection */
-    .enemy-card.selected {
-        border-color: #ff6b6b;
-        box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
-    }
-`;
-
-// Ajouter le CSS
-document.head.insertAdjacentHTML('beforeend', `<style>${valleeCSS}</style>`);
