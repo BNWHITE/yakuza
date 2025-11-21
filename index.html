@@ -176,23 +176,56 @@
             <div class="water-effect" id="water-effect"></div>
             
             <!-- ZONES AVEC MEILLEURE STRUCTURE -->
-            <div class="zone-container">
-                <div class="zone active-zone vallee-zone" data-zone="vallee" style="top: 70%; left: 25%;">
-                    <div class="zone-marker pulse">
-                        <div class="zone-glow"></div>
-                        <div class="zone-click-area"></div>
+            <!-- MODIFICATION: Section Vallée des Larmes améliorée -->
+            <section id="enemy-select" class="screen">
+                <div class="screen-header">
+                    <button class="nav-btn back-btn" data-target="world-map">
+                        <span class="btn-icon">←</span>
+                    </button>
+                    <h2 class="screen-title" id="zone-name">🌿 VALLÉE DES LARMES</h2>
+                    <div class="header-stats">
+                        <span class="hp-display">❤️ <span id="current-hp">100</span></span>
+                        <span class="mana-display">🔮 <span id="current-mana">50</span></span>
                     </div>
-                    <div class="zone-info">
-                        <h3>🌿 Vallée des Larmes</h3>
-                        <p>Niveau 1-5 • Ennemis faciles</p>
-                        <div class="zone-progress">
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 30%"></div>
-                            </div>
-                            <span>30% complété</span>
+                </div>
+            
+                <div class="zone-description">
+                    <p>Une vallée mystique où les larmes des anciens ont donné naissance à des créatures corrompues. 
+                       Purifiez ces terres en vainquant les ennemis pour restaurer leur beauté originelle.</p>
+                    
+                    <!-- Instructions seront ajoutées dynamiquement -->
+                </div>
+
+                <!-- INDICATEUR DE PROGRESSION -->
+                <div class="quest-progress">
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>🎯 Quête: Purification de la Vallée</span>
+                            <span id="quest-progress">0/3 ennemis vaincus</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="quest-progress-bar" style="width: 0%"></div>
                         </div>
                     </div>
                 </div>
+            
+                <!-- GRILLE DES ENNEMIS -->
+                <div class="enemy-grid" id="enemy-grid">
+                    <!-- Les ennemis seront chargés dynamiquement ici -->
+                    <div class="loading-enemies">
+                        <div class="loading-spinner"></div>
+                        <p>Chargement des ennemis...</p>
+                    </div>
+                </div>
+            
+                <!-- BOUTON D'ACTION -->
+                <div class="action-bar">
+                    <button class="action-btn large" id="refresh-enemies-btn">
+                        <span class="btn-icon">🔄</span>
+                        RAFRAÎCHIR LES ENNEMIS
+                    </button>
+                </div>
+            </section>
                 
                 <div class="zone locked-zone" data-zone="foret" style="top: 45%; left: 65%;">
                     <div class="zone-marker">
