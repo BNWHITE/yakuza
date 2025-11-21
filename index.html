@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KAHINA: SAUVEZ LA REINE</title>
+    <title>KAHINA: L'ASCENSION ROYALE</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -12,22 +12,120 @@
 
     <!-- EFFETS VISUELS DYNAMIQUES -->
     <div class="leaves-container" id="leaves-container"></div>
+    <div class="birds-container" id="birds-container"></div>
+    <div class="rain-container" id="rain-container"></div>
     <div class="combat-effects" id="combat-effects"></div>
     <div class="screen-transition" id="screen-transition"></div>
 
+    <!-- POPUP DE VICTOIRE -->
+    <div class="victory-popup" id="victory-popup">
+        <div class="popup-content">
+            <div class="victory-icon">🏆</div>
+            <h2>VICTOIRE ÉCLATANTE!</h2>
+            <div class="rewards">
+                <div class="reward-item">
+                    <span class="reward-icon">⭐</span>
+                    <span class="reward-text">+100 XP</span>
+                </div>
+                <div class="reward-item">
+                    <span class="reward-icon">✨</span>
+                    <span class="reward-text">+50 Essence</span>
+                </div>
+                <div class="reward-item">
+                    <span class="reward-icon">💰</span>
+                    <span class="reward-text">+25 Or</span>
+                </div>
+            </div>
+            <p>Vous avez vaincu le Gobelin Corrompu!</p>
+            <button class="action-btn primary large" id="continue-btn-popup">
+                <span class="btn-icon">🎯</span>
+                CONTINUER L'AVENTURE
+            </button>
+        </div>
+    </div>
+
+    <!-- TUTORIEL -->
+    <div class="tutorial-overlay" id="tutorial-overlay">
+        <div class="tutorial-content">
+            <div class="tutorial-header">
+                <h2>🌿 BIENVENUE DANS KAHINA 🌿</h2>
+                <p>Deviens le Gardien de la Reine Kahina</p>
+            </div>
+            
+            <div class="tutorial-steps">
+                <div class="tutorial-step active">
+                    <div class="step-icon">⚔️</div>
+                    <h3>COMBAT STRATÉGIQUE</h3>
+                    <p>Utilise 4 compétences pour vaincre tes ennemis</p>
+                    <ul>
+                        <li>⚔️ <strong>Frappe</strong> : Attaque basique (0 mana)</li>
+                        <li>🔥 <strong>Feu</strong> : Dégâts magiques (15 mana)</li>
+                        <li>💚 <strong>Soin</strong> : Régénération (20 mana)</li>
+                        <li>⚡ <strong>Foudre</strong> : Attaque puissante (30 mana)</li>
+                    </ul>
+                </div>
+                
+                <div class="tutorial-step">
+                    <div class="step-icon">🗺️</div>
+                    <h3>EXPLORATION</h3>
+                    <p>Parcours les royaumes et libère les terres</p>
+                    <ul>
+                        <li>🎯 <strong>Vallée des Larmes</strong> : Niveau 1-5</li>
+                        <li>🌳 <strong>Forêt Hurlante</strong> : Niveau 5+</li>
+                        <li>🏔️ <strong>Montagnes Maudites</strong> : Niveau 10+</li>
+                    </ul>
+                </div>
+                
+                <div class="tutorial-step">
+                    <div class="step-icon">🎯</div>
+                    <h3>OBJECTIF</h3>
+                    <p>Gagne des récompenses et deviens plus fort</p>
+                    <ul>
+                        <li>⭐ <strong>XP</strong> : Monte en niveau</li>
+                        <li>✨ <strong>Essence</strong> : Améliore tes compétences</li>
+                        <li>💰 <strong>Or</strong> : Achète de l'équipement</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="tutorial-navigation">
+                <button class="action-btn secondary" id="prev-step">
+                    <span class="btn-icon">←</span>
+                    PRÉCÉDENT
+                </button>
+                <button class="action-btn primary" id="next-step">
+                    SUIVANT
+                    <span class="btn-icon">→</span>
+                </button>
+                <button class="action-btn primary" id="start-adventure">
+                    COMMENCER
+                    <span class="btn-icon">⚡</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- ÉCRAN D'ACCUEIL -->
     <section id="auth-screen" class="screen active">
-        <div class="background-overlay"></div>
+        <div class="background-overlay royal-bg"></div>
+        <div class="floating-crystals">
+            <div class="crystal"></div>
+            <div class="crystal"></div>
+            <div class="crystal"></div>
+        </div>
+        
         <div class="content-center">
             <div class="logo-container">
-                <h1 class="main-title">KAHINA</h1>
-                <p class="subtitle">L'ASCENSION DE LA REINE</p>
+                <div class="title-glow">
+                    <h1 class="main-title">KAHINA</h1>
+                    <p class="subtitle">L'ASCENSION ROYALE</p>
+                </div>
                 <div class="title-ornament">⚔️👑🌿</div>
             </div>
             
             <div class="auth-card glass-panel">
                 <div class="input-container">
-                    <input type="text" id="player-name-input" placeholder="VOTRE NOM DE GARDIEN" maxlength="12">
+                    <input type="text" id="player-name-input" placeholder="TON NOM DE GARDIEN" maxlength="12">
                     <div class="input-underline"></div>
                 </div>
                 
@@ -36,9 +134,9 @@
                         <span class="btn-icon">⚡</span>
                         COMMENCER L'AVENTURE
                     </button>
-                    <button id="continue-btn" class="action-btn secondary">
-                        <span class="btn-icon">🎮</span>
-                        CONTINUER
+                    <button id="tutorial-btn" class="action-btn secondary">
+                        <span class="btn-icon">📖</span>
+                        APPRENDRE À JOUER
                     </button>
                 </div>
             </div>
@@ -72,41 +170,62 @@
             </button>
         </div>
 
-        <div class="map-container">
-            <div class="zone active-zone" data-zone="vallee" style="top: 65%; left: 25%;">
-                <div class="zone-marker pulse"></div>
+        <div class="map-container" id="map-container">
+            <!-- Effet d'eau au clic -->
+            <div class="water-effect" id="water-effect"></div>
+            
+            <div class="zone active-zone" data-zone="vallee" style="top: 70%; left: 25%;">
+                <div class="zone-marker pulse">
+                    <div class="zone-glow"></div>
+                </div>
                 <div class="zone-info">
-                    <h3>Vallée des Larmes</h3>
-                    <p>Niveau 1-5</p>
+                    <h3>🌿 Vallée des Larmes</h3>
+                    <p>Niveau 1-5 • Ennemis faciles</p>
+                    <div class="zone-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 30%"></div>
+                        </div>
+                        <span>30% complété</span>
+                    </div>
                 </div>
             </div>
             
             <div class="zone locked-zone" data-zone="foret" style="top: 45%; left: 65%;">
-                <div class="zone-marker"></div>
+                <div class="zone-marker">
+                    <div class="zone-glow"></div>
+                </div>
                 <div class="zone-info">
-                    <h3>Forêt Hurlante</h3>
-                    <p>Niveau 5+</p>
+                    <h3>🌳 Forêt Hurlante</h3>
+                    <p>Niveau 5+ • Débloquer au niveau 5</p>
                 </div>
             </div>
             
             <div class="zone locked-zone" data-zone="montagnes" style="top: 25%; left: 45%;">
-                <div class="zone-marker"></div>
+                <div class="zone-marker">
+                    <div class="zone-glow"></div>
+                </div>
                 <div class="zone-info">
-                    <h3>Montagnes Maudites</h3>
-                    <p>Niveau 10+</p>
+                    <h3>🏔️ Montagnes Maudites</h3>
+                    <p>Niveau 10+ • Débloquer au niveau 10</p>
                 </div>
             </div>
 
             <div class="player-avatar">
                 <img src="./images/princess.avif" alt="Kahina">
                 <div class="avatar-glow"></div>
+                <div class="avatar-level">Niv. <span id="avatar-level">1</span></div>
             </div>
+
+            <!-- Éléments décoratifs -->
+            <div class="map-decoration tree" style="top: 60%; left: 15%;"></div>
+            <div class="map-decoration rock" style="top: 80%; left: 80%;"></div>
+            <div class="map-decoration ruins" style="top: 30%; left: 20%;"></div>
         </div>
 
         <div class="action-bar">
             <button class="action-btn large" id="explore-btn">
                 <span class="btn-icon">🗺️</span>
-                EXPLORER LA ZONE
+                EXPLORER LA VALLÉE
             </button>
         </div>
     </section>
@@ -117,11 +236,16 @@
             <button class="nav-btn back-btn" data-target="world-map">
                 <span class="btn-icon">←</span>
             </button>
-            <h2 class="screen-title" id="zone-name">VALLÉE DES LARMES</h2>
+            <h2 class="screen-title">🌿 VALLÉE DES LARMES</h2>
             <div class="header-stats">
                 <span class="hp-display">❤️ <span id="current-hp">100</span></span>
                 <span class="mana-display">🔮 <span id="current-mana">50</span></span>
             </div>
+        </div>
+
+        <div class="zone-description">
+            <p>Une vallée mystique où les larmes des anciens ont donné naissance à des créatures corrompues. 
+               Purifie ces terres pour restaurer leur beauté originelle.</p>
         </div>
 
         <div class="enemy-grid" id="enemy-grid">
@@ -131,7 +255,7 @@
 
     <!-- ÉCRAN DE COMBAT AMÉLIORÉ -->
     <section id="combat-screen" class="screen">
-        <div class="combat-background"></div>
+        <div class="combat-background valley-bg"></div>
         
         <!-- Zone de combat principale -->
         <div class="combat-arena">
@@ -139,6 +263,7 @@
             <div class="combatant enemy-combatant">
                 <div class="character-model">
                     <img id="enemy-img" src="" alt="Ennemi" class="character-img enemy-char">
+                    <div class="combat-aura enemy-aura"></div>
                     <div class="health-bar">
                         <div class="health-fill enemy-health" id="enemy-health" style="width: 100%"></div>
                         <div class="health-text">❤️ <span id="enemy-hp">100</span>/<span id="enemy-max-hp">100</span></div>
@@ -148,10 +273,16 @@
                 </div>
             </div>
 
+            <!-- Zone d'effets milieu -->
+            <div class="combat-middle">
+                <div class="vs-badge">⚔️</div>
+            </div>
+
             <!-- Joueur en bas -->
             <div class="combatant player-combatant">
                 <div class="character-model">
                     <img src="./images/princess.avif" alt="Kahina" class="character-img player-char">
+                    <div class="combat-aura player-aura"></div>
                     <div class="health-bar">
                         <div class="health-fill" id="player-health" style="width: 100%"></div>
                         <div class="health-text">❤️ <span id="player-hp">100</span>/<span id="player-max-hp">100</span></div>
@@ -173,7 +304,7 @@
         <div class="combat-interface">
             <div class="combat-log-container">
                 <div class="combat-log" id="combat-log">
-                    <div class="log-entry">Le combat commence!</div>
+                    <div class="log-entry">Le combat commence! Choisis une action.</div>
                 </div>
             </div>
 
@@ -208,9 +339,9 @@
                     <span class="btn-icon">🏃</span>
                     FUIR
                 </button>
-                <button class="action-btn secondary" id="inventory-btn">
+                <button class="action-btn secondary" id="inventory-combat-btn">
                     <span class="btn-icon">🎒</span>
-                    ITEMS
+                    INVENTAIRE
                 </button>
             </div>
         </div>
@@ -219,7 +350,7 @@
     <!-- MENU LATÉRAL AMÉLIORÉ -->
     <div class="side-menu" id="side-menu">
         <div class="menu-header">
-            <h3>MENU DU ROYAUME</h3>
+            <h3>📜 MENU DU ROYAUME</h3>
             <button class="close-menu" id="close-menu">×</button>
         </div>
         
@@ -246,10 +377,10 @@
             </div>
 
             <nav class="menu-nav">
-                <button class="menu-item" data-section="inventory">
+                <button class="menu-item active" data-section="inventory">
                     <span class="menu-icon">🎒</span>
                     Inventaire
-                    <span class="menu-badge" id="inventory-count">0</span>
+                    <span class="menu-badge" id="inventory-count">3</span>
                 </button>
                 <button class="menu-item" data-section="skills">
                     <span class="menu-icon">⚡</span>
@@ -259,7 +390,7 @@
                 <button class="menu-item" data-section="quests">
                     <span class="menu-icon">📜</span>
                     Quêtes
-                    <span class="menu-badge" id="quests-count">0</span>
+                    <span class="menu-badge" id="quests-count">2</span>
                 </button>
                 <button class="menu-item" data-section="leaderboard">
                     <span class="menu-icon">🏆</span>
@@ -274,29 +405,61 @@
             <!-- Sections du menu -->
             <div class="menu-sections">
                 <!-- Inventaire -->
-                <div class="menu-section" id="inventory-section">
-                    <h4>Votre Inventaire</h4>
+                <div class="menu-section active" id="inventory-section">
+                    <h4>🎒 Votre Inventaire</h4>
                     <div class="inventory-items" id="inventory-items">
-                        <div class="empty-state">Aucun objet</div>
+                        <div class="inventory-item">
+                            <span class="item-icon">⚔️</span>
+                            <div class="item-details">
+                                <strong>Épée du Débutant</strong>
+                                <small>+5 Attaque • Équipé</small>
+                            </div>
+                        </div>
+                        <div class="inventory-item">
+                            <span class="item-icon">🛡️</span>
+                            <div class="item-details">
+                                <strong>Bouclier de Bois</strong>
+                                <small>+3 Défense</small>
+                            </div>
+                        </div>
+                        <div class="inventory-item">
+                            <span class="item-icon">🧪</span>
+                            <div class="item-details">
+                                <strong>Potion de Soin</strong>
+                                <small>Rend 50 PV</small>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Compétences -->
                 <div class="menu-section" id="skills-section">
-                    <h4>Compétences Maîtrisées</h4>
+                    <h4>⚡ Compétences Maîtrisées</h4>
                     <div class="skills-list" id="skills-list">
                         <div class="skill-item">
                             <span class="skill-icon">⚔️</span>
                             <div class="skill-details">
                                 <strong>Frappe Spirituelle</strong>
-                                <small>Dégâts de base - 0 mana</small>
+                                <small>Niveau 2 • Dégâts: 15-20</small>
+                                <div class="skill-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 60%"></div>
+                                    </div>
+                                    <span>60% vers niveau 3</span>
+                                </div>
                             </div>
                         </div>
                         <div class="skill-item">
                             <span class="skill-icon">🔥</span>
                             <div class="skill-details">
                                 <strong>Boule de Feu</strong>
-                                <small>Dégâts magiques - 15 mana</small>
+                                <small>Niveau 1 • Dégâts: 25-30</small>
+                                <div class="skill-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 30%"></div>
+                                    </div>
+                                    <span>30% vers niveau 2</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -304,42 +467,88 @@
 
                 <!-- Quêtes -->
                 <div class="menu-section" id="quests-section">
-                    <h4>Quêtes Actives</h4>
+                    <h4>📜 Quêtes Actives</h4>
                     <div class="quests-list" id="quests-list">
-                        <div class="empty-state">Aucune quête active</div>
+                        <div class="quest-item active">
+                            <span class="quest-icon">🌿</span>
+                            <div class="quest-details">
+                                <strong>Purification de la Vallée</strong>
+                                <small>Vaincre 3 Gobelins Corrompus</small>
+                                <div class="quest-progress">
+                                    <span>1/3 complété</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 33%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="quest-item">
+                            <span class="quest-icon">⚔️</span>
+                            <div class="quest-details">
+                                <strong>Maîtrise des Armes</strong>
+                                <small>Utiliser Frappe 10 fois</small>
+                                <div class="quest-progress">
+                                    <span>4/10 complété</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 40%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Classement -->
                 <div class="menu-section" id="leaderboard-section">
-                    <h4>Classement des Gardiens</h4>
+                    <h4>🏆 Classement des Gardiens</h4>
                     <div class="leaderboard" id="leaderboard">
-                        <div class="loading">Chargement...</div>
+                        <div class="leaderboard-item you">
+                            <div class="leaderboard-rank">#7</div>
+                            <div class="leaderboard-name">VOUS</div>
+                            <div class="leaderboard-score">Niv. 1</div>
+                        </div>
+                        <div class="leaderboard-item">
+                            <div class="leaderboard-rank">#1</div>
+                            <div class="leaderboard-name">ARTHUR</div>
+                            <div class="leaderboard-score">Niv. 15</div>
+                        </div>
+                        <div class="leaderboard-item">
+                            <div class="leaderboard-rank">#2</div>
+                            <div class="leaderboard-name">MORGANA</div>
+                            <div class="leaderboard-score">Niv. 12</div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Paramètres -->
                 <div class="menu-section" id="settings-section">
-                    <h4>Paramètres</h4>
+                    <h4>⚙️ Paramètres</h4>
                     <div class="settings-list">
                         <div class="setting-item">
-                            <span>Effets sonores</span>
+                            <span>🔊 Effets sonores</span>
                             <label class="switch">
                                 <input type="checkbox" id="sound-toggle" checked>
                                 <span class="slider"></span>
                             </label>
                         </div>
                         <div class="setting-item">
-                            <span>Musique</span>
+                            <span>🎵 Musique</span>
                             <label class="switch">
                                 <input type="checkbox" id="music-toggle" checked>
                                 <span class="slider"></span>
                             </label>
                         </div>
                         <div class="setting-item">
-                            <span>Vibrations</span>
+                            <span>📳 Vibrations</span>
                             <label class="switch">
                                 <input type="checkbox" id="vibration-toggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <span>🌙 Mode sombre</span>
+                            <label class="switch">
+                                <input type="checkbox" id="darkmode-toggle">
                                 <span class="slider"></span>
                             </label>
                         </div>
@@ -360,6 +569,7 @@
     <audio id="hit-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-boxing-punch-2051.mp3"></audio>
     <audio id="victory-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-video-game-treasure-2066.mp3"></audio>
     <audio id="defeat-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-sad-game-over-trombone-471.mp3"></audio>
+    <audio id="water-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-water-splash-1180.mp3"></audio>
     <audio id="background-music" loop src="https://assets.mixkit.co/music/preview/mixkit-fantasy-game-background-219.mp3"></audio>
 
     <script src="script.js"></script>
