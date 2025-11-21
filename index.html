@@ -9,16 +9,13 @@
 </head>
 <body>
 
-    <!-- EFFETS VISUELS -->
     <div class="leaves-container" id="leaves-container"></div>
-    <div class="quiz-effects" id="quiz-effects"></div>
-    <div class="screen-transition" id="screen-transition"></div>
+    <div class="combat-effects" id="combat-effects"></div> <div class="screen-transition" id="screen-transition"></div>
 
-    <!-- POPUP DE VICTOIRE -->
     <div class="victory-popup" id="victory-popup">
         <div class="popup-content">
             <div class="victory-icon">🏆</div>
-            <h2>QUIZ TERMINÉ!</h2>
+            <h2>TEMPS ÉCOULÉ!</h2>
             <div class="rewards" id="victory-rewards">
                 <div class="reward-item">
                     <span class="reward-icon">✅</span>
@@ -29,11 +26,11 @@
                     <span class="reward-text" id="total-score">0 points</span>
                 </div>
                 <div class="reward-item">
-                    <span class="reward-icon">⭐</span>
-                    <span class="reward-text" id="quiz-rank">Débutant</span>
+                    <span class="reward-icon">🎯</span>
+                    <span class="reward-text" id="quiz-accuracy">0% Précision</span>
                 </div>
             </div>
-            <p id="victory-message">Temps écoulé!</p>
+            <p id="victory-message">Bien joué, CHAMPION!</p>
             <button class="action-btn primary large" id="restart-quiz-btn">
                 <span class="btn-icon">🔄</span>
                 NOUVEAU QUIZ
@@ -41,8 +38,7 @@
         </div>
     </div>
 
-    <!-- ÉCRAN D'ACCUEIL -->
-    <section id="auth-screen" class="screen active">
+    <section id="auth-screen" class="screen active" style="background-image: url('jpg(4).png'); background-size: cover; background-position: center;">
         <div class="background-overlay"></div>
         <div class="content-center">
             <div class="logo-container">
@@ -54,7 +50,6 @@
             <div class="auth-card glass-panel">
                 <div class="input-container">
                     <input type="text" id="player-name-input" placeholder="TON NOM" maxlength="12" value="CHAMPION">
-                    <div class="input-underline"></div>
                 </div>
                 
                 <div class="button-group">
@@ -86,76 +81,78 @@
         </div>
     </section>
 
-    <!-- ÉCRAN DE QUIZ -->
-    <section id="quiz-screen" class="screen">
-        <div class="screen-header">
-            <button class="nav-btn back-btn" data-target="auth-screen">
-                <span class="btn-icon">←</span>
-            </button>
-            <h2 class="screen-title">QUIZ DE CULTURE GÉNÉRALE</h2>
+    <section id="quiz-screen" class="screen" style="background-image: url('image-general.png'); background-size: cover; background-position: center;">
+        
+        <div class="combat-background-overlay"></div>
+        
+        <div class="quiz-header-combat">
+            <h2 class="screen-title">DUEL DE CONNAISSANCES</h2>
             <div class="header-stats">
                 <span class="time-display">⏱️ <span id="timer">90</span>s</span>
                 <span class="score-display">⭐ <span id="current-score">0</span></span>
             </div>
         </div>
 
-        <!-- PROGRESSION -->
-        <div class="quiz-progress">
-            <div class="progress-container">
-                <div class="progress-label">
-                    <span>Question <span id="current-question">1</span>/∞</span>
-                    <span>✅ <span id="correct-count">0</span> bonnes réponses</span>
+        <div class="combat-arena-quiz">
+            
+            <div class="enemy-combatant-quiz">
+                <div class="character-model-quiz enemy-char-model">
+                    <img id="enemy-img" src="images/Sans titre.jpg" class="character-img enemy-char" alt="Ennemi">
+                    <div class="health-bar combat-hp-bar">
+                        <div class="health-fill enemy-health" id="enemy-hp-fill" style="width: 100%"></div>
+                    </div>
+                    <span class="enemy-name">L'OMBRE</span>
                 </div>
-                <div class="progress-bar">
-                    <div class="time-fill" id="time-fill" style="width: 100%"></div>
+            </div>
+            
+            <div class="combat-visuals">
+                 <div class="vs-badge">VS</div>
+            </div>
+
+            <div class="player-combatant-quiz">
+                <div class="character-model-quiz player-char-model">
+                    <img id="player-img" src="princess.avif" class="character-img player-char" alt="Joueur">
+                    <div class="health-bar combat-hp-bar">
+                        <div class="health-fill player-health" id="player-hp-fill" style="width: 100%"></div>
+                    </div>
+                    <span class="player-name" id="combat-player-name">CHAMPION</span>
                 </div>
             </div>
         </div>
 
-        <!-- ZONE DE QUESTION -->
-        <div class="question-area">
+        <div class="question-area-combat">
             <div class="question-card glass-panel">
                 <div class="question-header">
-                    <span class="category-badge" id="question-category">Culture Générale</span>
-                    <span class="difficulty-badge" id="question-difficulty">Moyenne</span>
+                    <span class="category-badge" id="question-category">CATÉGORIE</span>
+                    <span class="difficulty-badge" id="question-difficulty">POINTS: 0</span>
                 </div>
                 <h3 class="question-text" id="question-text">
                     Chargement de la question...
                 </h3>
             </div>
+            
+            <div class="combat-log-container">
+                <div class="combat-log" id="combat-log"></div>
+            </div>
 
-            <!-- OPTION DE PASSER -->
-            <div class="skip-option">
+            <div class="options-grid-combat" id="options-grid">
+                </div>
+            
+            <div class="skip-area">
                 <button class="action-btn secondary small" id="skip-btn">
                     <span class="btn-icon">⏭️</span>
-                    PASSER CETTE QUESTION
+                    PASSER (<span id="skips-remaining">3</span>)
                 </button>
-                <span class="skip-info">(Utilisations restantes: <span id="skips-remaining">3</span>)</span>
             </div>
-        </div>
-
-        <!-- OPTIONS DE RÉPONSE -->
-        <div class="options-grid" id="options-grid">
-            <!-- Les options seront générées dynamiquement -->
-            <div class="option-loading">
-                <div class="loading-spinner"></div>
-                <p>Chargement des réponses...</p>
-            </div>
-        </div>
-
-        <!-- FEEDBACK IMMÉDIAT -->
-        <div class="feedback-area" id="feedback-area">
-            <div class="feedback-message" id="feedback-message"></div>
         </div>
     </section>
 
-    <!-- ÉCRAN DE RÈGLES -->
     <section id="rules-screen" class="screen">
         <div class="screen-header">
             <button class="nav-btn back-btn" data-target="auth-screen">
                 <span class="btn-icon">←</span>
             </button>
-            <h2 class="screen-title">RÈGLES DU QUIZ</h2>
+            <h2 class="screen-title">RÈGLES DU DUEL</h2>
         </div>
 
         <div class="rules-content">
@@ -166,28 +163,28 @@
                         <span class="rule-icon">⏱️</span>
                         <div class="rule-text">
                             <strong>1 minute 30 secondes</strong>
-                            <p>Répondez au maximum de questions dans le temps imparti</p>
+                            <p>Répondez au maximum de questions de culture générale dans le temps imparti.</p>
                         </div>
                     </div>
                     <div class="rule-item">
-                        <span class="rule-icon">❓</span>
+                        <span class="rule-icon">✅</span>
                         <div class="rule-text">
-                            <strong>1000 questions uniques</strong>
-                            <p>Culture générale, sciences, histoire, géographie, arts...</p>
+                            <strong>Bonne réponse = Attaque!</strong>
+                            <p>Vous lancez un sort ou une attaque sur l'ennemi (visuel : Feu, Eau, Foudre, Pierre).</p>
                         </div>
                     </div>
                     <div class="rule-item">
-                        <span class="rule-icon">⚡</span>
+                        <span class="rule-icon">❌</span>
                         <div class="rule-text">
-                            <strong>Effets spéciaux</strong>
-                            <p>Chaque bonne réponse déclenche un effet visuel unique</p>
+                            <strong>Mauvaise réponse = Contrecoup</strong>
+                            <p>L'ennemi vous inflige un contrecoup (visuel) et vous perdez du temps.</p>
                         </div>
                     </div>
                     <div class="rule-item">
                         <span class="rule-icon">⏭️</span>
                         <div class="rule-text">
                             <strong>3 passages autorisés</strong>
-                            <p>Utilisez-les stratégiquement pour les questions difficiles</p>
+                            <p>Utilisez-les stratégiquement pour les questions trop difficiles.</p>
                         </div>
                     </div>
                 </div>
@@ -200,38 +197,12 @@
                             <span class="score-value">+10 pts</span>
                         </div>
                         <div class="score-item">
-                            <span class="score-badge medium">Moyenne</span>
+                            <span class="score-badge medium">Moyen</span>
                             <span class="score-value">+20 pts</span>
                         </div>
                         <div class="score-item">
                             <span class="score-badge hard">Difficile</span>
                             <span class="score-value">+30 pts</span>
-                        </div>
-                        <div class="score-item">
-                            <span class="score-badge bonus">Bonus rapidité</span>
-                            <span class="score-value">+5 pts</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="effects-preview">
-                    <h4>🎨 EFFETS VISUELS</h4>
-                    <div class="effects-grid">
-                        <div class="effect-item" data-effect="fire">
-                            <span class="effect-icon">🔥</span>
-                            <span>Feu</span>
-                        </div>
-                        <div class="effect-item" data-effect="water">
-                            <span class="effect-icon">💧</span>
-                            <span>Eau</span>
-                        </div>
-                        <div class="effect-item" data-effect="lightning">
-                            <span class="effect-icon">⚡</span>
-                            <span>Foudre</span>
-                        </div>
-                        <div class="effect-item" data-effect="nature">
-                            <span class="effect-icon">🌿</span>
-                            <span>Nature</span>
                         </div>
                     </div>
                 </div>
@@ -240,24 +211,24 @@
             <div class="action-bar">
                 <button class="action-btn primary large" id="start-from-rules">
                     <span class="btn-icon">🚀</span>
-                    COMMENCER LE QUIZ
+                    COMMENCER LE DUEL
                 </button>
             </div>
         </div>
     </section>
 
-    <!-- AUDIO ELEMENTS -->
     <audio id="correct-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3"></audio>
     <audio id="wrong-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3"></audio>
     <audio id="skip-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3"></audio>
-    <audio id="time-warning-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-warning-alarm-buzzer-985.mp3"></audio>
     <audio id="victory-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-video-game-treasure-2066.mp3"></audio>
     <audio id="fire-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-magic-fire-spell-2949.mp3"></audio>
     <audio id="water-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-water-splash-1180.mp3"></audio>
     <audio id="lightning-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-thunder-rumble-2391.mp3"></audio>
-    <audio id="nature-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-birds-in-forest-1240.mp3"></audio>
+    <audio id="stone-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-heavy-stone-impact-2227.mp3"></audio>
+    <audio id="counter-attack-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-splashing-impact-in-water-1647.mp3"></audio>
     <audio id="background-music" loop src="https://assets.mixkit.co/music/preview/mixkit-game-show-suspense-waiting-667.mp3"></audio>
 
+    <script src="data_questions.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
